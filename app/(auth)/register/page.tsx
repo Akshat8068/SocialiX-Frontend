@@ -1,12 +1,17 @@
 
 "use client"
 import { FormBuilder, type FormFieldConfig } from "@/components/common/FormBuilder";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/Input";
+import { useRegisterMutation } from "@/features/auth/api/authApi";
 import AuthHeader from "@/features/auth/components/AuthHeader";
-import { Eye, EyeOff, Lock, Mail, User, UserPlus } from "lucide-react";
-import Image from "next/image";
+import { RegisterFormData, registerSchema } from "@/features/auth/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {  UserPlus } from "lucide-react";
+
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const registerFields:FormFieldConfig[] = [
     {
@@ -38,10 +43,31 @@ const registerFields:FormFieldConfig[] = [
         required: true,
     },
 ]
+
+;
 export default function RegisterPage() {
-    const showPassword = false
-    const handleSubmit=(values: unknown)=> {
-        console.log(values);
+     const [register, { isLoading, isSuccess, isError, error }] =useRegisterMutation()
+     const form = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+
+    defaultValues: {
+        fullname: "",
+        username: "",
+        email: "",
+        password: "",
+    },
+})
+const router =useRouter()
+
+    const handleSubmit=async(data: RegisterFormData)=> {
+        try {
+            const response = await register(data).unwrap()
+            toast.success(response.message)
+            form.reset()
+            router.push("/email-verify")
+        } catch (error:any) {
+             toast.error(error.data?.message ?? "Something went wrong")
+        };
     }
 
     return (
@@ -57,6 +83,7 @@ export default function RegisterPage() {
 
             {/* Form */}
             <FormBuilder
+            form={form}
                 fields={registerFields}
                 onSubmit={handleSubmit}
                 submitButton={{

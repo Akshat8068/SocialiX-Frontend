@@ -1,83 +1,100 @@
 "use client";
 
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
 
-export interface OtpInputProps {
-    length?: number;
-    label?: string;
-    value?: string;
-    onChange?: (value: string) => void;
-    className?: string;
+interface OTPInputProps {
+  value?: string;
+  onChange: (value: string) => void;
+  length?: number;
+  disabled?: boolean;
 }
 
-export function OtpInput({
-    length = 6,
-    label = "Verification Code",
-    value = "",
-    onChange,
-    className,
-}: OtpInputProps) {
-    const inputRefs = React.useRef<(HTMLInputElement | null)[]>([]);
+export default function OTPInput({
+  value = "",
+  onChange,
+  length = 4,
+  disabled,
+}: OTPInputProps) {
+  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
-    const values = value.padEnd(length).split("").slice(0, length);
+  const otp = value.split("").slice(0, length);
 
-    const handleChange = (
-        index: number,
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const digit = e.target.value.replace(/\D/g, "").slice(-1);
+  useEffect(() => {
+    while (otp.length < length) otp.push("");
+  }, [value]);
 
-        const newValues = [...values];
-        newValues[index] = digit;
+  const handleChange = (index: number, inputValue: string) => {
+    if (!/^\d?$/.test(inputValue)) return;
 
-        onChange?.(newValues.join("").trim());
+    const newOtp = [...otp];
+    newOtp[index] = inputValue;
+    onChange(newOtp.join(""));
 
-        if (digit && index < length - 1) {
-            inputRefs.current[index + 1]?.focus();
-        }
-    };
+    if (inputValue && index < length - 1) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
 
-    const handleKeyDown = (
-        index: number,
-        e: React.KeyboardEvent<HTMLInputElement>
-    ) => {
-        if (e.key === "Backspace" && !values[index] && index > 0) {
-            inputRefs.current[index - 1]?.focus();
-        }
-    };
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Backspace") {
+      if (otp[index]) {
+        const newOtp = [...otp];
+        newOtp[index] = "";
+        onChange(newOtp.join(""));
+      } else if (index > 0) {
+        inputsRef.current[index - 1]?.focus();
+      }
+    }
 
-    return (
-        <div className={cn("space-y-2", className)}>
-            {label && (
-                <label className="ml-1 text-sm text-on-surface-variant">
-                    {label}
-                </label>
-            )}
+    if (e.key === "ArrowLeft" && index > 0) {
+      inputsRef.current[index - 1]?.focus();
+    }
 
-            <div
-                className="grid gap-2"
-                style={{
-                    gridTemplateColumns: `repeat(${length}, minmax(0,1fr))`,
-                }}
-            >
-                {Array.from({ length }).map((_, index) => (
-                    <input
-                        key={index}
-                        ref={(el) => {
-                            inputRefs.current[index] = el;
-                        }}
-                        type="text"
-                        inputMode="numeric"
-                        autoComplete="one-time-code"
-                        maxLength={1}
-                        value={values[index] || ""}
-                        onChange={(e) => handleChange(index, e)}
-                        onKeyDown={(e) => handleKeyDown(index, e)}
-                        className="h-14 rounded-lg border border-outline-variant/50 bg-white/50 text-center text-xl font-semibold outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    />
-                ))}
-            </div>
-        </div>
-    );
+    if (e.key === "ArrowRight" && index < length - 1) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, length);
+
+    if (!pasted) return;
+
+    const newOtp = pasted.split("");
+    while (newOtp.length < length) newOtp.push("");
+
+    onChange(newOtp.join(""));
+
+    const focusIndex = Math.min(pasted.length, length - 1);
+    inputsRef.current[focusIndex]?.focus();
+  };
+
+  return (
+    <div className="flex gap-3 justify-center">
+      {Array.from({ length }).map((_, index) => (
+        <input
+          key={index}
+          ref={(el) => {
+            inputsRef.current[index] = el;
+          }}
+          value={otp[index]}
+          disabled={disabled}
+          onChange={(e) => handleChange(index, e.target.value)}
+          onKeyDown={(e) => handleKeyDown(index, e)}
+          onPaste={handlePaste}
+          maxLength={1}
+          inputMode="numeric"
+          className="h-12 w-12 rounded-lg border border-outline-variant text-center text-lg font-semibold outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+        />
+      ))}
+    </div>
+  );
 }

@@ -16,7 +16,12 @@ export default function RootLayout({
        
       </head>
 
-      <body className={inter.className}>
+      <body className={inter.className} style={{
+    backgroundImage: "url('/AuthBg.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}>
         <main className="relative h-screen w-full flex items-center justify-center p-gutter overflow-hidden">
             <div className="absolute inset-0 bg-white/10" />
             <div className="relative z-10 w-full max-w-120">

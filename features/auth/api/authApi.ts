@@ -1,0 +1,70 @@
+
+import baseApi from "@/store/api/baseApi";
+import type {
+  AuthResponse,
+  ForgetEmailRequest,
+  ForgetEmailResponse,
+  LoginRequest,
+  RegisterRequest,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
+  VerifyEmailRequest,
+  VerifyEmailResponse,
+} from "@/types/auth";
+
+export const authApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    register: builder.mutation<AuthResponse, RegisterRequest>({
+      query: (data) => ({
+        url: "/auth/register",
+        method: "POST",
+        body: data,
+      }),
+
+      invalidatesTags: ["Auth"],
+    }),
+    login: builder.mutation<AuthResponse, LoginRequest>({
+      query: (data) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
+    emailVerify: builder.mutation<VerifyEmailResponse, VerifyEmailRequest>({
+      query: (data) => ({
+        url: "/auth/emailVerify",
+        method: "POST",
+        body: data,
+      }),
+
+
+      invalidatesTags: ["Auth"],
+    }),
+    forgetEmail: builder.mutation<ForgetEmailResponse, ForgetEmailRequest>({
+      query: (data) => ({
+        url: "/auth/forgetPassword",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
+    resetPassword: builder.mutation<ResetPasswordResponse, ResetPasswordRequest>({
+      query: (data) => ({
+        url: "/auth/resetPassword",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
+    
+  }),
+});
+
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useEmailVerifyMutation,
+  useForgetEmailMutation,
+  useResetPasswordMutation
+} = authApi;

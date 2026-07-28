@@ -1,9 +1,16 @@
+"use client";
+
 import { FormBuilder, type FormFieldConfig } from "@/components/common/FormBuilder";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
+import { useResetPasswordMutation } from "@/features/auth/api/authApi";
 import AuthHeader from "@/features/auth/components/AuthHeader";
+import { ResetPasswordFormData, resetPasswordSchema } from "@/features/auth/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const resetPasswordFields: FormFieldConfig[] = [
     {
@@ -21,7 +28,7 @@ const resetPasswordFields: FormFieldConfig[] = [
         required: true,
     },
     {
-        id: "password",
+        id: "newPassword",
         type: "password",
         label: "New Password",
         placeholder: "••••••••",
@@ -29,10 +36,24 @@ const resetPasswordFields: FormFieldConfig[] = [
     },
 ]
 export default function ResetPasswordPage() {
-    const showPassword = false
-    const handleSubmit = async (data: any) => {
-        console.log(data)
-    }
+    const [resetPassword, { isLoading, isSuccess, isError, error }] = useResetPasswordMutation()
+        const form = useForm<ResetPasswordFormData>({
+            resolver: zodResolver(resetPasswordSchema),
+            defaultValues: {
+                email: "",
+                otp: "",
+                newPassword:""
+            },
+        })
+        const handleSubmit = async (data: ResetPasswordFormData) => {
+            try {
+                const response = await resetPassword(data).unwrap()
+                toast.success(response.message)
+                form.reset()
+            } catch (error: any) {
+                toast.error(error.data?.message ?? "Something went wrong")
+            };
+        }
     return (
 
         <>
@@ -43,6 +64,7 @@ export default function ResetPasswordPage() {
             <FormBuilder
                 fields={resetPasswordFields}
                 onSubmit={handleSubmit}
+                form={form}
                 submitButton={{
                     children: "Reset Password",
                     variant: "primary",

@@ -1,12 +1,21 @@
 "use client"
 
-import { FormBuilder,type FormFieldConfig } from "@/components/common/FormBuilder";
+import { FormBuilder, type FormFieldConfig } from "@/components/common/FormBuilder";
+import { useLoginMutation } from "@/features/auth/api/authApi";
 import AuthHeader from "@/features/auth/components/AuthHeader";
-import {  User } from "lucide-react";
+import { LoginFormData, loginSchema } from "@/features/auth/validation";
+import { useAppDispatch } from "@/store/hooks";
+import { loginSuccess, setAuthenticated, setUser } from "@/store/slices/authSlice";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 
-const loginFields:FormFieldConfig[] = [
+const loginFields: FormFieldConfig[] = [
     {
         id: "email",
         type: "email",
@@ -17,15 +26,33 @@ const loginFields:FormFieldConfig[] = [
         id: "password",
         type: "password",
         label: "Password",
-        required:true,
+        required: true,
         placeholder: "••••••••",
     },
 ]
 
 export default function LoginPage() {
-    const showPassword = false
-    const handleSubmit = (values: unknown) => {
-        console.log(values)
+    const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation()
+    const dispatch=useAppDispatch()
+    const form = useForm<LoginFormData>({
+        resolver: zodResolver(loginSchema),
+
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    })
+    const router = useRouter();
+    const handleSubmit = async (data: LoginFormData) => {
+        try {
+            const response = await login(data).unwrap()
+            toast.success(response.message)
+            form.reset()
+            dispatch(loginSuccess(response.data))
+            router.push("/")
+        } catch (error: any) {
+            toast.error(error.data?.message ?? "Something went wrong")
+        };
     }
 
     return (
@@ -37,9 +64,10 @@ export default function LoginPage() {
 
             <FormBuilder
                 fields={loginFields}
+                form={form}
                 onSubmit={handleSubmit}
                 submitButton={{
-                    children: "Sign In",
+                    children: " Sign In",
                     fullWidth: true,
                 }}
             />
@@ -48,7 +76,7 @@ export default function LoginPage() {
                 <Link href="/forget-password">
                     Forgot Password?
                 </Link>
-                </div>
+            </div>
 
             <p className="mt-xl text-sm text-on-surface-variant">
                 Don't have an account?{" "}

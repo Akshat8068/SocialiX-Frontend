@@ -3,9 +3,15 @@
 import { FormBuilder, FormFieldConfig } from "@/components/common/FormBuilder";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
+import { useForgetEmailMutation } from "@/features/auth/api/authApi";
 import AuthHeader from "@/features/auth/components/AuthHeader";
+import { ForgetEmailFormData, forgetEmailSchema } from "@/features/auth/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 
 const forgotPasswordFields: FormFieldConfig[] = [
@@ -19,8 +25,24 @@ const forgotPasswordFields: FormFieldConfig[] = [
     },
 ]
 export default function ForgotPasswordPage() {
-    const handleSubmit = async (data: any) => {
-        console.log(data)
+    const [forgetEmail, { isLoading, isSuccess, isError, error }] = useForgetEmailMutation()
+    const form = useForm<ForgetEmailFormData>({
+        resolver: zodResolver(forgetEmailSchema),
+
+        defaultValues: {
+            email: ""
+        },
+    })
+    const router = useRouter()
+    const handleSubmit = async (data: ForgetEmailFormData) => {
+        try {
+            const response = await forgetEmail(data).unwrap()
+            toast.success(response.message)
+            form.reset()
+            router.push("/reset-password")
+        } catch (error: any) {
+            toast.error(error.data?.message ?? "Something went wrong")
+        };
     }
     return (
 
@@ -32,6 +54,7 @@ export default function ForgotPasswordPage() {
 
             <FormBuilder
                 fields={forgotPasswordFields}
+                form={form}
                 onSubmit={handleSubmit}
                 submitButton={{
                     children: "Proceed",

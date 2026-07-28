@@ -3,9 +3,9 @@
 import { Eye, EyeOff, Lock, LucideIcon } from "lucide-react";
 import { FormField } from "./FormField";
 import { Input } from "../ui/Input";
-import { useForm, Controller,type Control } from "react-hook-form"
+import {  Controller,type Control, UseFormReturn } from "react-hook-form"
 import { Button, ButtonProps } from "../ui/button";
-import { OtpInput } from "../ui/otpInput";
+import OTPInput from "../ui/otpInput";
 export type FieldType =
     | "text"
     | "email"
@@ -25,6 +25,7 @@ interface RenderFieldProps {
 }
 interface FormBuilderProps {
     fields: FormFieldConfig[];
+    form: UseFormReturn<any>
     defaultValues?: any;
     submitButton?: ButtonProps;
     onSubmit: (values: any) => void;
@@ -58,7 +59,9 @@ function PasswordField({ field, placeholder }: { field: any; placeholder?: strin
             />
 
             <input
+           {...field}
                 id="password"
+                
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className="w-full rounded-lg border border-outline-variant/50 bg-white/50 py-3 pl-12 pr-12 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
@@ -81,6 +84,7 @@ export function RenderField({
     field,
     control,
 }: RenderFieldProps) {
+
     return (
         <Controller
             name={field.id}
@@ -119,21 +123,19 @@ function renderInput(
         case "password":
             return (
                 <PasswordField
-                    {...controller}
-                    id={field.id}
+                   field={controller}
                     placeholder={field.placeholder}
                 />
             );
         case "otp":
-            return (
-                <OtpInput
-                    length={field.length ?? 4}
-                    value={controller.value ?? ""}
-                    onChange={controller.onChange}
-                    label={undefined} 
-                />
-            )
-
+      return (
+        <OTPInput
+          value={controller.value}
+          onChange={controller.onChange}
+          length={field.length ?? 4}
+          disabled={field.disabled}
+        />
+      )
         default:
             return null;
     }
@@ -141,14 +143,12 @@ function renderInput(
 
 export function FormBuilder({
     fields,
-    defaultValues,
+    form,
     submitButton,
     onSubmit,
 }: FormBuilderProps) {
-    const form = useForm({
-        defaultValues,
-    });
-
+    
+ 
     return (
         <form className="w-full space-y-md" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-5">
