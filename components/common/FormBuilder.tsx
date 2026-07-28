@@ -1,26 +1,50 @@
+"use client";
+
 import { Eye, EyeOff, Lock, LucideIcon } from "lucide-react";
 import { FormField } from "./FormField";
 import { Input } from "../ui/Input";
-
+import { useForm, Controller,type Control } from "react-hook-form"
+import { Button, ButtonProps } from "../ui/button";
+import { OtpInput } from "../ui/otpInput";
 export type FieldType =
     | "text"
     | "email"
     | "password"
     | "number"
     | "textarea"
-    | "select";
+    | "select"
+    | "otp";
 
-export interface FormFieldConfig {
-    type: FieldType;
-    name: string;
+export interface FormOption {
     label: string;
-    placeholder?: string;
-    icon?: LucideIcon;
+    value: string;
 }
-
 interface RenderFieldProps {
     field: FormFieldConfig;
+    control: Control<any>;
 }
+interface FormBuilderProps {
+    fields: FormFieldConfig[];
+    defaultValues?: any;
+    submitButton?: ButtonProps;
+    onSubmit: (values: any) => void;
+}
+export interface FormFieldConfig {
+    id: string;
+    type: FieldType;
+    icon?: LucideIcon;
+    label?: string;
+    length?: number
+    placeholder?: string;
+    helperText?: string;
+    required?: boolean;
+    disabled?: boolean;
+
+    options?: FormOption[];
+
+    className?: string;
+}
+
 
 
 function PasswordField({ field, placeholder }: { field: any; placeholder?: string }) {
@@ -53,37 +77,96 @@ function PasswordField({ field, placeholder }: { field: any; placeholder?: strin
     );
 }
 
-export function RenderField({ field }: RenderFieldProps) {
+export function RenderField({
+    field,
+    control,
+}: RenderFieldProps) {
+    return (
+        <Controller
+            name={field.id}
+            control={control}
+            render={({ field: controller, fieldState }) => (
+                <FormField
+                    id={field.id}
+                    label={field.label}
+                    required={field.required}
+                    error={fieldState.error?.message}
+                    helperText={field.helperText}
+                >
+                    {renderInput(field, controller)}
+                </FormField>
+            )}
+        />
+    );
+}
+
+function renderInput(
+    field: FormFieldConfig,
+    controller: any
+) {
     switch (field.type) {
-        case "text":
         case "email":
+        case "text":
         case "number":
             return (
-                <FormField
-                    id={field.name}
-                    label={field.label}
-                >
-                    <Input
-                        id={field.name}
-                        type={field.type}
-                        icon={field.icon}
-                        placeholder={field.placeholder}
-                    />
-                </FormField>
+                <Input
+                    {...controller}
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                />
             );
-
-
         case "password":
             return (
-                <FormField
-                    id={field.name}
-                    label={field.label}
-                >
-                    <PasswordField field={field} placeholder={field.placeholder} />
-                </FormField>
+                <PasswordField
+                    {...controller}
+                    id={field.id}
+                    placeholder={field.placeholder}
+                />
+            );
+        case "otp":
+            return (
+                <OtpInput
+                    length={field.length ?? 4}
+                    value={controller.value ?? ""}
+                    onChange={controller.onChange}
+                    label={undefined} 
+                />
             )
 
         default:
             return null;
     }
+}
+
+export function FormBuilder({
+    fields,
+    defaultValues,
+    submitButton,
+    onSubmit,
+}: FormBuilderProps) {
+    const form = useForm({
+        defaultValues,
+    });
+
+    return (
+        <form className="w-full space-y-md" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-5">
+                {fields.map((field) => (
+                    <RenderField
+                        key={field.id}
+                        field={field}
+                        control={form.control}
+                    />
+                ))}
+            </div>
+
+            <Button
+                type="submit"
+                {...submitButton}
+            >
+                {submitButton?.children ?? "Submit"}
+            </Button>
+        </form>
+    );
 }

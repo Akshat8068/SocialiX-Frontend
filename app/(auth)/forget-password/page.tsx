@@ -1,12 +1,27 @@
 "use client";
 
+import { FormBuilder, FormFieldConfig } from "@/components/common/FormBuilder";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 
+
+const forgotPasswordFields: FormFieldConfig[] = [
+    {
+        id: "email",
+        type: "email",
+        label: "Email Address",
+        placeholder: "name@gmail.com",
+        required: true,
+        helperText: "We'll send a password reset link to this email.",
+    },
+]
 export default function ForgotPasswordPage() {
+    const handleSubmit = async (data: any) => {
+        console.log(data)
+    }
     return (
 
         <>
@@ -15,23 +30,16 @@ export default function ForgotPasswordPage() {
 
             {/* Form */}
 
-            <form className="w-full space-y-5">
-
-                {/* Email */}
-
-                 <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@gmail.com"
-                    icon={Mail}
-                />
-
-                {/* Proceed Button */}
-
-                <Button type="submit" variant="primary" size="lg" fullWidth>
-                    Proceed
-                </Button>
-            </form>
+            <FormBuilder
+                fields={forgotPasswordFields}
+                onSubmit={handleSubmit}
+                submitButton={{
+                    children: "Proceed",
+                    variant: "primary",
+                    size: "lg",
+                    fullWidth: true,
+                }}
+            />
 
             {/* Footer */}
 
