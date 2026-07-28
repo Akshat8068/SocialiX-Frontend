@@ -1,9 +1,15 @@
 "use client";
 
-import { FormBuilder,type FormFieldConfig } from "@/components/common/FormBuilder";
+import { FormBuilder, type FormFieldConfig } from "@/components/common/FormBuilder";
+import { useEmailVerifyMutation } from "@/features/auth/api/authApi";
 import AuthHeader from "@/features/auth/components/AuthHeader";
+import { EmailVerifyFormData, emailVerifySchema } from "@/features/auth/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 
 const resetPasswordFields: FormFieldConfig[] = [
@@ -24,8 +30,25 @@ const resetPasswordFields: FormFieldConfig[] = [
 
 ]
 export default function VerifyEmailPage() {
-    const handleSubmit = async (data: any) => {
-        console.log(data)
+    const [emailVerify, { isLoading, isSuccess, isError, error }] = useEmailVerifyMutation()
+    const form = useForm<EmailVerifyFormData>({
+        resolver: zodResolver(emailVerifySchema),
+        defaultValues: {
+            email: "",
+            otp: "",
+        },
+    })
+    const router=useRouter()
+    const handleSubmit = async (data: EmailVerifyFormData) => {
+        try {
+            const response = await emailVerify(data).unwrap()
+            
+            toast.success(response.message)
+            form.reset()
+router.push("/login")
+        } catch (error: any) {
+            toast.error(error.data?.message ?? "Something went wrong")
+        };
     }
     return (
 
@@ -45,8 +68,9 @@ export default function VerifyEmailPage() {
             <FormBuilder
                 fields={resetPasswordFields}
                 onSubmit={handleSubmit}
+                form={form}
                 submitButton={{
-                    children: "Verify Email",
+                    children: isLoading ? "Verifying..." : "Verify Email",
                     variant: "primary",
                     size: "lg",
                     fullWidth: true,
