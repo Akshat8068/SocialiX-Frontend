@@ -7,11 +7,8 @@ import {
     Bookmark,
     UserSquare2,
     Pin,
-    Play,
-    Copy,
 } from "lucide-react";
 import clsx from "clsx";
-import { dummyPosts } from "../data";
 import { useGetProfileQuery } from "../api/profile.api";
 
 const tabs = [
@@ -33,7 +30,13 @@ const tabs = [
     },
 ];
 
-export default function ProfileTabs() {
+interface ProfileTabsProps {
+    onPostClick: () => void;
+}
+
+export default function ProfileTabs({
+    onPostClick,
+}: ProfileTabsProps) {
     const [activeTab, setActiveTab] = useState("posts");
     const { data, isLoading, isError } = useGetProfileQuery();
     
@@ -83,6 +86,7 @@ export default function ProfileTabs() {
                 {user?.post.map((post) => (
                     <div
                         key={post.id}
+                        onClick={onPostClick}
                         className="group relative aspect-square overflow-hidden bg-surface-container"
                     >
                         <Image
