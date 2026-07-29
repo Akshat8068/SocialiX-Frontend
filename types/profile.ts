@@ -2,7 +2,7 @@ import { ApiResponse } from "./api";
 import { User } from "./auth";
 
 export interface UpdateProfileRequest {
-    fullname: string;
+    fullname?: string;
     username?: string;
     bio?: string;
     website?: string;

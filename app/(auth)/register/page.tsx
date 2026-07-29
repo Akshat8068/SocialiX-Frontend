@@ -1,7 +1,7 @@
 
 "use client"
 import { FormBuilder, type FormFieldConfig } from "@/components/common/FormBuilder";
-import { useRegisterMutation } from "@/features/auth/api/authApi";
+import { useRegisterMutation } from "@/features/auth/api/auth.api";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { RegisterFormData, registerSchema } from "@/features/auth/validation";
 import { zodResolver } from "@hookform/resolvers/zod";

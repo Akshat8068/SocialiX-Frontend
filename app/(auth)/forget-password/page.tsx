@@ -3,7 +3,7 @@
 import { FormBuilder, FormFieldConfig } from "@/components/common/FormBuilder";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
-import { useForgetEmailMutation } from "@/features/auth/api/authApi";
+import { useForgetEmailMutation } from "@/features/auth/api/auth.api";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { ForgetEmailFormData, forgetEmailSchema } from "@/features/auth/validation";
 import { zodResolver } from "@hookform/resolvers/zod";

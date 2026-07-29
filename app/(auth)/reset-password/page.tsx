@@ -3,7 +3,7 @@
 import { FormBuilder, type FormFieldConfig } from "@/components/common/FormBuilder";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
-import { useResetPasswordMutation } from "@/features/auth/api/authApi";
+import { useResetPasswordMutation } from "@/features/auth/api/auth.api";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { ResetPasswordFormData, resetPasswordSchema } from "@/features/auth/validation";
 import { zodResolver } from "@hookform/resolvers/zod";

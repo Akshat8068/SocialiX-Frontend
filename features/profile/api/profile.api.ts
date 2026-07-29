@@ -12,10 +12,10 @@ export const profileApi = baseApi.injectEndpoints({
         }),
 
         updateProfile: builder.mutation<UpdateProfileResponse,UpdateProfileRequest>({
-            query: (body) => ({
+            query: (data) => ({
                 url: "/user/profile",
                 method: "PUT",
-                body,
+                body:data,
             }),
             invalidatesTags: ["Profile"],
         }),

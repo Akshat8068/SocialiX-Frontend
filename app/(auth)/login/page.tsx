@@ -1,7 +1,7 @@
 "use client"
 
 import { FormBuilder, type FormFieldConfig } from "@/components/common/FormBuilder";
-import { useLoginMutation } from "@/features/auth/api/authApi";
+import { useLoginMutation } from "@/features/auth/api/auth.api";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { LoginFormData, loginSchema } from "@/features/auth/validation";
 import { useAppDispatch } from "@/store/hooks";

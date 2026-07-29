@@ -11,6 +11,21 @@ export interface LoginRequest {
   email: string;
   password: string;
 }
+export interface Media {
+  id: number;
+  publicId: string;
+  secureUrl: string;
+}
+
+export interface Post {
+  id: number;
+  caption: string;
+  visibility: string;
+  media: Media[];
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+}
 
 export interface User {
   id: number;
@@ -22,7 +37,11 @@ export interface User {
   profilePicture?: string | null;
   accountType?: "PUBLIC" | "PRIVATE";
   professionalAccount?: boolean;
-  isVerified: boolean;
+  isVerified?: boolean;
+  postCount?: number;
+  followercount?: number
+  followingCount?: number
+  post: Post[];
 }
 
 export type AuthResponse = ApiResponse<User>

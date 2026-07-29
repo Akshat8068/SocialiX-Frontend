@@ -14,8 +14,8 @@ export const loginSchema = z.object({
 export const emailVerifySchema = z.object({
     email: z.email("Invalid Email Address").toLowerCase(),
     otp: z
-    .string()
-    .length(4, "OTP must be 4 digits"),
+        .string()
+        .length(4, "OTP must be 4 digits"),
 })
 export const forgetEmailSchema = z.object({
     email: z.email("Invalid Email Address").toLowerCase()
@@ -25,9 +25,20 @@ export const resetPasswordSchema = z.object({
     otp: z.string().length(4, "OTP must be 4 digits"),
     newPassword: z.string().min(8, "Password must be atleast 8 charcters")
 })
+export const ProfileUpdateSchema = z.object({
+    fullname: z.string().optional(),
+    username: z.string().optional(),
+    bio: z.string().max(150, "Bio have onlu 150 words").optional(),
+    website: z.preprocess(
+        (value) => value === "" ? undefined : value,
+        z.url().optional()
+    ),
+    accountType: z.enum(["PUBLIC", "PRIVATE"]).optional(),
+})
 
 export type RegisterFormData = z.infer<typeof registerSchema>
-export type LoginFormData=z.infer<typeof loginSchema>
-export type EmailVerifyFormData=z.infer<typeof emailVerifySchema>
-export type ForgetEmailFormData=z.infer<typeof forgetEmailSchema>
+export type LoginFormData = z.infer<typeof loginSchema>
+export type EmailVerifyFormData = z.infer<typeof emailVerifySchema>
+export type ForgetEmailFormData = z.infer<typeof forgetEmailSchema>
 export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>
+export type UpdateProfileFormData = z.infer<typeof ProfileUpdateSchema>
