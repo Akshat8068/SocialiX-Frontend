@@ -1,5 +1,5 @@
 import baseApi from "@/store/api/baseApi";
-import { AcceptRequestResponse, CancelRequestResponse, FollowActionRequest, FollowersRequest, FollowersResponse, FollowingRequest, FollowingResponse, FollowRequest, FollowResponse, FriendsResponse, MutualFollowersRequest, MutualFollowersResponse, PendingRequestsResponse, RejectRequestResponse, RemoveFollowerResponse, SentRequestsResponse, UnfollowResponse } from "../types";
+import { AcceptRequestResponse,  CancelRequestResponse, FollowActionRequest,  FollowersResponse,  FollowingResponse,  FollowRequest,  FollowResponse, FriendsResponse, MutualFollowersResponse, PendingRequestsResponse, RejectRequestResponse, RemoveFollowerResponse, SentRequestsResponse, UnfollowResponse } from "../types";
 
 export const followApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -51,14 +51,14 @@ export const followApi = baseApi.injectEndpoints({
             invalidatesTags: ["Follow", "Profile"],
         }),
 
-        getFollowers: builder.query<FollowersResponse,FollowersRequest>({
+        getFollowers: builder.query<FollowersResponse,FollowRequest>({
             query: ({ userId }) => ({
                 url: `/follow/follower/${userId}`,
             }),
             providesTags: ["Follow"],
         }),
 
-        getFollowing: builder.query<FollowingResponse,FollowingRequest>({
+        getFollowing: builder.query<FollowingResponse,FollowRequest>({
             query: ({ userId }) => ({
                 url: `/follow/following/${userId}`,
             }),
@@ -79,7 +79,7 @@ export const followApi = baseApi.injectEndpoints({
             providesTags: ["Follow"],
         }),
 
-        mutualFollow: builder.query<MutualFollowersResponse,MutualFollowersRequest>({
+        mutualFollow: builder.query<MutualFollowersResponse,FollowRequest>({
             query: ({ userId }) => ({
                 url: `/follow/mutual/${userId}`,
             }),

@@ -15,22 +15,10 @@ export interface Follow {
 export interface FollowRequest {
     userId: number;
 }
-
 export interface FollowActionRequest {
     id: number;
 }
 
-export interface FollowersRequest {
-    userId: number;
-}
-
-export interface FollowingRequest {
-    userId: number;
-}
-
-export interface MutualFollowersRequest {
-    userId: number;
-}
 
 export type FollowResponse = ApiResponse<Follow>;
 
