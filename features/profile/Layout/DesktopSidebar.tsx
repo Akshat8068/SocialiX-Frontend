@@ -1,98 +1,97 @@
-"use client";
-
-import Link from "next/link";
 import {
-  User,
-  Settings,
-  Users,
-  UserPlus,
-  VolumeX,
-  Ban,
+  Home,
+  Compass,
+  Clapperboard,
+  MessageCircle,
+  Bell,
+  BarChart3,
+  Plus,
 } from "lucide-react";
 
-const menuItems = [
-  {
-    label: "Profile",
-    href: "/profile",
-    icon: User,
-    active: true,
-  },
-  {
-    label: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
-  {
-    label: "Followers",
-    href: "/followers",
-    icon: Users,
-  },
-  {
-    label: "Following",
-    href: "/following",
-    icon: UserPlus,
-  },
-  {
-    label: "Muted",
-    href: "/muted",
-    icon: VolumeX,
-  },
-  {
-    label: "Blocked",
-    href: "/blocked",
-    icon: Ban,
-  },
-];
-
-export default function DesktopSidebar() {
+const DesktopSidebar = () => {
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 flex-col border-r bg-background lg:flex">
+    <aside className="fixed left-0 top-0 hidden h-screen w-64 border-r border-border bg-background lg:flex lg:flex-col">
       {/* Logo */}
-      <div className="border-b px-6 py-6">
-        <h1 className="text-2xl font-bold text-primary">
+      <div className="px-6 py-8">
+        <h1 className="text-3xl font-bold tracking-tight text-primary">
           SocialiX
         </h1>
+
+        <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+          Premium Pro
+        </p>
       </div>
 
       {/* Navigation */}
-      <nav className="flex flex-1 flex-col gap-2 p-4">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
+      <nav className="flex-1 space-y-2 px-4">
+        <SidebarItem icon={<Home size={22} />} label="Home" />
 
-          return (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 transition-colors ${
-                item.active
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted"
-              }`}
-            >
-              <Icon size={20} />
+        <SidebarItem icon={<Compass size={22} />} label="Explore" />
 
-              <span className="font-medium">
-                {item.label}
-              </span>
-            </Link>
-          );
-        })}
+        <SidebarItem icon={<Clapperboard size={22} />} label="Reels" />
+
+        <SidebarItem icon={<MessageCircle size={22} />} label="Messages" />
+
+        <SidebarItem icon={<Bell size={22} />} label="Notifications" />
+
+        <SidebarItem
+          active
+          icon={<BarChart3 size={22} />}
+          label="Analytics"
+        />
       </nav>
 
-      {/* Pro Card */}
-      <div className="m-4 rounded-2xl border bg-muted p-5">
-        <h3 className="font-semibold text-primary">
-          SocialiX Pro
-        </h3>
-
-        <p className="mt-2 text-sm text-muted-foreground">
-          Unlock premium features and grow your audience faster.
-        </p>
-
-        <button className="mt-5 w-full rounded-xl bg-primary py-2.5 font-medium text-primary-foreground transition hover:opacity-90">
-          Upgrade to Pro
+      {/* Create Post */}
+      <div className="px-4">
+        <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 font-semibold text-primary-foreground transition hover:opacity-90 active:scale-95">
+          <Plus size={18} />
+          Create Post
         </button>
+      </div>
+
+      {/* User */}
+      <div className="mt-8 flex items-center gap-3 border-t border-border px-4 py-6">
+        <img
+          src={profile.avatar}
+          alt={profile.name}
+          className="h-11 w-11 rounded-full object-cover"
+        />
+
+        <div className="min-w-0">
+          <p className="truncate font-semibold">{profile.name}</p>
+
+          <p className="truncate text-xs text-muted-foreground">
+            @{profile.username}
+          </p>
+        </div>
       </div>
     </aside>
   );
+};
+
+interface SidebarItemProps {
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
 }
+
+function SidebarItem({
+  icon,
+  label,
+  active = false,
+}: SidebarItemProps) {
+  return (
+    <button
+      className={`flex w-full items-center gap-4 rounded-xl px-4 py-3 text-left transition-all active:scale-95 ${active
+          ? "bg-primary text-primary-foreground"
+          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+        }`}
+    >
+      {icon}
+
+      <span className="font-medium">{label}</span>
+    </button>
+  );
+}
+
+export default DesktopSidebar;
