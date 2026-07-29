@@ -1,5 +1,6 @@
 
 import baseApi from "@/store/api/baseApi";
+import { ApiResponse } from "@/types/api";
 import type {
   AuthResponse,
   ForgetEmailRequest,
@@ -8,6 +9,7 @@ import type {
   RegisterRequest,
   ResetPasswordRequest,
   ResetPasswordResponse,
+  User,
   VerifyEmailRequest,
   VerifyEmailResponse,
 } from "@/types/auth";
@@ -57,6 +59,13 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
+    getMe: builder.query<ApiResponse<User>, void>({
+      query: () => ({
+        url: "/auth/me",
+        method: "GET",
+      }),
+      providesTags: ["Auth"]
+    }),
     
   }),
 });
@@ -66,5 +75,6 @@ export const {
   useLoginMutation,
   useEmailVerifyMutation,
   useForgetEmailMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
+  useGetMeQuery
 } = authApi;

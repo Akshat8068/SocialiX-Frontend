@@ -1,47 +1,52 @@
-import Link from "next/link";
+import { profile } from "@/data/profileData";
 
-interface ProfileStatsProps {
-  posts: number;
-  followers: number;
-  following: number;
-}
 
-export default function ProfileStats({
-  posts,
-  followers,
-  following,
-}: ProfileStatsProps) {
-  return (
-    <div className="flex items-center justify-between gap-6 lg:justify-start lg:gap-10">
-      <Link
-        href="/profile/posts"
-        className="flex flex-col items-center transition-opacity hover:opacity-80 lg:items-start"
-      >
-        <span className="text-lg font-bold text-foreground lg:text-xl">
-          {posts}
-        </span>
-        <span className="text-sm text-muted-foreground">Posts</span>
-      </Link>
+const ProfileStats = () => {
 
-      <Link
-        href="/profile/followers"
-        className="flex flex-col items-center transition-opacity hover:opacity-80 lg:items-start"
-      >
-        <span className="text-lg font-bold text-foreground lg:text-xl">
-          {followers.toLocaleString()}
-        </span>
-        <span className="text-sm text-muted-foreground">Followers</span>
-      </Link>
+    const stats = [
+        {
+            label: "Posts",
+            value: profile.posts
+        },
+        {
+            label: "Followers",
+            value: "8.2k"
+        },
+        {
+            label: "Following",
+            value: profile.following
+        }
+    ];
 
-      <Link
-        href="/profile/following"
-        className="flex flex-col items-center transition-opacity hover:opacity-80 lg:items-start"
-      >
-        <span className="text-lg font-bold text-foreground lg:text-xl">
-          {following.toLocaleString()}
-        </span>
-        <span className="text-sm text-muted-foreground">Following</span>
-      </Link>
-    </div>
-  );
-}
+
+    return (
+
+        <div className="
+      flex gap-8
+      border-y border-border
+      py-4
+    ">
+
+            {
+                stats.map((item) => (
+                    <div key={item.label}>
+
+                        <p className="font-bold text-xl">
+                            {item.value}
+                        </p>
+
+                        <p className="text-sm text-muted-foreground">
+                            {item.label}
+                        </p>
+
+                    </div>
+                ))
+            }
+
+        </div>
+
+    );
+};
+
+
+export default ProfileStats;
