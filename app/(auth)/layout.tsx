@@ -7,7 +7,7 @@ export default function AuthLayout({
   return (
     <main className="relative h-screen w-full flex items-center justify-center p-gutter overflow-hidden"
       style={{
-        backgroundImage: "url('/AuthBg.jpg')",
+        backgroundImage: "url('/Hero.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

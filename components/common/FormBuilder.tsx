@@ -3,16 +3,18 @@
 import { Eye, EyeOff, Lock, LucideIcon } from "lucide-react";
 import { FormField } from "./FormField";
 import { Input } from "../ui/Input";
-import {  Controller,type Control, UseFormReturn } from "react-hook-form"
+import { Controller, type Control, UseFormReturn } from "react-hook-form"
 import { Button, ButtonProps } from "../ui/button";
 import OTPInput from "../ui/otpInput";
+import { Textarea } from "../ui/textArea";
+import { Switch } from "../ui/switch";
 export type FieldType =
     | "text"
     | "email"
     | "password"
     | "number"
     | "textarea"
-    | "select"
+    | "switch"
     | "otp";
 
 export interface FormOption {
@@ -40,7 +42,7 @@ export interface FormFieldConfig {
     helperText?: string;
     required?: boolean;
     disabled?: boolean;
-
+    switchLabel?: string;
     options?: FormOption[];
 
     className?: string;
@@ -59,9 +61,9 @@ function PasswordField({ field, placeholder }: { field: any; placeholder?: strin
             />
 
             <input
-           {...field}
+                {...field}
                 id="password"
-                
+
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className="w-full rounded-lg border border-outline-variant/50 bg-white/50 py-3 pl-12 pr-12 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
@@ -81,27 +83,46 @@ function PasswordField({ field, placeholder }: { field: any; placeholder?: strin
 }
 
 export function RenderField({
-    field,
-    control,
+  field,
+  control,
 }: RenderFieldProps) {
+  return (
+    <Controller
+      name={field.id}
+      control={control}
+      render={({ field: controller, fieldState }) => {
+        if (field.type === "switch") {
+          return (
+            <div className="flex items-center justify-between rounded-xl border border-outline-variant p-5">
+              <div>
+                <p className="font-medium">{field.label}</p>
 
-    return (
-        <Controller
-            name={field.id}
-            control={control}
-            render={({ field: controller, fieldState }) => (
-                <FormField
-                    id={field.id}
-                    label={field.label}
-                    required={field.required}
-                    error={fieldState.error?.message}
-                    helperText={field.helperText}
-                >
-                    {renderInput(field, controller)}
-                </FormField>
-            )}
-        />
-    );
+                {field.helperText && (
+                  <p className="text-sm text-on-surface-variant">
+                    {field.helperText}
+                  </p>
+                )}
+              </div>
+
+              {renderInput(field, controller)}
+            </div>
+          );
+        }
+
+        return (
+          <FormField
+            id={field.id}
+            label={field.label}
+            required={field.required}
+            error={fieldState.error?.message}
+            helperText={field.helperText}
+          >
+            {renderInput(field, controller)}
+          </FormField>
+        );
+      }}
+    />
+  );
 }
 
 function renderInput(
@@ -123,19 +144,41 @@ function renderInput(
         case "password":
             return (
                 <PasswordField
-                   field={controller}
+                    field={controller}
                     placeholder={field.placeholder}
                 />
             );
         case "otp":
-      return (
-        <OTPInput
-          value={controller.value}
-          onChange={controller.onChange}
-          length={field.length ?? 4}
-          disabled={field.disabled}
-        />
-      )
+            return (
+                <OTPInput
+                    value={controller.value}
+                    onChange={controller.onChange}
+                    length={field.length ?? 4}
+                    disabled={field.disabled}
+                />
+            )
+        case "textarea":
+            return (
+                <Textarea
+                    {...controller}
+                    id={field.id}
+                    placeholder={field.placeholder}
+                    disabled={field.disabled}
+                    rows={5}
+                />
+            );
+        case "switch":
+            return (
+                <Switch
+                    checked={controller.value === "PRIVATE"}
+                    disabled={field.disabled}
+                    onCheckedChange={(checked) =>
+                        controller.onChange(
+                            checked ? "PRIVATE" : "PUBLIC"
+                        )
+                    }
+                />
+            );
         default:
             return null;
     }
@@ -147,8 +190,8 @@ export function FormBuilder({
     submitButton,
     onSubmit,
 }: FormBuilderProps) {
-    
- 
+
+
     return (
         <form className="w-full space-y-md" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-5">

@@ -1,104 +1,248 @@
-import ProfileStats from "./ProfileStats";
-import Bio from "./Bio";
-import ActionButtons from "./ActionButtons";
+"use client";
 
-import { profile } from "@/data/profileData";
-import { Camera } from "lucide-react";
+import Image from "next/image";
+import { Camera, Link2, Share2, Pencil, LayoutDashboard, BadgeCheck } from "lucide-react";
 
-
-const ProfileHeader = () => {
-  return (
-    <section className="space-y-6">
-
-      <div className="
-        flex flex-col gap-6
-        md:flex-row
-      ">
-
-        {/* Avatar */}
-        <div className="relative mx-auto md:mx-0">
-
-          <div className="
-            h-32 w-32
-            md:h-40 md:w-40
-            rounded-full
-            bg-gradient-to-tr from-primary to-secondary
-            p-1
-          ">
-
-            <img
-              src={profile.avatar}
-              alt={profile.name}
-              className="
-                h-full w-full
-                rounded-full
-                border-4 border-background
-                object-cover
-              "
-            />
-
-          </div>
-
-
-          <button
-            className="
-            absolute bottom-2 right-2
-            rounded-full
-            bg-primary
-            p-2
-            text-white
-            border-4 border-background
-            "
-          >
-            <Camera size={16} />
-          </button>
-
-        </div>
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useGetProfileQuery } from "../api/profile.api";
 
 
 
-        {/* Details */}
-        <div className="flex-1 space-y-5">
+export default function ProfileHeader() {
+    const { data, isLoading, isError } = useGetProfileQuery();
+
+    const user = data?.data
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError || !data) {
+        return <div>Something went wrong.</div>;
+    }
+
+    return (
+        <>
+
+            <section className="space-y-6 md:hidden">
+
+                <div className="flex items-end justify-between">
+
+                    <div className="relative">
+
+                        <div className="h-24 w-24 rounded-full bg-gradient-to-tr from-primary to-secondary p-1">
+                            <div className="h-full w-full overflow-hidden rounded-full border-4 border-surface">
+                                <Image
+                                    src={user?.profilePicture || "/hero.jpg"}
+                                    alt={user?.fullname||"USer"}
+                                    width={96}
+                                    height={96}
+                                    className="h-full w-full object-cover"
+                                />
+                            </div>
+                        </div>
 
 
-          <div className="
-            flex flex-col gap-4
-            md:flex-row
-            md:justify-between
-            md:items-center
-          ">
+                        <Button
+                            variant="primary"
+                            className="absolute bottom-0 right-0 rounded-full p-2"
+                        >
+                            <Camera size={16} />
+                        </Button>
 
-            <div>
+                    </div>
 
-              <h1 className="text-3xl font-bold">
-                {profile.name}
-              </h1>
+                    <div className="flex flex-1 justify-around">
 
-              <p className="text-muted-foreground">
-                @{profile.username}
-              </p>
+                        <div className="text-center">
+                            <p className="text-lg font-bold">{user?.postCount}</p>
+                            <p className="text-xs text-muted-foreground">Posts</p>
+                        </div>
 
-            </div>
+                        <div className="text-center">
+                            <p className="text-lg font-bold">{user?.followercount}</p>
+                            <p className="text-xs text-muted-foreground">Followers</p>
+                        </div>
+
+                        <div className="text-center">
+                            <p className="text-lg font-bold">{user?.followingCount}</p>
+                            <p className="text-xs text-muted-foreground">Following</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div className="flex items-center gap-2">
+
+                        <h2 className="text-2xl font-bold">
+                            {user?.fullname}
+                        </h2>
+
+                        {/* {user.verified && (
+                            <BadgeCheck
+                                size={20}
+                                className="text-primary"
+                            />
+                        )} */}
+
+                    </div>
+
+                    <p className="mt-1 text-muted-foreground">
+                        @{user?.username}
+                    </p>
+
+                    <p className="mt-4 leading-7">
+                        {user?.bio}
+                    </p>
+
+                    <a
+                        href={user?.website}
+                        className="mt-3 flex items-center gap-2 text-primary"
+                    >
+                        <Link2 size={16} />
+
+                        {user?.website}
+                    </a>
+
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                    <Link href={"/profile/edit"}>
+                        <Button
+                            variant="primary"
+                            size="lg"
+                            leftIcon={<Pencil size={16} />}
+                        >
+                            Edit Profile
+                        </Button>
+                    </Link>
 
 
-            <ActionButtons />
 
-          </div>
+                    <Button
+                        variant="outlined"
+                        size="lg"
+                        leftIcon={<Share2 size={16} />}
+                    >
+                        Share
+                    </Button>
+                </div>
 
-
-
-          <ProfileStats />
-
-
-          <Bio />
-
-        </div>
-
-      </div>
-
-    </section>
-  );
-};
+            </section>
 
 
-export default ProfileHeader;
+            <section className="hidden gap-10 md:flex">
+
+                <div className="h-40 w-40 relative rounded-full bg-gradient-to-tr from-primary to-secondary p-1">
+                    <div className="h-full w-full overflow-hidden rounded-full border-4 border-surface">
+                        <Image
+                            src={user?.profilePicture || "/Hero.jpg"}
+                            alt={user?.fullname ||"User profile"}
+                            width={160}
+                            height={160}
+                            className="h-full w-full object-cover"
+                        />
+
+                    </div>
+
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        className="absolute bottom-0 right-0 rounded-full p-2"
+                    >
+                        <Camera size={36} />
+                    </Button>
+                </div>
+
+
+                <div className="flex-1  space-y-6">
+
+                    <div className="flex items-center justify-between">
+
+                        <div>
+
+                            <div className="flex items-center gap-2">
+
+                                <h1 className="text-4xl font-bold">
+                                    {user?.fullname}
+                                </h1>
+
+                                {/* {user.verified && (
+                                    <BadgeCheck
+                                        className="text-primary"
+                                    />
+                                )} */}
+
+                            </div>
+
+                            <p className="text-muted-foreground">
+                                @{user?.username}
+                            </p>
+
+                        </div>
+
+                        <div className="flex gap-3">
+                            <Link href={"/profile/edit"}>
+                                <Button
+                                    variant="primary"
+                                    size="lg"
+                                    leftIcon={<Pencil size={16} />}>
+                                    Edit Profile
+                                </Button>
+                            </Link>
+                            <Button
+                                variant="outlined"
+                                size="lg"
+                                leftIcon={<Share2 size={16} />}
+                            >
+                            </Button>
+
+                        </div>
+
+                    </div>
+
+                    <div className="flex gap-10   py-4">
+
+                        <div>
+                            <span className="font-bold">{user?.postCount}</span>{" "}
+                            Posts
+                        </div>
+
+                        <div>
+                            <span className="font-bold">{user?.followercount}</span>{" "}
+                            Followers
+                        </div>
+
+                        <div>
+                            <span className="font-bold">{user?.followingCount}</span>{" "}
+                            Following
+                        </div>
+
+                    </div>
+
+                    <div className="max-w-2xl space-y-3">
+
+                        <p className="leading-8">
+                            {user?.bio}
+                        </p>
+
+                        <a
+                            href={user?.website}
+                            className="flex items-center gap-2 text-primary"
+                        >
+                            <Link2 size={18} />
+
+                            {user?.website}
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section >
+        </>
+    );
+}

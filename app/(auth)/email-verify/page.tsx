@@ -1,7 +1,7 @@
 "use client";
 
 import { FormBuilder, type FormFieldConfig } from "@/components/common/FormBuilder";
-import { useEmailVerifyMutation } from "@/features/auth/api/authApi";
+import { useEmailVerifyMutation } from "@/features/auth/api/auth.api";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { EmailVerifyFormData, emailVerifySchema } from "@/features/auth/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,14 +38,14 @@ export default function VerifyEmailPage() {
             otp: "",
         },
     })
-    const router=useRouter()
+    const router = useRouter()
     const handleSubmit = async (data: EmailVerifyFormData) => {
         try {
             const response = await emailVerify(data).unwrap()
-            
+
             toast.success(response.message)
             form.reset()
-router.push("/login")
+            router.push("/login")
         } catch (error: any) {
             toast.error(error.data?.message ?? "Something went wrong")
         };
