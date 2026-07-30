@@ -1,33 +1,26 @@
-export interface PostUser {
-    id: number;
-    username: string;
-    fullname: string;
-    profilePicture: string | null;
-}
+import { ApiResponse } from "./api";
+import { User } from "./auth";
+import { Hashtag } from "./hashTag";
 
 export interface PostMedia {
     id: number;
     url: string;
     publicId: string;
-    type: "IMAGE" | "VIDEO";
+    secureUrl:string
 }
 
 export interface Post {
     id: number;
-    caption: string | null;
-    user: PostUser;
+    caption?: string | null;
+    user: User;
     media: PostMedia[];
+    hashtag?:Hashtag;
     createdAt: string;
     updatedAt: string;
 }
-
-export interface ApiResponse<T> {
-    success: boolean;
-    message: string;
-    data: T;
-}
 export interface CreatePostRequest {
     caption?: string;
+    hashtag?:Hashtag;
     media: File[];
 }
 
@@ -35,6 +28,7 @@ export interface UpdatePostRequest {
     postId: number;
     caption?: string;
     media?: File[];
+    hashtag?:Hashtag;
     formData:string
 }
 

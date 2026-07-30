@@ -26,7 +26,6 @@ export const resetPasswordSchema = z.object({
     newPassword: z.string().min(8, "Password must be atleast 8 charcters")
 })
 export const ProfileUpdateSchema = z.object({
-    fullname: z.string().optional(),
     bio: z.string().max(150, "Bio have onlu 150 words").optional(),
     website: z.preprocess(
         (value) => value === "" ? undefined : value,

@@ -1,9 +1,4 @@
-export interface LikedUser {
-    id: number;
-    username: string;
-    fullname: string;
-    profilePicture: string | null;
-}
+import { User } from "./auth";
 
 export interface LikeRequest {
     postId: number;
@@ -18,19 +13,13 @@ export interface ToggleLikeResponse {
 export interface GetLikedUsersResponse {
     success: boolean;
     message: string;
-    data: LikedUser[];
-}
-export interface CommentUser {
-    id: number;
-    username: string;
-    fullname: string;
-    profilePicture: string | null;
+    data: User[];
 }
 
 export interface Comment {
     id: number;
     content: string;
-    user: CommentUser;
+    user: User;
     createdAt: string;
     updatedAt: string;
     replies: Comment[];
@@ -38,11 +27,6 @@ export interface Comment {
 
 export interface CreateCommentRequest {
     postId: number;
-    content: string;
-}
-
-export interface ReplyCommentRequest {
-    commentId: number;
     content: string;
 }
 
@@ -61,12 +45,6 @@ export interface GetPostCommentsRequest {
 
 
 export interface CreateCommentResponse {
-    success: boolean;
-    message: string;
-    data: Comment;
-}
-
-export interface ReplyCommentResponse {
     success: boolean;
     message: string;
     data: Comment;

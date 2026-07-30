@@ -13,23 +13,23 @@ import UserListModel from "@/components/UserListModel/UserListModel";
 interface FeedPostProps {
     post: {
         id: number;
-        fullname: string;
-        username: string;
-        profilePicture: string;
-        location: string;
-        createdAt: string;
-        verified: boolean;
-        image: string;
-        likes: number;
-        commentsCount: number;
-        shares: number;
-        isLiked: boolean;
-        isSaved: boolean;
-        caption: string;
-        comments: {
-            id: number;
-            username: string;
-            comment: string;
+        fullname?: string;
+        username?: string;
+        profilePicture?: string;
+        location?: string;
+        createdAt?: string;
+        verified?: boolean;
+        image?: string;
+        likes?: number;
+        commentsCount?: number;
+        shares?: number;
+        isLiked?: boolean;
+        isSaved?: boolean;
+        caption?: string;
+        comments?: {
+            id?: number;
+            username?: string;
+            comment?: string;
         }[];
     };
 }

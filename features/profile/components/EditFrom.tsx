@@ -6,18 +6,14 @@ import { useForm } from "react-hook-form";
 import { FormBuilder, FormFieldConfig } from "@/components/common/FormBuilder";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { useUpdateProfileMutation } from "../api/profile.api";
+import { useRemoveProfilePictureMutation, useUpdateProfileMutation, useUpdateProfilePictureMutation } from "../api/profile.api";
 import { ProfileUpdateSchema, UpdateProfileFormData } from "@/features/auth/validation";
 import { toast } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react";
+import FileUpload from "@/components/ui/FileUpload";
 
 const profileFields: FormFieldConfig[] = [
-    {
-        id: "fullname",
-        type: "text",
-        label: "Full Name",
-        placeholder: "Enter your full name"
-    },
     {
         id: "bio",
         type: "textarea",
@@ -40,31 +36,57 @@ const profileFields: FormFieldConfig[] = [
 
 export default function EditProfileForm() {
     const [updateProfile, { isLoading, isSuccess, isError, error }] = useUpdateProfileMutation()
+    const [updateProfilePicture, { isLoading: isUploading }] = useUpdateProfilePictureMutation()
+    const [removeProfilePicture, { isLoading: isRemoving }] = useRemoveProfilePictureMutation();
+    const [profileImage, setProfileImage] = useState<File[]>([]);
+    const [preview, setPreview] = useState<string[]>([]);
     const router = useRouter()
     const form = useForm<UpdateProfileFormData>({
         resolver: zodResolver(ProfileUpdateSchema),
         defaultValues: {
-            fullname: "",
             bio: "",
             website: "",
-            accountType:"PUBLIC"
+            accountType: "PUBLIC"
         },
     })
 
+    const handleImageChange = (files: File[]) => {
+        setProfileImage(files);
 
+        setPreview(
+            files.map((file) => URL.createObjectURL(file))
+        );
+    };
     const handleSubmit = async (data: UpdateProfileFormData) => {
         try {
-            console.log(data)
             const response = await updateProfile(data).unwrap()
-            console.log(response)
-            toast.success(response.message)
+
+            if (profileImage.length > 0) {
+                const res = await updateProfilePicture({
+                    profilePicture: profileImage[0],
+                }).unwrap();
+                toast.success(res.message)
+            }
             form.reset()
+            toast.success(response.message)
             router.push("/profile")
         } catch (error: any) {
             console.log(error);
             console.log(error.data);
             console.log(error.data?.message)
             toast.error(error.data?.message ?? "Something went wrong")
+        }
+    }
+    const handleRemoveProfilePicture = async () => {
+        try {
+            const response = await removeProfilePicture().unwrap();
+
+            toast.success(response.message);
+            setProfileImage([]);
+            setPreview([]);
+            router.push("/profile")
+        } catch (error: any) {
+            toast.error(error.data?.message ?? "Something went wrong");
         }
     }
     return (
@@ -97,29 +119,27 @@ export default function EditProfileForm() {
 
                 <div className="flex flex-col items-center gap-5 md:flex-row">
                     <div className="relative">
-                        <div className="h-24 w-24 rounded-full bg-gradient-to-tr from-primary to-secondary p-1">
-                            <div className="h-full w-full overflow-hidden rounded-full border-4 border-surface">
-                                <Image
-                                    src="/Hero.jpg"
-                                    alt="Profile"
-                                    width={96}
-                                    height={96}
-                                    className="rounded-full border-4 h-full w-full  border-surface object-cover shadow"
+                        <div className="h-24 w-24 rounded-full bg-primary  p-1">
+                            <div className="h-full w-full rounded-full">
+                                <FileUpload
+                                    value={profileImage}
+                                    previewUrls={preview}
+                                    onChange={handleImageChange}
+                                    accept="image/*"
                                 />
                             </div>
 
                         </div>
-                        <Button
-                            variant="primary"
-                            className="absolute bottom-0 right-0 rounded-full p-2"
-                        >
-                            <Camera size={16} />
-                        </Button>
+
                     </div>
                     <div className="mt-2 flex justify-around gap-4">
 
-                        <Button ><Edit size={16} /></Button>
-                        <Button><Trash size={16} /></Button>
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={handleRemoveProfilePicture}
+                            disabled={isRemoving}
+                        ><Trash size={16} /></Button>
                     </div>
                 </div>
 
@@ -128,16 +148,16 @@ export default function EditProfileForm() {
 
             <div className="pb-16">
                 <FormBuilder
-                form={form}
-                fields={profileFields}
-                onSubmit={handleSubmit}
-                submitButton={{
-                    children: isLoading ? "Saving..." : "Save",
-                    variant: "primary",
-                    size: "lg",
-                    fullWidth: true
-                }}
-            />
+                    form={form}
+                    fields={profileFields}
+                    onSubmit={handleSubmit}
+                    submitButton={{
+                        children: isLoading ? "Saving..." : "Save",
+                        variant: "primary",
+                        size: "lg",
+                        fullWidth: true
+                    }}
+                />
 
             </div>
         </section >

@@ -1,9 +1,9 @@
 import baseApi from "@/store/api/baseApi";
-import { GetProfileResponse, RemoveProfilePictureResponse, UpdateProfilePictureRequest, UpdateProfilePictureResponse, UpdateProfileRequest, UpdateProfileResponse } from "@/types/profile";
+import { ProfileResponse, RemoveProfilePictureResponse, UpdateProfilePictureRequest, UpdateProfilePictureResponse, UpdateProfileRequest } from "@/types/profile";
 
 export const profileApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getProfile: builder.query<GetProfileResponse, void>({
+        getProfile: builder.query<ProfileResponse, void>({
             query: () => ({
                 url: "/user/profile",
                 method: "GET",
@@ -11,7 +11,7 @@ export const profileApi = baseApi.injectEndpoints({
             providesTags: ["Profile"],
         }),
 
-        updateProfile: builder.mutation<UpdateProfileResponse,UpdateProfileRequest>({
+        updateProfile: builder.mutation<ProfileResponse,UpdateProfileRequest>({
             query: (data) => ({
                 url: "/user/profile",
                 method: "PUT",
@@ -41,6 +41,21 @@ export const profileApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["Profile"],
         }),
+        getUsers: builder.query<ProfileResponse[], void>({
+            query: () => ({
+                url: "/user/otherUsers",
+                method: "GET",
+            }),
+            providesTags: ["Profile"],
+        }),
+        getUserProfile: builder.query<ProfileResponse, number>({
+            query: (userId) => ({
+                
+                url: `/user/otherUsers/${userId}`,
+                method: "GET",
+            }),
+            providesTags: ["Profile"],
+        }),
     }),
 });
 
@@ -49,4 +64,5 @@ export const {
     useUpdateProfileMutation,
     useUpdateProfilePictureMutation,
     useRemoveProfilePictureMutation,
+    useGetUsersQuery,useGetUserProfileQuery
 } = profileApi
