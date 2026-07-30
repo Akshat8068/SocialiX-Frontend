@@ -1,4 +1,5 @@
-import { ApiResponse } from "./api";
+import { ApiResponse } from "./api"
+import { Post } from "./post";
 
 export interface RegisterRequest {
   fullname: string;
@@ -11,29 +12,17 @@ export interface LoginRequest {
   email: string;
   password: string;
 }
-export interface Media {
-  id: number;
-  publicId: string;
-  secureUrl: string;
-}
 
-export interface Post {
-  id: number;
-  caption: string;
-  visibility: string;
-  media: Media[];
-  likeCount: number;
-  commentCount: number;
-  createdAt: string;
-}
+
+
 
 export interface User {
   id: number;
   fullname: string;
   username: string;
   email: string;
-  bio?: string;
-  website?: string;
+  bio?: string | null;
+  website?: string | null;
   profilePicture?: string | null;
   accountType?: "PUBLIC" | "PRIVATE";
   professionalAccount?: boolean;
@@ -41,7 +30,8 @@ export interface User {
   postCount?: number;
   followercount?: number
   followingCount?: number
-  post: Post[];
+  post?: Post[];
+  isFollowing?:boolean
 }
 
 export type AuthResponse = ApiResponse<User>

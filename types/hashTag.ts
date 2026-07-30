@@ -1,28 +1,15 @@
-export interface HashtagOwner {
-    id: number;
-    username: string;
-    fullname: string;
-}
+import { ApiResponse } from "./api";
+import { User } from "./auth";
+
 
 export interface Hashtag {
     id: number;
     name: string;
     isPublic: boolean;
     postCount: number;
-    owner: HashtagOwner;
+    owner: User;
     createdAt: string;
 }
-
-export interface ApiResponse<T> {
-    success: boolean;
-    message: string;
-    data: T;
-}
-
-/* -------------------------------------------------------------------------- */
-/*                                   Requests                                 */
-/* -------------------------------------------------------------------------- */
-
 export interface CreateHashtagRequest {
     name: string;
 }
@@ -35,10 +22,7 @@ export interface DeleteHashtagRequest {
     hashtagId: number;
 }
 
-
-export type CreateHashtagResponse = ApiResponse<Hashtag>;
-
-export type GetHashtagResponse = ApiResponse<Hashtag>;
+export type HashtagResponse = ApiResponse<Hashtag>;
 
 export interface DeleteHashtagResponse {
     success: boolean;

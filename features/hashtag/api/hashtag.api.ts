@@ -1,9 +1,9 @@
 import baseApi from "@/store/api/baseApi";
-import { CreateHashtagRequest, CreateHashtagResponse, DeleteHashtagRequest, DeleteHashtagResponse, GetHashtagRequest, GetHashtagResponse } from "@/types/hashTag";
+import { CreateHashtagRequest,  DeleteHashtagRequest, DeleteHashtagResponse, GetHashtagRequest, HashtagResponse } from "@/types/hashTag";
 
 export const hashtagApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        createHashtag: builder.mutation<CreateHashtagResponse,CreateHashtagRequest>({
+        createHashtag: builder.mutation<HashtagResponse,CreateHashtagRequest>({
             query: (data) => ({
                 url: "/hashtag",
                 method: "POST",
@@ -12,7 +12,7 @@ export const hashtagApi = baseApi.injectEndpoints({
             invalidatesTags: ["Post","Hashtags"],
         }),
 
-        getHashtag: builder.query<GetHashtagResponse, GetHashtagRequest>({
+        getHashtag: builder.query<HashtagResponse, GetHashtagRequest>({
             query: ({ hashTag }) => ({
                 url: "/hashtag",
                 method: "GET",

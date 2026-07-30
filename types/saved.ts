@@ -1,34 +1,16 @@
-export interface SavedUser {
-    id: number;
-    username: string;
-    fullname: string;
-    profilePicture: string | null;
-}
+import { User } from "./auth";
+import { Post } from "./post";
 
-export interface SavedPost {
-    id: number;
-    caption: string | null;
-}
 
 export interface Saved {
     id: number;
-    user: SavedUser;
-    post: SavedPost;
+    user: User;
+    post: Post;
     createdAt: string;
 }
 
-export interface SavePostRequest {
+export interface PostRequest {
     postId: number;
-}
-
-export interface GetSingleSavedRequest {
-    postId: number;
-}
-
-export interface SavePostResponse {
-    success: boolean;
-    message: string;
-    data?: Saved;
 }
 
 export interface GetSingleSavedResponse {

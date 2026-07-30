@@ -1,25 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { Camera, Link2, Share2, Pencil, LayoutDashboard, BadgeCheck } from "lucide-react";
+import { Camera, Link2, Share2, Pencil, LayoutDashboard, BadgeCheck, MessageCirclePlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useGetProfileQuery } from "../api/profile.api";
+import { User } from "@/types/auth";
+interface ProfileHeaderProps {
+    user: User ;
+    isOwnProfile: boolean;
+}
 
-
-
-export default function ProfileHeader() {
-    const { data, isLoading, isError } = useGetProfileQuery();
-
-    const user = data?.data
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (isError || !data) {
-        return <div>Something went wrong.</div>;
-    }
+export default function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
 
     return (
         <>
@@ -34,7 +26,7 @@ export default function ProfileHeader() {
                             <div className="h-full w-full overflow-hidden rounded-full border-4 border-surface">
                                 <Image
                                     src={user?.profilePicture || "/hero.jpg"}
-                                    alt={user?.fullname||"USer"}
+                                    alt={user?.fullname || "USer"}
                                     width={96}
                                     height={96}
                                     className="h-full w-full object-cover"
@@ -43,12 +35,13 @@ export default function ProfileHeader() {
                         </div>
 
 
-                        <Button
+                        {isOwnProfile && (<Button
                             variant="primary"
+                            size="lg"
                             className="absolute bottom-0 right-0 rounded-full p-2"
                         >
-                            <Camera size={16} />
-                        </Button>
+                            <Camera size={36} />
+                        </Button>)}
 
                     </div>
 
@@ -98,37 +91,57 @@ export default function ProfileHeader() {
                         {user?.bio}
                     </p>
 
-                    <a
+                    {user.website && (<a
                         href={user?.website}
                         className="mt-3 flex items-center gap-2 text-primary"
                     >
                         <Link2 size={16} />
 
                         {user?.website}
-                    </a>
+                    </a>)}
 
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                    <Link href={"/profile/edit"}>
-                        <Button
-                            variant="primary"
-                            size="lg"
-                            leftIcon={<Pencil size={16} />}
-                        >
-                            Edit Profile
-                        </Button>
-                    </Link>
-
-
-
-                    <Button
-                        variant="outlined"
-                        size="lg"
-                        leftIcon={<Share2 size={16} />}
-                    >
-                        Share
-                    </Button>
+                    {isOwnProfile ? (
+                        <>
+                            <Link href={"/profile/edit"}>
+                                <Button
+                                    variant="primary"
+                                    size="lg"
+                                    leftIcon={<Pencil size={16} />}
+                                >
+                                    Edit Profile
+                                </Button>
+                            </Link>
+                            <Button
+                                variant="outlined"
+                                size="lg"
+                                leftIcon={<Share2 size={16} />}
+                            >
+                                Share
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Link href={"/profile/edit"}>
+                                <Button
+                                    variant="primary"
+                                    size="lg"
+                                    leftIcon={<Pencil size={16} />}
+                                >
+                                    Follow
+                                </Button>
+                            </Link>
+                            <Button
+                                variant="outlined"
+                                size="lg"
+                                leftIcon={<MessageCirclePlus size={16} />}
+                            >
+                                Share
+                            </Button>
+                        </>
+                    )}
                 </div>
 
             </section>
@@ -140,21 +153,21 @@ export default function ProfileHeader() {
                     <div className="h-full w-full overflow-hidden rounded-full border-4 border-surface">
                         <Image
                             src={user?.profilePicture || "/Hero.jpg"}
-                            alt={user?.fullname ||"User profile"}
+                            alt={user?.fullname || "User profile"}
                             width={160}
                             height={160}
                             className="h-full w-full object-cover"
                         />
 
                     </div>
-
-                    <Button
+                    {isOwnProfile && (<Button
                         variant="primary"
                         size="lg"
                         className="absolute bottom-0 right-0 rounded-full p-2"
                     >
                         <Camera size={36} />
-                    </Button>
+                    </Button>)}
+
                 </div>
 
 
@@ -185,20 +198,45 @@ export default function ProfileHeader() {
                         </div>
 
                         <div className="flex gap-3">
-                            <Link href={"/profile/edit"}>
-                                <Button
-                                    variant="primary"
-                                    size="lg"
-                                    leftIcon={<Pencil size={16} />}>
-                                    Edit Profile
-                                </Button>
-                            </Link>
-                            <Button
-                                variant="outlined"
-                                size="lg"
-                                leftIcon={<Share2 size={16} />}
-                            >
-                            </Button>
+                            {isOwnProfile ? (
+                                <>
+                                    <Link href={"/profile/edit"}>
+                                        <Button
+                                            variant="primary"
+                                            size="lg"
+                                            leftIcon={<Pencil size={16} />}
+                                        >
+                                            Edit Profile
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        variant="outlined"
+                                        size="lg"
+                                        leftIcon={<Share2 size={16} />}
+                                    >
+                                        Share
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <Link href={"/profile/edit"}>
+                                        <Button
+                                            variant="primary"
+                                            size="lg"
+                                            leftIcon={<Pencil size={16} />}
+                                        >
+                                            Follow
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        variant="outlined"
+                                        size="lg"
+
+                                    >
+                                        <MessageCirclePlus size={16} />
+                                    </Button>
+                                </>
+                            )}
 
                         </div>
 
@@ -229,14 +267,14 @@ export default function ProfileHeader() {
                             {user?.bio}
                         </p>
 
-                        <a
+                        {user.website && (<a
                             href={user?.website}
                             className="flex items-center gap-2 text-primary"
                         >
                             <Link2 size={18} />
 
                             {user?.website}
-                        </a>
+                        </a>)}
 
                     </div>
 

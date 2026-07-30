@@ -6,8 +6,6 @@ import {
     DeleteCommentResponse,
     GetPostCommentsRequest,
     GetPostCommentsResponse,
-    ReplyCommentRequest,
-    ReplyCommentResponse,
     UpdateCommentRequest,
     UpdateCommentResponse,
 } from "@/types/likeandComment";
@@ -23,7 +21,7 @@ export const commentApi = baseApi.injectEndpoints({
             invalidatesTags: ["Post","Comment"],
         }),
 
-        replyComment: builder.mutation<ReplyCommentResponse,ReplyCommentRequest>({
+        replyComment: builder.mutation<UpdateCommentResponse,UpdateCommentRequest>({
             query: ({ commentId, content }) => ({
                 url: `/comment/reply/${commentId}`,
                 method: "POST",

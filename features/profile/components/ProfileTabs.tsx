@@ -9,7 +9,7 @@ import {
     Pin,
 } from "lucide-react";
 import clsx from "clsx";
-import { useGetProfileQuery } from "../api/profile.api";
+import { Post } from "@/types/post";
 
 const tabs = [
     {
@@ -20,10 +20,7 @@ const tabs = [
         id: "pinned",
         icon: Pin,
     },
-    {
-        id: "saved",
-        icon: Bookmark,
-    },
+    
     {
         id: "tagged",
         icon: UserSquare2,
@@ -32,23 +29,17 @@ const tabs = [
 
 interface ProfileTabsProps {
     onPostClick: () => void;
+    isOwnProfile:boolean
+    posts:Post[]
 }
 
 export default function ProfileTabs({
-    onPostClick,
+    onPostClick,isOwnProfile,posts
 }: ProfileTabsProps) {
     const [activeTab, setActiveTab] = useState("posts");
-    const { data, isLoading, isError } = useGetProfileQuery();
-    
-        const user = data?.data
-        if (isLoading) {
-            return <div>Loading...</div>;
-        }
-    
-        if (isError || !data) {
-            return <div>Something went wrong.</div>;
-        }
-
+    if(posts.length==0){
+        return <h1 className="text-center">No POst</h1>
+    }
     return (
         <section className="mt-8">
 
@@ -83,36 +74,21 @@ export default function ProfileTabs({
 
             <div className="mt-1 grid grid-cols-3 gap-1 md:mt-6 md:gap-3">
 
-                {user?.post?.map((post) => (
+                {posts?.map((post) => (
                     <div
                         key={post.id}
                         onClick={onPostClick}
                         className="group relative aspect-square overflow-hidden bg-surface-container"
                     >
                         <Image
-                            src={post.media[0].secureUrl}
+                            src={post.media[0]?.secureUrl}
                             alt={post.caption||"Post"}
                             fill
                             className="object-cover transition duration-500 group-hover:scale-110"
                         />
 
-                        {/* {post.type === "carousel" && (
-                            <Copy
-                                size={18}
-                                className="absolute right-2 top-2 text-white"
-                            />
-                        )} */}
-
-                        {/* {post.type === "video" && (
-                            <Play
-                                size={18}
-                                fill="white"
-                                className="absolute right-2 top-2 text-white"
-                            />
-                        )} */}
-
                     </div>
-                ))}
+                ))} 
 
             </div>
 
