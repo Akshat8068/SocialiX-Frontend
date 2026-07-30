@@ -6,7 +6,8 @@ import baseQueryWithReauth from "./fetchBaseQuery";
   reducerPath: "api",
   baseQuery:baseQueryWithReauth,
 
-   tagTypes: ["Auth", "Profile","Follow"],
+   tagTypes: ["Auth", "Profile", "Follow", "Post", "Hashtags", "Like",
+     "Comment","Saved"],
 
   endpoints: () => ({})
 })

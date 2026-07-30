@@ -10,7 +10,7 @@ interface FollowRequestActionsProps {
     rejecting?: boolean;
 }
 
-export default function FollowRequestActions({
+export default function UserRequestActions({
     userId,
     onAccept,
     onReject,

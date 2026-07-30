@@ -8,7 +8,7 @@ interface FollowSearchProps {
     placeholder?: string;
 }
 
-export default function FollowSearch({
+export default function UserSearch({
     value,
     onChange,
     placeholder = "Search",
