@@ -13,7 +13,11 @@ export interface UpdateProfilePictureRequest {
 }
 
 export type ProfileResponse = ApiResponse<User>;
-
+export interface GetUsersResponse {
+  success: boolean;
+  message: string;
+  data: User[];
+}
 export interface UpdateProfilePictureData {
     profilePicture: string;
 }

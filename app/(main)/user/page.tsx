@@ -1,7 +1,10 @@
-export default function UserPage() {
+import UserList from "@/features/user/UserList";
+import Users from "@/features/user/Users";
+
+export default function User() {
   return (
-    <main className="min-h-screen lg:pl-64">
-      <h1>Users</h1>
+    <main className="min-h-screen pb-20 lg:pb-10">
+      <Users/>
     </main>
   );
 }
