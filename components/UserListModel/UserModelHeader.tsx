@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 
 interface FollowModalHeaderProps {
     title: string;
-    count: number;
+    count?: number;
     onClose: () => void;
 }
 

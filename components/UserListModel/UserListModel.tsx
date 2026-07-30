@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { X } from "lucide-react";
 import UserModelHeader from "./UserModelHeader";
 import UserSearch from "./UserSearch";
-import UserList from "./USerList";
+import UserList from "./UserList";
 
 
 

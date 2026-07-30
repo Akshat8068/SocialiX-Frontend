@@ -83,7 +83,7 @@ export default function ProfileTabs({
 
             <div className="mt-1 grid grid-cols-3 gap-1 md:mt-6 md:gap-3">
 
-                {user?.post.map((post) => (
+                {user?.post?.map((post) => (
                     <div
                         key={post.id}
                         onClick={onPostClick}
