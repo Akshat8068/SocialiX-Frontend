@@ -8,7 +8,7 @@ interface FollowModalHeaderProps {
     onClose: () => void;
 }
 
-export default function FollowModalHeader({
+export default function UserModelHeader({
     title,
     count,
     onClose,

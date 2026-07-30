@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import FollowActions from "./FollowActions";
-import FollowRequestActions from "./FollowRequestActions";
-import { FollowModalType, FollowUser } from "./FollowListModal";
 import { BadgeCheckIcon } from "lucide-react";
+import {  FollowUser, UserListType } from "./UserListModel";
+import UserRequestActions from "./UserRequestActions";
+import UserActions from "./UserActions";
 
 interface FollowUserCardProps {
-    type: FollowModalType;
+    type: UserListType;
     user: FollowUser;
 
     onFollow?: (id: number) => void;
@@ -19,7 +19,7 @@ interface FollowUserCardProps {
     onMessage?: (id: number) => void;
 }
 
-export default function FollowUserCard({
+export default function UserCard({
     type,
     user,
     onFollow,
@@ -78,13 +78,13 @@ export default function FollowUserCard({
             {/* Actions */}
             <div className="ml-2 flex shrink-0 items-center">
                 {type === "requests" ? (
-                    <FollowRequestActions
+                    <UserRequestActions
                         userId={user.id}
                         onAccept={onAccept}
                         onReject={onReject}
                     />
                 ) : (
-                    <FollowActions
+                    <UserActions
                         user={user}
                         onFollow={onFollow}
                         onUnfollow={onUnfollow}

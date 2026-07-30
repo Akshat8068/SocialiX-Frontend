@@ -13,19 +13,21 @@ interface PostActionsProps {
     shares: number;
     isLiked?: boolean;
     isSaved?: boolean;
+    onLikesClick?: () => void
 }
 
 export default function PostActions({
     likes,
     comments,
     shares,
+    onLikesClick,
     isLiked = false,
     isSaved = false,
 }: PostActionsProps) {
     return (
         <div className="flex items-center justify-between px-4 py-3">
             <div className="flex items-center gap-6">
-                <button className="flex items-center gap-2 transition-transform active:scale-95">
+                <button onClick={onLikesClick} className="flex items-center gap-2 transition-transform active:scale-95">
                     <Heart
                         size={22}
                         className={

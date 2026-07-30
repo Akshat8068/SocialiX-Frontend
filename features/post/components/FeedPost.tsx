@@ -6,6 +6,9 @@ import PostActions from "./PostActions";
 import PostCaption from "./PostCaption";
 import PostComments from "./PostComments";
 import AddComment from "./AddComment";
+import { useState } from "react";
+import { likedUsers } from "../data";
+import UserListModel from "@/components/UserListModel/UserListModel";
 
 interface FeedPostProps {
     post: {
@@ -32,6 +35,9 @@ interface FeedPostProps {
 }
 
 export default function FeedPost({ post }: FeedPostProps) {
+    const [openLikes, setOpenLikes] = useState(false);
+
+    const [search, setSearch] = useState("")
     return (
         <article className="mb-8 overflow-hidden rounded-xl border bg-card shadow-sm">
             <PostHeader
@@ -54,6 +60,7 @@ export default function FeedPost({ post }: FeedPostProps) {
                 shares={post.shares}
                 isLiked={post.isLiked}
                 isSaved={post.isSaved}
+                onLikesClick={() => setOpenLikes(true)}
             />
 
             <PostCaption
@@ -68,6 +75,22 @@ export default function FeedPost({ post }: FeedPostProps) {
 
             <AddComment
                 profilePicture="/Hero.jpg"
+            />
+            <UserListModel
+                open={openLikes}
+                onClose={() => setOpenLikes(false)}
+                users={likedUsers}
+                title="Likes"
+                type="likes"
+
+                count={post.likes}
+
+                search={search}
+                onSearchChange={setSearch}
+
+                onFollow={(id) => { }}
+                onUnfollow={(id) => { }}
+                onMessage={(id) => { }}
             />
         </article>
     );

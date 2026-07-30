@@ -1,10 +1,10 @@
 "use client";
 
-import { FollowModalType, FollowUser } from "./FollowListModal";
-import FollowUserCard from "./FollowUserCard";
+import UserCard from "./UserCard";
+import {FollowUser, UserListType } from "./UserListModel";
 
 interface FollowListProps {
-    type: FollowModalType;
+    type: UserListType;
     users: FollowUser[];
     loading?: boolean;
 
@@ -17,7 +17,7 @@ interface FollowListProps {
     onMessage?: (id: number) => void;
 }
 
-export default function FollowList({
+export default function UserList({
     type,
     users,
     loading = false,
@@ -73,7 +73,7 @@ export default function FollowList({
     return (
         <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
             {users.map((user) => (
-                <FollowUserCard
+                <UserCard
                     key={user.id}
                     type={type}
                     user={user}

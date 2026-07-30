@@ -1,7 +1,7 @@
 "use client";
 
 import { MessageCircle } from "lucide-react";
-import { FollowUser } from "./FollowListModal";
+import { FollowUser } from "./UserListModel";
 
 interface FollowActionsProps {
     user: FollowUser;
@@ -11,7 +11,7 @@ interface FollowActionsProps {
     onMessage?: (id: number) => void;
 }
 
-export default function FollowActions({
+export default function UserActions({
     user,
     onFollow,
     onUnfollow,

@@ -2,14 +2,17 @@
 
 import { useEffect } from "react";
 import { X } from "lucide-react";
-import FollowModalHeader from "./FollowModalHeader";
-import FollowSearch from "./FollowSearch";
-import FollowList from "./FollowList";
+import UserModelHeader from "./UserModelHeader";
+import UserSearch from "./UserSearch";
+import UserList from "./USerList";
 
-export type FollowModalType =
+
+
+
+export type UserListType =
     | "followers"
     | "following"
-    | "requests";
+    | "requests" | "likes";
 
 export interface FollowUser {
     id: number;
@@ -27,7 +30,7 @@ interface FollowListModalProps {
     open: boolean;
     onClose: () => void;
 
-    type: FollowModalType;
+    type: UserListType;
 
     title: string;
     count: number;
@@ -48,7 +51,7 @@ interface FollowListModalProps {
     onMessage?: (id: number) => void;
 }
 
-export default function FollowListModal({
+export default function UserListModel({
     open,
     onClose,
 
@@ -162,7 +165,7 @@ export default function FollowListModal({
                 </button>
 
                 {/* Header */}
-                <FollowModalHeader
+                <UserModelHeader
                     title={title}
                     count={count}
                     onClose={onClose}
@@ -170,7 +173,7 @@ export default function FollowListModal({
 
                 {/* Search */}
                 <div className="px-5 pb-4">
-                    <FollowSearch
+                    <UserSearch
                         value={search}
                         onChange={onSearchChange}
                     />
@@ -178,7 +181,7 @@ export default function FollowListModal({
 
                 {/* List */}
                 <div className="flex-1 overflow-y-auto">
-                    <FollowList
+                    <UserList
                         type={type}
                         users={users}
                         loading={loading}

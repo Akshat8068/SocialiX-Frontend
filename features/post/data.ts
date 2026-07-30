@@ -175,3 +175,21 @@ export const dummyPosts = [
         ],
     },
 ];
+
+export const likedUsers = [
+    {
+        id: 1,
+        fullName: "John Doe",
+        username: "john",
+        profilePicture: "/Hero.jpg",
+        isFollowing: true,
+        isVerified: true
+    },
+    {
+        id: 2,
+        fullName: "Emma",
+        username: "emma",
+        profilePicture: "/Hero.jpg",
+        isFollowing: false
+    }
+];
