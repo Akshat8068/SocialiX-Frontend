@@ -19,12 +19,6 @@ const profileFields: FormFieldConfig[] = [
         placeholder: "Enter your full name"
     },
     {
-        id: "username",
-        type: "text",
-        label: "Username",
-        placeholder: "Enter username"
-    },
-    {
         id: "bio",
         type: "textarea",
         label: "Bio",
@@ -51,7 +45,6 @@ export default function EditProfileForm() {
         resolver: zodResolver(ProfileUpdateSchema),
         defaultValues: {
             fullname: "",
-            username: "",
             bio: "",
             website: "",
             accountType:"PUBLIC"
