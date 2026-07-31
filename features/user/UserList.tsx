@@ -10,7 +10,7 @@ export default function UserList({users}:{users:User[]}) {
         grid-cols-1
         gap-4
         md:gap-5
-        lg:grid-cols-2
+        lg:grid-cols-3
         lg:gap-6
       "
     >

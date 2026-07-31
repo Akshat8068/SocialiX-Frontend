@@ -1,46 +1,63 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
-import { FollowUser } from "./UserListModel";
+
+import { FollowUser, UserListType } from "./UserListModel";
 import { Button } from "../ui/button";
 
 interface FollowActionsProps {
     user: FollowUser;
-
+    type: UserListType;
     onFollow?: (id: number) => void;
     onUnfollow?: (id: number) => void;
     onMessage?: (id: number) => void;
+    onRemoveFollower?: (id: number) => void
 }
 
 export default function UserActions({
     user,
     onFollow,
+    onRemoveFollower,
+    type,
     onUnfollow,
     onMessage,
 }: FollowActionsProps) {
     const isFollowing = user.isFollowing ?? false;
     const requested = user.requested ?? false;
-    if (requested) {
+    if (user.requested) {
         return (
-            
-            <Button onClick={() => {
-                    if (user.requestId) {
-                        onUnfollow?.(user.requestId);
-                    }
-                }}>
-                Cancel Request</Button>
+            <Button onClick={() => user.requestId && onUnfollow?.(user.requestId)}>
+                Cancel Request
+            </Button>
         );
     }
 
-    if (isFollowing) {
+    // Followers list
+    if (type === "followers") {
         return (
-            
-            <Button onClick={() => onUnfollow?.(user.id)}>Folllowing</Button>
+            <Button
+                onClick={() => onRemoveFollower?.(user.id)}
+            >
+                Remove
+            </Button>
         );
     }
 
+    // Following list
+    if (type === "following") {
+        return (
+            <Button
+                onClick={() => onUnfollow?.(user.id)}
+            >
+                unFollow
+            </Button>
+        );
+    }
+
+    // Default
     return (
-        
-        <Button onClick={() => onFollow?.(user.id)}>Folllow</Button>
+        <Button onClick={() => onFollow?.(user.id)}>
+            Follow
+        </Button>
     );
+
 }

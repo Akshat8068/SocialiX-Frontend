@@ -12,7 +12,7 @@ interface FollowUserCardProps {
 
     onFollow?: (id: number) => void;
     onUnfollow?: (id: number) => void;
-
+onRemoveFollower?: (id: number) => void
     onAccept?: (id: number) => void;
     onReject?: (id: number) => void;
 
@@ -23,6 +23,7 @@ export default function UserCard({
     type,
     user,
     onFollow,
+    onRemoveFollower,
     onUnfollow,
     onAccept,
     onReject,
@@ -86,9 +87,11 @@ export default function UserCard({
                 ) : (
                     <UserActions
                         user={user}
+                         type={type}
                         onFollow={onFollow}
                         onUnfollow={onUnfollow}
                         onMessage={onMessage}
+                        onRemoveFollower={onRemoveFollower}
                     />
                 )}
             </div>

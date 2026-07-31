@@ -7,18 +7,18 @@ import { useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { User } from "@/types/auth";
 import { Post } from "@/types/post";
-import { useGetFollowersQuery, useGetFollowingQuery } from "@/features/follow/api/follow.api";
+import { useGetFollowersQuery, useGetFollowingQuery, useRemoveFollowerMutation, useUnFollowUserMutation } from "@/features/follow/api/follow.api";
 import { useGetUserPostsQuery } from "@/features/post/api/post.api";
 import UserListModel from "@/components/UserListModel/UserListModel";
 
 interface ProfilePageProps {
-    user?:User
-    isLoading:boolean
-    isError:boolean
+    user?: User
+    isLoading: boolean
+    isError: boolean
     posts?: Post[]
     isFollowing?: boolean;
 }
-export default function ProfilePage({ user,isLoading,isError,isFollowing }: ProfilePageProps) {
+export default function ProfilePage({ user, isLoading, isError, isFollowing }: ProfilePageProps) {
     const [showFeed, setShowFeed] = useState(false)
     const [openModal, setOpenModal] = useState(false);
     const [modalType, setModalType] = useState<"followers" | "following">("followers")
@@ -33,14 +33,15 @@ export default function ProfilePage({ user,isLoading,isError,isFollowing }: Prof
     }
     const currentUser = useAppSelector((state) => state.auth.user)
     const isOwnProfile = currentUser?.id === user?.id
-    const userId=user?.id
+    const userId = user?.id
     const { data: followersData } = useGetFollowersQuery(
         { userId: userId! },
         {
             skip: !userId,
         }
     );
-
+    const [unFollowUser] = useUnFollowUserMutation();
+    const [removeFollower] = useRemoveFollowerMutation()
     const { data: followingData } = useGetFollowingQuery(
         { userId: userId! },
         {
@@ -77,7 +78,7 @@ export default function ProfilePage({ user,isLoading,isError,isFollowing }: Prof
         return <div>Loading...</div>;
     }
 
-    if (isError ) {
+    if (isError) {
         return <div>Something went wrong.</div>;
     }
     if (!user) {
@@ -96,15 +97,17 @@ export default function ProfilePage({ user,isLoading,isError,isFollowing }: Prof
                     onFollowingClick={openFollowing}
                 />
                 {showFeed ? (
-                    <ProfileFeedView posts={userPosts }/>
+                    <ProfileFeedView posts={userPosts} />
                 ) : (
-                        <ProfileTabs posts={userPosts} isOwnProfile={isOwnProfile} onPostClick={() => setShowFeed(true)} />
+                    <ProfileTabs posts={userPosts} isOwnProfile={isOwnProfile} onPostClick={() => setShowFeed(true)} />
                 )}
             </div>
             <UserListModel
                 open={openModal}
                 onClose={() => setOpenModal(false)}
                 type={modalType}
+                onRemoveFollower={(id) => removeFollower({ userId: id })}
+                onUnfollow={(id) => unFollowUser({ userId: id })}
                 title={modalType === "followers" ? "Followers" : "Following"}
                 count={
                     modalType === "followers"

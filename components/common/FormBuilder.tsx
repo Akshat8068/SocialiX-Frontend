@@ -9,6 +9,7 @@ import OTPInput from "../ui/otpInput";
 import { Textarea } from "../ui/textArea";
 import { Switch } from "../ui/switch";
 import { Select} from "../ui/select";
+import { useState } from "react";
 export type FieldType =
     | "text"
     | "email"
@@ -53,7 +54,7 @@ export interface FormFieldConfig {
 
 
 function PasswordField({ field, placeholder }: { field: any; placeholder?: string }) {
-    const showPassword = false
+    const [showPassword,setShowPassword]= useState(false)
 
     return (
         <div className="relative group">
@@ -72,6 +73,7 @@ function PasswordField({ field, placeholder }: { field: any; placeholder?: strin
             />
             <button
                 type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors"
             >
                 {showPassword ? (
