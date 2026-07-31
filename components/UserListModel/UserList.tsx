@@ -1,7 +1,7 @@
 "use client";
 
 import UserCard from "./UserCard";
-import {FollowUser, UserListType } from "./UserListModel";
+import { FollowUser, UserListType } from "./UserListModel";
 
 interface FollowListProps {
     type: UserListType;
@@ -10,7 +10,7 @@ interface FollowListProps {
 
     onFollow?: (id: number) => void;
     onUnfollow?: (id: number) => void;
-
+    onRemoveFollower?: (id: number) => void;
     onAccept?: (id: number) => void;
     onReject?: (id: number) => void;
 
@@ -21,7 +21,7 @@ export default function UserList({
     type,
     users,
     loading = false,
-
+    onRemoveFollower,
     onFollow,
     onUnfollow,
 
@@ -82,6 +82,8 @@ export default function UserList({
                     onAccept={onAccept}
                     onReject={onReject}
                     onMessage={onMessage}
+                    onRemoveFollower={onRemoveFollower}
+
                 />
             ))}
         </div>

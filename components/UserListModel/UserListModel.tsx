@@ -15,18 +15,18 @@ export type UserListType =
     | "requests" | "likes";
 
 export interface FollowUser {
-  id: number; // user id
+    id: number; // user id
 
-  requestId?: number;
+    requestId?: number;
 
-  fullName: string;
-  username: string;
-  profilePicture?: string;
-  isVerified?: boolean;
+    fullName: string;
+    username: string;
+    profilePicture?: string;
+    isVerified?: boolean;
 
-  isFollowing?: boolean;
-  followsYou?: boolean;
-  requested?: boolean;
+    isFollowing?: boolean;
+    followsYou?: boolean;
+    requested?: boolean;
 }
 
 interface FollowListModalProps {
@@ -47,7 +47,7 @@ interface FollowListModalProps {
 
     onFollow?: (id: number) => void;
     onUnfollow?: (id: number) => void;
-
+    onRemoveFollower?: (id: number) => void
     onAccept?: (id: number) => void;
     onReject?: (id: number) => void;
 
@@ -68,7 +68,7 @@ export default function UserListModel({
 
     search,
     onSearchChange,
-
+    onRemoveFollower,
     onFollow,
     onUnfollow,
 
@@ -186,6 +186,7 @@ export default function UserListModel({
                 <div className="flex-1 overflow-y-auto">
                     <UserList
                         type={type}
+                        onRemoveFollower={onRemoveFollower}
                         users={users}
                         loading={loading}
                         onFollow={onFollow}
