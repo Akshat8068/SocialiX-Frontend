@@ -49,7 +49,7 @@ export default function LoginPage() {
             toast.success(response.message)
             form.reset()
             dispatch(loginSuccess(response.data))
-            router.push("/")
+            router.push("/home")
         } catch (error: any) {
             toast.error(error.data?.message ?? "Something went wrong")
         };
