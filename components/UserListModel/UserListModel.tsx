@@ -15,15 +15,18 @@ export type UserListType =
     | "requests" | "likes";
 
 export interface FollowUser {
-    id: number;
-    fullName: string;
-    username: string;
-    profilePicture?: string;
-    isVerified?: boolean;
+  id: number; // user id
 
-    isFollowing?: boolean;
-    followsYou?: boolean;
-    requested?: boolean;
+  requestId?: number;
+
+  fullName: string;
+  username: string;
+  profilePicture?: string;
+  isVerified?: boolean;
+
+  isFollowing?: boolean;
+  followsYou?: boolean;
+  requested?: boolean;
 }
 
 interface FollowListModalProps {

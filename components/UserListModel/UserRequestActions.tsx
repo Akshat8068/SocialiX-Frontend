@@ -1,7 +1,10 @@
 "use client";
 
+import { FollowUser } from "./UserListModel";
+
+
 interface FollowRequestActionsProps {
-    userId: number;
+    user: FollowUser;
 
     onAccept?: (id: number) => void;
     onReject?: (id: number) => void;
@@ -11,7 +14,7 @@ interface FollowRequestActionsProps {
 }
 
 export default function UserRequestActions({
-    userId,
+    user,
     onAccept,
     onReject,
     accepting = false,
@@ -23,7 +26,11 @@ export default function UserRequestActions({
             <button
                 type="button"
                 disabled={accepting || rejecting}
-                onClick={() => onReject?.(userId)}
+                onClick={() => {
+                    if (user.requestId) {
+                        onReject?.(user.requestId);
+                    }
+                }}
                 className="
           h-10
           rounded-xl
@@ -60,7 +67,11 @@ export default function UserRequestActions({
             <button
                 type="button"
                 disabled={accepting || rejecting}
-                onClick={() => onAccept?.(userId)}
+                onClick={() => {
+                    if (user.requestId) {
+                        onAccept?.(user.requestId);
+                    }
+                }}
                 className="
           h-10
           rounded-xl

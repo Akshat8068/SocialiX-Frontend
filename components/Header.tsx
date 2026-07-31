@@ -1,7 +1,74 @@
 "use client";
-import {Bell,Search,Settings} from "lucide-react";
+import { useAcceptRequestMutation, useCancelRequestMutation, useGetPendingRequestQuery, useGetSentRequestQuery, useRejectRequestMutation } from "@/features/follow/api/follow.api";
+import { Bell, Search, Settings, UserCheck, UserPlus } from "lucide-react";
+import { useState } from "react";
+import UserListModel, { FollowUser } from "./UserListModel/UserListModel";
+
+
 
 export default function Header() {
+  const [modal, setModal] = useState<"pending" | "sent" | null>(null);
+  const [search, setSearch] = useState("");
+
+  const {
+    data: pendingData,
+    isLoading: pendingLoading,
+  } = useGetPendingRequestQuery();
+
+  const {
+    data: sentData,
+    isLoading: sentLoading,
+  } = useGetSentRequestQuery()
+  const [acceptRequest] = useAcceptRequestMutation()
+
+  const [rejectRequest] = useRejectRequestMutation()
+
+  const [cancelRequest] = useCancelRequestMutation()
+  const pendingUsers: FollowUser[] =
+    pendingData?.data?.map((item) => ({
+      id: item.follower.id,
+      requestId: item.id,
+
+      fullName: item.follower.fullname,
+      username: item.follower.username,
+      profilePicture: item.follower.profilePicture ?? undefined,
+      isVerified: item.follower.isVerified,
+    })) ?? []
+  const sentUsers: FollowUser[] =
+    sentData?.data?.map((item) => ({
+      id: item.following.id,
+      requestId: item.id,
+
+      fullName: item.following.fullname,
+      username: item.following.username,
+      profilePicture: item.following.profilePicture ?? undefined,
+      isVerified: item.following.isVerified,
+      requested: true,
+    })) ?? []
+  const handleAccept = async (id: number) => {
+    try {
+      await acceptRequest({ id }).unwrap();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleReject = async (id: number) => {
+    try {
+      await rejectRequest({ id }).unwrap();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCancelRequest = async (id: number) => {
+    try {
+      await cancelRequest({ id }).unwrap();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-outline-variant/30 bg-surface/80 px-4 backdrop-blur-xl md:hidden">
@@ -12,12 +79,18 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
 
-          <button className="rounded-full p-2 transition hover:bg-surface-container-low">
-            <Bell size={22} />
+          <button
+            onClick={() => setModal("sent")}
+            className="rounded-full p-2 transition hover:bg-surface-container-low"
+          >
+            <UserPlus size={22} />
           </button>
 
-          <button className="rounded-full p-2 transition hover:bg-surface-container-low">
-            <Settings size={22} />
+          <button
+            onClick={() => setModal("pending")}
+            className="rounded-full p-2 transition hover:bg-surface-container-low"
+          >
+            <UserCheck size={22} />
           </button>
 
         </div>
@@ -44,22 +117,38 @@ export default function Header() {
 
         <div className="flex items-center gap-5">
 
-          <button className="rounded-full p-2 transition hover:bg-surface-container-low">
-            <Settings size={22} />
+          <button
+            onClick={() => setModal("sent")}
+            className="rounded-full p-2 transition hover:bg-surface-container-low"
+          >
+            <UserPlus size={22} />
           </button>
 
-          <button className="relative rounded-full p-2 transition hover:bg-surface-container-low">
-
-            <Bell size={22} />
-
-            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
-
+          <button
+            onClick={() => setModal("pending")}
+            className="rounded-full p-2 transition hover:bg-surface-container-low"
+          >
+            <UserCheck size={22} />
           </button>
 
 
         </div>
 
       </header>
+      <UserListModel
+        open={modal !== null}
+        onClose={() => setModal(null)}
+        title={modal === "pending" ? "Follow Requests" : "Sent Requests"}
+        count={modal === "pending" ? pendingUsers.length : sentUsers.length}
+        type={modal === "pending" ? "requests" : "following"}
+        users={modal === "pending" ? pendingUsers : sentUsers}
+        loading={modal === "pending" ? pendingLoading : sentLoading}
+        search={search}
+        onSearchChange={setSearch}
+        onAccept={(requestId) => handleAccept(requestId)}
+        onReject={(requestId) => handleReject(requestId)}
+        onUnfollow={(requestId) => handleCancelRequest(requestId)}
+      />
     </>
   );
 }
