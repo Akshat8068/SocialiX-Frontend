@@ -21,10 +21,28 @@ export interface FollowActionRequest {
 
 
 export type FollowResponse = ApiResponse<Follow>;
+export interface FollowerItem {
+    id: number;
+    follower: User;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+}
 
-export type FollowersResponse = ApiResponse<User[]>;
+export interface FollowingItem {
+    id: number;
+    following: User;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+}
+export interface FollowersResponse extends ApiResponse<FollowerItem[]> {
+    count: number;
+}
 
-export type FollowingResponse = ApiResponse<User[]>;
+export interface FollowingResponse extends ApiResponse<FollowingItem[]> {
+    count: number;
+}
 
 export type PendingRequestsResponse = ApiResponse<Follow[]>;
 

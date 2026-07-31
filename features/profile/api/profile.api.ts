@@ -1,5 +1,5 @@
 import baseApi from "@/store/api/baseApi";
-import { GetUsersResponse, ProfileResponse, RemoveProfilePictureResponse, UpdateProfilePictureRequest, UpdateProfilePictureResponse, UpdateProfileRequest } from "@/types/profile";
+import { GetUsersResponse, ProfileResponse, UserProfileResponse, RemoveProfilePictureResponse, UpdateProfilePictureRequest, UpdateProfilePictureResponse, UpdateProfileRequest } from "@/types/profile";
 
 export const profileApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -48,7 +48,7 @@ export const profileApi = baseApi.injectEndpoints({
             }),
             providesTags: ["Profile"],
         }),
-        getUserProfile: builder.query<ProfileResponse, number>({
+        getUserProfile: builder.query<UserProfileResponse, number>({
             query: (userId) => ({
                 
                 url: `/user/otherUsers/${userId}`,

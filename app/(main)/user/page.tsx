@@ -1,4 +1,4 @@
-import UserList from "@/features/user/UserList";
+
 import Users from "@/features/user/Users";
 
 export default function User() {

@@ -13,6 +13,12 @@ export interface UpdateProfilePictureRequest {
 }
 
 export type ProfileResponse = ApiResponse<User>;
+export interface UserProfileData {
+    user: User;
+    isFollowing: boolean;
+}
+
+export type UserProfileResponse = ApiResponse<UserProfileData>;
 export interface GetUsersResponse {
   success: boolean;
   message: string;
