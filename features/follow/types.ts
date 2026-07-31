@@ -44,10 +44,50 @@ export interface FollowingResponse extends ApiResponse<FollowingItem[]> {
     count: number;
 }
 
-export type PendingRequestsResponse = ApiResponse<Follow[]>;
+export interface FollowRequestUser {
+  id: number;
+  username: string;
+  fullname: string;
+  email: string;
 
-export type SentRequestsResponse = ApiResponse<Follow[]>;
+  bio: string | null;
+  website: string | null;
 
+  profilePicture: string | null;
+  profilePicturePublicId: string | null;
+
+  isVerified: boolean;
+
+  accountType: "PUBLIC" | "PRIVATE";
+
+  professionalAccount: boolean;
+}
+
+export interface PendingRequest {
+  id: number;
+
+  follower: FollowRequestUser;
+
+  status: "PENDING";
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SentRequest {
+  id: number;
+
+  following: FollowRequestUser;
+
+  status: "PENDING";
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PendingRequestsResponse = ApiResponse<PendingRequest[]>;
+
+export type SentRequestsResponse = ApiResponse<SentRequest[]>;
 export type MutualFollowersResponse = ApiResponse<User[]>;
 
 export type FriendsResponse = ApiResponse<User[]>;

@@ -79,7 +79,7 @@ export default function UserCard({
             <div className="ml-2 flex shrink-0 items-center">
                 {type === "requests" ? (
                     <UserRequestActions
-                        userId={user.id}
+                        user={user}
                         onAccept={onAccept}
                         onReject={onReject}
                     />
