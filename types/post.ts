@@ -21,6 +21,7 @@ export interface Post {
 export interface CreatePostRequest {
     caption?: string;
     hashtag?:Hashtag;
+    visibility?:boolean
     media: File[];
 }
 

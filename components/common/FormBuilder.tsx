@@ -8,6 +8,7 @@ import { Button, ButtonProps } from "../ui/button";
 import OTPInput from "../ui/otpInput";
 import { Textarea } from "../ui/textArea";
 import { Switch } from "../ui/switch";
+import { Select} from "../ui/select";
 export type FieldType =
     | "text"
     | "email"
@@ -15,7 +16,8 @@ export type FieldType =
     | "number"
     | "textarea"
     | "switch"
-    | "otp";
+    | "otp"
+    | "select"
 
 export interface FormOption {
     label: string;
@@ -83,46 +85,46 @@ function PasswordField({ field, placeholder }: { field: any; placeholder?: strin
 }
 
 export function RenderField({
-  field,
-  control,
+    field,
+    control,
 }: RenderFieldProps) {
-  return (
-    <Controller
-      name={field.id}
-      control={control}
-      render={({ field: controller, fieldState }) => {
-        if (field.type === "switch") {
-          return (
-            <div className="flex items-center justify-between rounded-xl border border-outline-variant p-5">
-              <div>
-                <p className="font-medium">{field.label}</p>
+    return (
+        <Controller
+            name={field.id}
+            control={control}
+            render={({ field: controller, fieldState }) => {
+                if (field.type === "switch") {
+                    return (
+                        <div className="flex items-center justify-between rounded-xl border border-outline-variant p-5">
+                            <div>
+                                <p className="font-medium">{field.label}</p>
 
-                {field.helperText && (
-                  <p className="text-sm text-on-surface-variant">
-                    {field.helperText}
-                  </p>
-                )}
-              </div>
+                                {field.helperText && (
+                                    <p className="text-sm text-on-surface-variant">
+                                        {field.helperText}
+                                    </p>
+                                )}
+                            </div>
 
-              {renderInput(field, controller)}
-            </div>
-          );
-        }
+                            {renderInput(field, controller)}
+                        </div>
+                    );
+                }
 
-        return (
-          <FormField
-            id={field.id}
-            label={field.label}
-            required={field.required}
-            error={fieldState.error?.message}
-            helperText={field.helperText}
-          >
-            {renderInput(field, controller)}
-          </FormField>
-        );
-      }}
-    />
-  );
+                return (
+                    <FormField
+                        id={field.id}
+                        label={field.label}
+                        required={field.required}
+                        error={fieldState.error?.message}
+                        helperText={field.helperText}
+                    >
+                        {renderInput(field, controller)}
+                    </FormField>
+                );
+            }}
+        />
+    );
 }
 
 function renderInput(
@@ -179,6 +181,16 @@ function renderInput(
                     }
                 />
             );
+            case "select":
+  return (
+    <Select
+      {...controller}
+      id={field.id}
+      disabled={field.disabled}
+      placeholder={field.placeholder}
+      options={field.options ?? []}
+    />
+  );
         default:
             return null;
     }

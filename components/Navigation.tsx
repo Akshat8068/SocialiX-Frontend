@@ -12,23 +12,21 @@ import {
   Plus,
   Search,
   User,
+  User2,
 } from "lucide-react";
 import clsx from "clsx";
+import { Button } from "./ui/button";
 
 const sidebarItems = [
-  { label: "Home", href: "/", icon: Home },
-  { label: "Explore", href: "/explore", icon: Compass },
-  { label: "Reels", href: "/reels", icon: Clapperboard },
-  { label: "Messages", href: "/messages", icon: MessageCircle },
-  { label: "Notifications", href: "/notifications", icon: Bell },
-  { label: "Analytics", href: "/analytics", icon: BarChart3 },
+  { label: "Home", href: "/home", icon: Home },
+  { label: "Users", href: "/user", icon: Compass },
+  { label: "Profile", href: "/profile", icon: User },
 ];
 
 const bottomItems = [
-  { label: "Home", href: "/", icon: Home },
-  { label: "Search", href: "/explore", icon: Search },
-  { label: "Post", href: "/create", icon: Plus },
-  { label: "Reels", href: "/reels", icon: Clapperboard },
+  { label: "Home", href: "/home", icon: Home },
+  { label: "Users", href: "/user", icon: User2 },
+  { label: "Post", href: "/post", icon: Plus },
   { label: "Profile", href: "/profile", icon: User },
 ];
 
@@ -77,13 +75,7 @@ export default function Navigation() {
         </div>
 
         <div className="px-4">
-          <button className="hidden w-full rounded-xl bg-primary py-3 font-semibold text-white lg:block">
-            Create Post
-          </button>
-
-          <button className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white lg:hidden">
-            <Plus />
-          </button>
+          <Link href={"/post"}><Button rightIcon={<Plus size={20}/>}>Create Post</Button></Link>
         </div>
 
         <div className="mt-6 flex items-center justify-center gap-3 border-t border-outline-variant p-4 lg:justify-start">
