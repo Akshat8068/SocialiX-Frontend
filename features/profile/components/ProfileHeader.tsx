@@ -1,17 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { Camera, Link2, Share2, Pencil, LayoutDashboard, BadgeCheck, MessageCirclePlus } from "lucide-react";
+import {  Link2, Share2, Pencil, MessageCirclePlus, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { User } from "@/types/auth";
 interface ProfileHeaderProps {
-    user: User ;
+    user: User;
+    onFollowersClick: () => void;
+    onFollowingClick: () => void;
     isOwnProfile: boolean;
+    followerCount: number;
+    followingCount: number;
+    postCount:number
 }
 
-export default function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
+export default function ProfileHeader({onFollowersClick,onFollowingClick, user,postCount, isOwnProfile,followerCount,followingCount }: ProfileHeaderProps) {
 
     return (
         <>
@@ -22,7 +27,7 @@ export default function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps
 
                     <div className="relative">
 
-                        <div className="h-24 w-24 rounded-full bg-gradient-to-tr from-primary to-secondary p-1">
+                        <div className="h-24 w-24 rounded-full bg-primary p-1">
                             <div className="h-full w-full overflow-hidden rounded-full border-4 border-surface">
                                 <Image
                                     src={user?.profilePicture || "/hero.jpg"}
@@ -35,56 +40,52 @@ export default function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps
                         </div>
 
 
-                        {isOwnProfile && (<Button
-                            variant="primary"
-                            size="lg"
-                            className="absolute bottom-0 right-0 rounded-full p-2"
-                        >
-                            <Camera size={36} />
-                        </Button>)}
+                       
 
                     </div>
 
                     <div className="flex flex-1 justify-around">
 
                         <div className="text-center">
-                            <p className="text-lg font-bold">{user?.postCount}</p>
+                            <p className="text-lg font-bold">{postCount}</p>
                             <p className="text-xs text-muted-foreground">Posts</p>
                         </div>
 
-                        <div className="text-center">
-                            <p className="text-lg font-bold">{user?.followercount}</p>
-                            <p className="text-xs text-muted-foreground">Followers</p>
-                        </div>
+                        <button
+                            onClick={onFollowersClick}
+                            className="text-left"
+                        >
+                            <span className="font-bold">{followerCount}</span>{" "}
+                            Followers
+                        </button>
 
-                        <div className="text-center">
-                            <p className="text-lg font-bold">{user?.followingCount}</p>
-                            <p className="text-xs text-muted-foreground">Following</p>
-                        </div>
+                        <button
+                            onClick={onFollowingClick}
+                            className="text-left"
+                        >
+                            <span className="font-bold">{followingCount}</span>{" "}
+                            Following
+                        </button>
 
                     </div>
 
                 </div>
+                
 
                 <div>
-
                     <div className="flex items-center gap-2">
-
                         <h2 className="text-2xl font-bold">
-                            {user?.fullname}
+                            @{user.username}
                         </h2>
 
-                        {/* {user.verified && (
-                            <BadgeCheck
-                                size={20}
-                                className="text-primary"
-                            />
-                        )} */}
-
+                        {user.accountType === "PRIVATE" && (
+                            <Lock size={16} className="font-bold  text-muted-foreground" />
+                        )}
                     </div>
+                    
 
                     <p className="mt-1 text-muted-foreground">
-                        @{user?.username}
+                        {user?.fullname}
                     </p>
 
                     <p className="mt-4 leading-7">
@@ -149,7 +150,7 @@ export default function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps
 
             <section className="hidden gap-10 md:flex">
 
-                <div className="h-40 w-40 relative rounded-full bg-gradient-to-tr from-primary to-secondary p-1">
+                <div className="h-40 w-40 relative rounded-full bg-primary  p-1">
                     <div className="h-full w-full overflow-hidden rounded-full border-4 border-surface">
                         <Image
                             src={user?.profilePicture || "/Hero.jpg"}
@@ -160,13 +161,7 @@ export default function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps
                         />
 
                     </div>
-                    {isOwnProfile && (<Button
-                        variant="primary"
-                        size="lg"
-                        className="absolute bottom-0 right-0 rounded-full p-2"
-                    >
-                        <Camera size={36} />
-                    </Button>)}
+                    
 
                 </div>
 
@@ -178,22 +173,20 @@ export default function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps
                         <div>
 
                             <div className="flex items-center gap-2">
+                                <h2 className="text-2xl font-bold">
+                                    @{user.username}
+                                </h2>
 
-                                <h1 className="text-4xl font-bold">
-                                    {user?.fullname}
-                                </h1>
-
-                                {/* {user.verified && (
-                                    <BadgeCheck
-                                        className="text-primary"
-                                    />
-                                )} */}
-
+                                {user.accountType === "PRIVATE" && (
+                                    <Lock size={16} className="font-bold  text-muted-foreground" />
+                                )}
                             </div>
 
-                            <p className="text-muted-foreground">
-                                @{user?.username}
+
+                            <p className="mt-1 text-muted-foreground">
+                                {user?.fullname}
                             </p>
+
 
                         </div>
 
@@ -245,19 +238,25 @@ export default function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps
                     <div className="flex gap-10   py-4">
 
                         <div>
-                            <span className="font-bold">{user?.postCount}</span>{" "}
+                            <span className="font-bold">{postCount}</span>{" "}
                             Posts
                         </div>
 
-                        <div>
-                            <span className="font-bold">{user?.followercount}</span>{" "}
+                        <button
+                            onClick={onFollowersClick}
+                            className="text-left"
+                        >
+                            <span className="font-bold">{followerCount}</span>{" "}
                             Followers
-                        </div>
+                        </button>
 
-                        <div>
-                            <span className="font-bold">{user?.followingCount}</span>{" "}
+                        <button
+                            onClick={onFollowingClick}
+                            className="text-left"
+                        >
+                            <span className="font-bold">{followingCount}</span>{" "}
                             Following
-                        </div>
+                        </button>
 
                     </div>
 

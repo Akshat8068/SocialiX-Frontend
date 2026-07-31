@@ -8,11 +8,11 @@ import Link from "next/link";
 export default function UserCard({user}: {user: User;}) {
   return (
     <div className="rounded-2xl border bg-card transition-all hover:shadow-md">
+      <Link
+        href={`/user/${user.id}`}
+      >
       <div className="flex items-center justify-between p-4">
-        <Link
-          href={`/user/${user.id}`}
-          className="flex min-w-0 flex-1 items-center gap-4"
-        >
+        
           <Image
             src={user.profilePicture || "/Hero.jpg"}
             alt={user.fullname}
@@ -30,10 +30,11 @@ export default function UserCard({user}: {user: User;}) {
               @{user.username}
             </p>
           </div>
-        </Link>
+          <Button rightIcon={<Eye size={16} />}>View Profile</Button>
+        
 
-        <Button rightIcon={<Eye size={16}/>}>View Profile</Button>
       </div>
+    </Link>
     </div>
   )
 }

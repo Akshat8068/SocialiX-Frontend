@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import {
     Grid3X3,
-    Bookmark,
     UserSquare2,
     Pin,
 } from "lucide-react";

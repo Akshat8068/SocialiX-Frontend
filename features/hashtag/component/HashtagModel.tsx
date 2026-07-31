@@ -25,8 +25,7 @@ export default function HashtagModel({
     initialHashtags = [],
 }: HashtagModelProps) {
     const [search, setSearch] = useState("");
-    const [selectedHashtags, setSelectedHashtags] =
-        useState<string[]>(initialHashtags);
+    const [selectedHashtags, setSelectedHashtags] =useState<string[]>(initialHashtags);
 
     useEffect(() => {
         setSelectedHashtags(initialHashtags);
