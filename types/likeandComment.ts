@@ -19,9 +19,9 @@ export interface GetLikedUsersResponse {
 export interface Comment {
     id: number;
     content: string;
-    user: User;
     createdAt: string;
-    updatedAt: string;
+    updatedAt?: string;
+    user: User;
     replies: Comment[];
 }
 

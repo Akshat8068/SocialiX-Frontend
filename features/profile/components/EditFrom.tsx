@@ -70,11 +70,8 @@ export default function EditProfileForm() {
             form.reset()
             toast.success(response.message)
             router.push("/profile")
-        } catch (error: any) {
-            console.log(error);
-            console.log(error.data);
-            console.log(error.data?.message)
-            toast.error(error.data?.message ?? "Something went wrong")
+        } catch (error) {
+            toast.error("Something went wrong")
         }
     }
     const handleRemoveProfilePicture = async () => {
@@ -85,8 +82,8 @@ export default function EditProfileForm() {
             setProfileImage([]);
             setPreview([]);
             router.push("/profile")
-        } catch (error: any) {
-            toast.error(error.data?.message ?? "Something went wrong");
+        } catch (error) {
+            toast.error("Something went wrong");
         }
     }
     return (

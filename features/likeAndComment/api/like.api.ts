@@ -5,7 +5,7 @@ export const likeApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         toggleLike: builder.mutation<ToggleLikeResponse, LikeRequest>({
             query: ({ postId }) => ({
-                url: `/like/${postId}`,
+                url: `/likes/${postId}`,
                 method: "POST",
             }),
             invalidatesTags: ["Post","Like"],
@@ -13,7 +13,7 @@ export const likeApi = baseApi.injectEndpoints({
 
         getLikedUsers: builder.query<GetLikedUsersResponse, LikeRequest>({
             query: ({ postId }) => ({
-                url: `/like/${postId}/users`,
+                url: `/likes/${postId}/users`,
             }),
             providesTags: ["Post","Like"],
         }),

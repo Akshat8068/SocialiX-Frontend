@@ -1,53 +1,64 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { FormBuilder, FormFieldConfig } from "@/components/common/FormBuilder";
 
 interface AddCommentProps {
-    profilePicture?: string;
-    onSubmit?: (comment: string) => void;
+    profilePicture: string;
+    onSubmit: (content: string) => void;
+}
+
+interface CommentForm {
+    content: string;
 }
 
 export default function AddComment({
-    profilePicture = "/Hero.jpg",
+    profilePicture,
     onSubmit,
 }: AddCommentProps) {
-    const [comment, setComment] = useState("");
+    const form = useForm<CommentForm>({
+        defaultValues: {
+            content: "",
+        },
+    });
 
-    const handleSubmit = () => {
-        const value = comment.trim();
+    const fields: FormFieldConfig[] = [
+        {
+            id: "content",
+            type: "text",
+            placeholder: "Add a comment...",
+        },
+    ];
 
-        if (!value) return;
+    const handleSubmit = (values: CommentForm) => {
+        if (!values.content.trim()) return;
 
-        onSubmit?.(value);
-        setComment("");
+        onSubmit(values.content);
+        form.reset();
     };
 
     return (
         <div className="flex items-center gap-3 border-t px-4 py-3">
             <Image
-                src={profilePicture}
-                alt="Your profile"
-                width={32}
-                height={32}
+                src={profilePicture || "/Hero.jpg"}
+                alt="Profile"
+                width={36}
+                height={36}
                 className="rounded-full object-cover"
             />
 
-            <input
-                type="text"
-                placeholder="Add a comment..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-            />
-
-            <button
-                onClick={handleSubmit}
-                disabled={!comment.trim()}
-                className="text-sm font-semibold text-primary disabled:cursor-not-allowed disabled:opacity-50"
-            >
-                Post
-            </button>
+            <div className="flex-1">
+                <FormBuilder
+                    form={form}
+                    fields={fields}
+                    onSubmit={handleSubmit}
+                    submitButton={{
+                        children: "Post",
+                        className: "mt-2",
+                    }}
+                />
+            </div>
         </div>
     );
 }

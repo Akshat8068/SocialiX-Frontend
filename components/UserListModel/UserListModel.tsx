@@ -21,7 +21,7 @@ export interface FollowUser {
 
     fullName: string;
     username: string;
-    profilePicture?: string;
+    profilePicture: string | null | undefined
     isVerified?: boolean;
 
     isFollowing?: boolean;

@@ -74,7 +74,6 @@ const router=useRouter()
       });
 
       const res=await createPost(formData).unwrap();
-      console.log(res)
       form.reset();
       setFiles([]);
 
