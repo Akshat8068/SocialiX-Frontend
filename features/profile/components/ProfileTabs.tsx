@@ -5,7 +5,6 @@ import Image from "next/image";
 import {
     Grid3X3,
     UserSquare2,
-    Pin,
 } from "lucide-react";
 import clsx from "clsx";
 import { Post } from "@/types/post";
@@ -14,10 +13,6 @@ const tabs = [
     {
         id: "posts",
         icon: Grid3X3,
-    },
-    {
-        id: "pinned",
-        icon: Pin,
     },
     
     {
@@ -80,7 +75,7 @@ export default function ProfileTabs({
                         className="group relative aspect-square overflow-hidden bg-surface-container"
                     >
                         <Image
-                            src={post.media[0]?.secureUrl}
+                            src={post.media[0]?.secureUrl || "/Hero.jpg"}
                             alt={post.caption||"Post"}
                             fill
                             className="object-cover transition duration-500 group-hover:scale-110"

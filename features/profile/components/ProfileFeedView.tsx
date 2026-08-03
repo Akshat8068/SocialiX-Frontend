@@ -4,13 +4,12 @@ import FeedPost from "@/features/post/components/FeedPost";
 import { Post } from "@/types/post";
 
 interface ProfileFeedViewProps {
-  posts: Post[];
+  posts: Post[]
 }
 
 export default function ProfileFeedView({
   posts,
 }: ProfileFeedViewProps) {
-    console.log(posts)
      if (posts.length === 0) {
         return (
             <div className="py-20 text-center">

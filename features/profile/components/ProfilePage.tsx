@@ -8,7 +8,6 @@ import { useAppSelector } from "@/store/hooks";
 import { User } from "@/types/auth";
 import { Post } from "@/types/post";
 import { useGetFollowersQuery, useGetFollowingQuery, useRemoveFollowerMutation, useUnFollowUserMutation } from "@/features/follow/api/follow.api";
-import { useGetUserPostsQuery } from "@/features/post/api/post.api";
 import UserListModel from "@/components/UserListModel/UserListModel";
 
 interface ProfilePageProps {
@@ -48,14 +47,8 @@ export default function ProfilePage({ user, isLoading, isError, isFollowing }: P
             skip: !userId,
         }
     )
-    const { data: userPostsData } = useGetUserPostsQuery(
-        { userId: userId as number },
-        {
-            skip: !userId,
-        }
-    )
-    const userPosts = userPostsData?.data ?? [];
-    const postCount = userPostsData?.data.length ?? 0;
+    const userPosts = user?.post ?? [];
+    const postCount = userPosts.length;
     const followerUsers =
         followersData?.data.map((item) => ({
             id: item.follower.id,

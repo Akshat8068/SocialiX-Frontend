@@ -16,7 +16,10 @@ export interface Post {
     media: PostMedia[];
     hashtag?:Hashtag;
     createdAt: string;
+    isLiked: boolean;
     updatedAt: string;
+    likeCount: number;
+    commentCount:number
 }
 export interface CreatePostRequest {
     caption?: string;

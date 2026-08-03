@@ -4,7 +4,6 @@ import { useGetUsersQuery } from "../profile/api/profile.api";
 import UserList from "./UserList";
 export default function Users() {
     const {data,isLoading,isError}=useGetUsersQuery()
-    console.log(data)
     return (
         <div className="mx-auto w-full max-w-7xl  px-4 sm:px-6 lg:px-8 pt-5 md:pt-20 ">
             <header className="mb-8">

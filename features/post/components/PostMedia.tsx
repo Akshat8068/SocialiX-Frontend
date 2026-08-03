@@ -14,7 +14,7 @@ export default function PostMedia({
     return (
         <div className="relative aspect-square w-full overflow-hidden bg-muted">
             <Image
-                src={image}
+                src={image || "/Hero.jpg"}
                 alt={alt}
                 fill
                 priority
