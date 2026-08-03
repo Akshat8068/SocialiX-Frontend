@@ -24,22 +24,12 @@ export default function FeedPost({ post }: FeedPostProps) {
     const [search, setSearch] = useState("")
     const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation()
     const [toggleLike] = useToggleLikeMutation()
-    const [liked, setLiked] = useState(post.isLiked);
-    const [likeCount, setLikeCount] = useState(post.likeCount);
     const handleLike = async () => {
         try {
             const res = await toggleLike({ postId: post.id }).unwrap();
 
-            if (res.liked) {
-                setLiked(true);
-                setLikeCount((prev) => prev + 1);
-                toast.success("Post liked");
-            } else {
-                setLiked(false);
-                setLikeCount((prev) => prev - 1);
-                toast.success("Like removed");
-            }
-        } catch (error) {
+            toast.success(res.message);
+        } catch {
             toast.error("Something went wrong");
         }
     };
@@ -85,6 +75,9 @@ export default function FeedPost({ post }: FeedPostProps) {
             isVerified: user.isVerified,
             isFollowing: user.isFollowing,
     })) ?? []
+    console.log(post)
+    console.log(post.likeCount)
+    console.log(post.isLiked)
     return (
         <article className="mb-8 overflow-hidden rounded-xl border bg-card shadow-sm">
             <PostHeader
@@ -102,8 +95,8 @@ export default function FeedPost({ post }: FeedPostProps) {
             />
 
             <PostActions
-                likes={likeCount}
-                isLiked={liked}
+                likes={post.likeCount}
+                isLiked={post.isLiked}
                 comments={post.commentCount}
                 shares={0}
                 isSaved={false}

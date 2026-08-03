@@ -13,11 +13,12 @@ interface ProfileHeaderProps {
     isOwnProfile: boolean;
     followerCount: number;
     followingCount: number;
-    postCount:number
+    postCount: number
+    isFollowing?: boolean
 }
 
-export default function ProfileHeader({onFollowersClick,onFollowingClick, user,postCount, isOwnProfile,followerCount,followingCount }: ProfileHeaderProps) {
-
+export default function ProfileHeader({onFollowersClick,onFollowingClick,isFollowing, user,postCount, isOwnProfile,followerCount,followingCount }: ProfileHeaderProps) {
+    console.log({ isOwnProfile, isFollowing });
     return (
         <>
 

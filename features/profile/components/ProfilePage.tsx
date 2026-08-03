@@ -17,7 +17,7 @@ interface ProfilePageProps {
     posts?: Post[]
     isFollowing?: boolean;
 }
-export default function ProfilePage({ user, isLoading, isError, isFollowing }: ProfilePageProps) {
+export default function ProfilePage({ user, isLoading, isError,posts, isFollowing }: ProfilePageProps) {
     const [showFeed, setShowFeed] = useState(false)
     const [openModal, setOpenModal] = useState(false);
     const [modalType, setModalType] = useState<"followers" | "following">("followers")
@@ -47,7 +47,7 @@ export default function ProfilePage({ user, isLoading, isError, isFollowing }: P
             skip: !userId,
         }
     )
-    const userPosts = user?.post ?? [];
+    const userPosts = posts ?? user?.post ?? [];
     const postCount = userPosts.length;
     const followerUsers =
         followersData?.data.map((item) => ({
@@ -84,6 +84,7 @@ export default function ProfilePage({ user, isLoading, isError, isFollowing }: P
                     user={user}
                     postCount={postCount}
                     isOwnProfile={isOwnProfile}
+                    isFollowing={isFollowing}
                     followerCount={followersData?.count ?? 0}
                     followingCount={followingData?.count ?? 0}
                     onFollowersClick={openFollowers}
