@@ -8,7 +8,7 @@ export const profileApi = baseApi.injectEndpoints({
                 url: "/user/profile",
                 method: "GET",
             }),
-            providesTags: ["Profile"],
+            providesTags: ["Profile","Post"],
         }),
 
         updateProfile: builder.mutation<ProfileResponse,UpdateProfileRequest>({
@@ -54,7 +54,7 @@ export const profileApi = baseApi.injectEndpoints({
                 url: `/user/otherUsers/${userId}`,
                 method: "GET",
             }),
-            providesTags: ["Profile"],
+            providesTags: ["Profile","Post"],
         }),
     }),
 });

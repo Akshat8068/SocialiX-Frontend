@@ -19,7 +19,7 @@ export interface Post {
     isLiked: boolean;
     updatedAt: string;
     likeCount: number;
-    commentCount:number
+    commentCount: number
 }
 export interface CreatePostRequest {
     caption?: string;

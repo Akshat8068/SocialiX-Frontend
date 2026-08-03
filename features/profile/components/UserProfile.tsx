@@ -19,6 +19,7 @@ export default function UserProfile({ userId }: Props) {
     <ProfilePage
       user={user}
       posts={posts}
+      isFollowing={isFollowing}
       isLoading={isLoading}
       isError={isError}
     />
