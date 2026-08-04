@@ -7,9 +7,14 @@ export default function Profile() {
   const { data, isLoading, isError } = useGetProfileQuery()
   return (
     <>
-      <ProfilePage user={data?.data}
+      <ProfilePage
+        user={data?.data}
+        posts={data?.data?.post ?? []}
+        isOwnProfile={true}
+        isFollowing={false}
         isLoading={isLoading}
-        isError={isError} />
-    </>
+        isError={isError}
+      />
+      </>
   )
 }

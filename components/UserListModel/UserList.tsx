@@ -7,7 +7,7 @@ interface FollowListProps {
     type: UserListType;
     users: FollowUser[];
     loading?: boolean;
-
+    isOwnProfile: boolean
     onFollow?: (id: number) => void;
     onUnfollow?: (id: number) => void;
     onRemoveFollower?: (id: number) => void;
@@ -24,7 +24,7 @@ export default function UserList({
     onRemoveFollower,
     onFollow,
     onUnfollow,
-
+isOwnProfile,
     onAccept,
     onReject,
 
@@ -83,6 +83,7 @@ export default function UserList({
                     onReject={onReject}
                     onMessage={onMessage}
                     onRemoveFollower={onRemoveFollower}
+                    isOwnProfile={isOwnProfile}
 
                 />
             ))}

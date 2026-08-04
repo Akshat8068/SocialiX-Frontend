@@ -75,9 +75,6 @@ export default function FeedPost({ post }: FeedPostProps) {
             isVerified: user.isVerified,
             isFollowing: user.isFollowing,
     })) ?? []
-    console.log(post)
-    console.log(post.likeCount)
-    console.log(post.isLiked)
     return (
         <article className="mb-8 overflow-hidden rounded-xl border bg-card shadow-sm">
             <PostHeader

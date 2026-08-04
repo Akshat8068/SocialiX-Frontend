@@ -21,6 +21,11 @@ export interface Post {
     likeCount: number;
     commentCount: number
 }
+export interface HomeFeedResponse {
+    success: boolean;
+    message: string;
+    data: Post[];
+}
 export interface CreatePostRequest {
     caption?: string;
     hashtag?:Hashtag;

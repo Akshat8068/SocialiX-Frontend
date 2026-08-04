@@ -13,11 +13,12 @@ import UserListModel from "@/components/UserListModel/UserListModel";
 interface ProfilePageProps {
     user?: User
     isLoading: boolean
+    isOwnProfile: boolean;
     isError: boolean
     posts?: Post[]
     isFollowing?: boolean;
 }
-export default function ProfilePage({ user, isLoading, isError,posts, isFollowing }: ProfilePageProps) {
+export default function ProfilePage({ user, isLoading, isError,posts,isOwnProfile, isFollowing }: ProfilePageProps) {
     const [showFeed, setShowFeed] = useState(false)
     const [openModal, setOpenModal] = useState(false);
     const [modalType, setModalType] = useState<"followers" | "following">("followers")
@@ -30,8 +31,7 @@ export default function ProfilePage({ user, isLoading, isError,posts, isFollowin
         setModalType("following");
         setOpenModal(true);
     }
-    const currentUser = useAppSelector((state) => state.auth.user)
-    const isOwnProfile = currentUser?.id === user?.id
+
     const userId = user?.id
     const { data: followersData } = useGetFollowersQuery(
         { userId: userId! },
@@ -100,8 +100,17 @@ export default function ProfilePage({ user, isLoading, isError,posts, isFollowin
                 open={openModal}
                 onClose={() => setOpenModal(false)}
                 type={modalType}
-                onRemoveFollower={(id) => removeFollower({ userId: id })}
-                onUnfollow={(id) => unFollowUser({ userId: id })}
+                isOwnProfile={isOwnProfile}
+                onRemoveFollower={
+                    isOwnProfile
+                        ? (id) => removeFollower({ userId: id })
+                        : undefined
+                }
+                onUnfollow={
+                    isOwnProfile
+                        ? (id) => unFollowUser({ userId: id })
+                        : undefined
+                }
                 title={modalType === "followers" ? "Followers" : "Following"}
                 count={
                     modalType === "followers"

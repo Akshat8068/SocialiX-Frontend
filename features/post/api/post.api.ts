@@ -1,5 +1,5 @@
 import baseApi from "@/store/api/baseApi";
-import { CreatePostRequest, DeletePostResponse, GetUserPostRequest, GetUserPostResponse, GetUserPostsRequest, GetUserPostsResponse, PostRequest, PostResponse, UpdatePostRequest } from "@/types/post";
+import { CreatePostRequest, DeletePostResponse, GetUserPostRequest, GetUserPostResponse, GetUserPostsRequest, GetUserPostsResponse, HomeFeedResponse, PostRequest, PostResponse, UpdatePostRequest } from "@/types/post";
 
 export const postApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -53,6 +53,12 @@ export const postApi = baseApi.injectEndpoints({
             }),
             providesTags: ["Profile","Post"],
         }),
+        getHomeFeed: builder.query<HomeFeedResponse, void>({
+            query: () => ({
+                url: "/post/feed",
+            }),
+            providesTags: ["Post"],
+        })
     }),
 });
 
@@ -63,4 +69,5 @@ export const {
     useDeletePostMutation,
     useGetUserPostsQuery,
     useGetUserPostQuery,
+    useGetHomeFeedQuery
 } = postApi;

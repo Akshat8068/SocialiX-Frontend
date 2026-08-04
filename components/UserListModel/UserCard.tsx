@@ -9,7 +9,7 @@ import UserActions from "./UserActions";
 interface FollowUserCardProps {
     type: UserListType;
     user: FollowUser;
-
+    isOwnProfile: boolean
     onFollow?: (id: number) => void;
     onUnfollow?: (id: number) => void;
 onRemoveFollower?: (id: number) => void
@@ -28,6 +28,7 @@ export default function UserCard({
     onAccept,
     onReject,
     onMessage,
+    isOwnProfile,
 }: FollowUserCardProps) {
     return (
         <div
@@ -91,7 +92,8 @@ export default function UserCard({
                         onFollow={onFollow}
                         onUnfollow={onUnfollow}
                         onMessage={onMessage}
-                        onRemoveFollower={onRemoveFollower}
+                            onRemoveFollower={onRemoveFollower}
+                            isOwnProfile={isOwnProfile}
                     />
                 )}
             </div>

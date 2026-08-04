@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import {  Link2, Share2, Pencil, MessageCirclePlus, Lock } from "lucide-react";
+import { Link2, Share2, Pencil, MessageCirclePlus, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { User } from "@/types/auth";
+import { useFollowUserMutation, useUnFollowUserMutation } from "@/features/follow/api/follow.api";
 interface ProfileHeaderProps {
     user: User;
     onFollowersClick: () => void;
@@ -17,8 +18,23 @@ interface ProfileHeaderProps {
     isFollowing?: boolean
 }
 
-export default function ProfileHeader({onFollowersClick,onFollowingClick,isFollowing, user,postCount, isOwnProfile,followerCount,followingCount }: ProfileHeaderProps) {
-    console.log({ isOwnProfile, isFollowing });
+export default function ProfileHeader({ onFollowersClick, onFollowingClick, isFollowing, user, postCount, isOwnProfile, followerCount, followingCount }: ProfileHeaderProps) {
+    const [followUser, { isLoading: isFollowLoading }] = useFollowUserMutation()
+
+    const [unFollowUser, { isLoading: isUnfollowLoading }] = useUnFollowUserMutation()
+    const handleFollow = async () => {
+        if (!user?.id) return;
+
+        try {
+            if (isFollowing) {
+                await unFollowUser({ userId: user.id }).unwrap();
+            } else {
+                await followUser({ userId: user.id }).unwrap();
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
     return (
         <>
 
@@ -41,7 +57,7 @@ export default function ProfileHeader({onFollowersClick,onFollowingClick,isFollo
                         </div>
 
 
-                       
+
 
                     </div>
 
@@ -71,7 +87,7 @@ export default function ProfileHeader({onFollowersClick,onFollowingClick,isFollo
                     </div>
 
                 </div>
-                
+
 
                 <div>
                     <div className="flex items-center gap-2">
@@ -83,7 +99,7 @@ export default function ProfileHeader({onFollowersClick,onFollowingClick,isFollo
                             <Lock size={16} className="font-bold  text-muted-foreground" />
                         )}
                     </div>
-                    
+
 
                     <p className="mt-1 text-muted-foreground">
                         {user?.fullname}
@@ -126,15 +142,13 @@ export default function ProfileHeader({onFollowersClick,onFollowingClick,isFollo
                         </>
                     ) : (
                         <>
-                            <Link href={"/profile/edit"}>
-                                <Button
-                                    variant="primary"
-                                    size="lg"
-                                    leftIcon={<Pencil size={16} />}
-                                >
-                                    Follow
-                                </Button>
-                            </Link>
+
+                            <Button
+                                variant={isFollowing ? "outlined" : "primary"} size="lg"
+                                onClick={handleFollow}
+                                disabled={isFollowLoading || isUnfollowLoading}>
+                                {isFollowing ? "Following" : "Follow"}
+                            </Button>
                             <Button
                                 variant="outlined"
                                 size="lg"
@@ -162,7 +176,7 @@ export default function ProfileHeader({onFollowersClick,onFollowingClick,isFollo
                         />
 
                     </div>
-                    
+
 
                 </div>
 
@@ -213,15 +227,12 @@ export default function ProfileHeader({onFollowersClick,onFollowingClick,isFollo
                                 </>
                             ) : (
                                 <>
-                                    <Link href={"/profile/edit"}>
-                                        <Button
-                                            variant="primary"
-                                            size="lg"
-                                            leftIcon={<Pencil size={16} />}
-                                        >
-                                            Follow
-                                        </Button>
-                                    </Link>
+
+                                        <Button variant={isFollowing ? "outlined" : "primary"} size="lg"
+                                            onClick={handleFollow}
+                                            disabled={isFollowLoading || isUnfollowLoading}>
+                                        {isFollowing ? "Following" : "Follow"}
+                                    </Button>
                                     <Button
                                         variant="outlined"
                                         size="lg"

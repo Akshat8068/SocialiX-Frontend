@@ -3,6 +3,7 @@
 
 import { FollowUser, UserListType } from "./UserListModel";
 import { Button } from "../ui/button";
+import { boolean } from "zod";
 
 interface FollowActionsProps {
     user: FollowUser;
@@ -11,12 +12,14 @@ interface FollowActionsProps {
     onUnfollow?: (id: number) => void;
     onMessage?: (id: number) => void;
     onRemoveFollower?: (id: number) => void
+isOwnProfile :boolean
 }
 
 export default function UserActions({
     user,
     onFollow,
     onRemoveFollower,
+    isOwnProfile,
     type,
     onUnfollow,
     onMessage,
@@ -33,13 +36,15 @@ export default function UserActions({
 
     // Followers list
     if (type === "followers") {
-        return (
-            <Button
-                onClick={() => onRemoveFollower?.(user.id)}
-            >
-                Remove
-            </Button>
-        );
+        if (isOwnProfile) {
+            return (
+                <Button onClick={() => onRemoveFollower?.(user.id)}>
+                    Remove
+                </Button>
+            );
+        }
+
+        return <Button>View Profile</Button>;
     }
 
     // Following list
