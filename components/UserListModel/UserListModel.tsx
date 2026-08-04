@@ -50,14 +50,14 @@ interface FollowListModalProps {
     onRemoveFollower?: (id: number) => void
     onAccept?: (id: number) => void;
     onReject?: (id: number) => void;
-
+    isOwnProfile: boolean;
     onMessage?: (id: number) => void;
 }
 
 export default function UserListModel({
     open,
     onClose,
-
+    isOwnProfile,
     title,
     count,
     users,
@@ -193,6 +193,7 @@ export default function UserListModel({
                         onUnfollow={onUnfollow}
                         onAccept={onAccept}
                         onReject={onReject}
+                        isOwnProfile={isOwnProfile}
                         onMessage={onMessage}
                     />
                 </div>
