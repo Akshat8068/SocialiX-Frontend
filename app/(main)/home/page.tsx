@@ -7,9 +7,6 @@ import ProfileFeedView from "@/features/profile/components/ProfileFeedView";
 export default function HomeFeed() {
   const { data, isLoading, isError, error } = useGetHomeFeedQuery();
 
-  console.log({
-    data
-  });
   if (isLoading) {
     return <div>Loading...</div>;
   }

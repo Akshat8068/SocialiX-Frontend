@@ -1,0 +1,102 @@
+import { User } from "./auth";
+
+export interface Message {
+  id: number;
+  content: string;
+  sender: User;
+  seenAt: string | null;
+  isDeletedForEveryone: boolean;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface SocketMessage extends Message {
+  conversationId: number;
+}
+export interface ConversationParticipant {
+  id: number;
+  user: User;
+  joinedAt: string;
+}
+
+export interface Conversation {
+  id: number;
+  participants: ConversationParticipant[];
+  lastMessage: string | null;
+  lastMessageAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ConversationResponse {
+  id: number;
+  conversation: Conversation;
+}
+
+
+
+export interface CreateConversationRequest {
+  receiverId: number;
+}
+
+export interface CreateConversationResponse {
+  conversationId: number;
+}
+
+/* ---------------- Socket Emit Payloads ---------------- */
+
+export interface JoinConversationPayload {
+  conversationId: number;
+}
+
+export interface SendMessagePayload {
+  conversationId: number;
+  receiverId: number;
+  content: string;
+}
+
+export interface TypingPayload {
+  conversationId: number;
+}
+
+export interface MarkSeenPayload {
+  conversationId: number;
+  messageId: number;
+}
+
+export interface DeleteForEveryonePayload {
+  conversationId: number;
+  messageId: number;
+}
+
+/* ---------------- Socket Receive Events ---------------- */
+
+
+export interface MessageSeenEvent {
+  conversationId: number;
+  messageId: number;
+  seenAt: string
+}
+
+export interface MessageDeletedEvent {
+  messageId: number;
+  deletedAt: string;
+   conversationId: number
+}
+
+export interface UserOfflineEvent {
+  userId: number;
+  lastSeen: string;
+}
+
+export interface JoinedConversationEvent {
+  conversationId: number;
+  message: string;
+}
+export interface UserTypingEvent {
+  conversationId: number;
+  userId: number;
+  username: string;
+  isTyping: boolean;
+}
+export interface MessageNotificationEvent extends SocketMessage {}

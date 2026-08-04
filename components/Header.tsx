@@ -1,8 +1,9 @@
 "use client";
 import { useAcceptRequestMutation, useCancelRequestMutation, useGetPendingRequestQuery, useGetSentRequestQuery, useRejectRequestMutation } from "@/features/follow/api/follow.api";
-import { Bell, Search, Settings, UserCheck, UserPlus } from "lucide-react";
+import { Search, Send, UserCheck, UserPlus } from "lucide-react";
 import { useState } from "react";
 import UserListModel, { FollowUser } from "./UserListModel/UserListModel";
+import Link from "next/link";
 
 
 
@@ -85,13 +86,20 @@ export default function Header() {
           >
             <UserPlus size={22} />
           </button>
-
           <button
             onClick={() => setModal("pending")}
             className="rounded-full p-2 transition hover:bg-surface-container-low"
           >
             <UserCheck size={22} />
           </button>
+          <Link href={"/chat"}>
+            <button
+
+              className="rounded-full p-2 transition hover:bg-surface-container-low"
+            >
+              <Send size={22} />
+            </button>
+          </Link>
 
         </div>
       </header>

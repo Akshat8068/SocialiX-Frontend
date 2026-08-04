@@ -11,11 +11,11 @@ export default function MainLayout({
     return (
         <AuthProvider>
             <ProtectedRoute>
-                <Navigation/>
-                <Header/>
+                <Navigation />
+                <Header />
                 {children}
             </ProtectedRoute>
-            
+
         </AuthProvider>
     );
 }
