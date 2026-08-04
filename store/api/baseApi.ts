@@ -7,7 +7,7 @@ import baseQueryWithReauth from "./fetchBaseQuery";
   baseQuery:baseQueryWithReauth,
 
    tagTypes: ["Auth", "Profile", "Follow", "Post", "Hashtags", "Like",
-     "Comment","Saved"],
+     "Comment","Saved","Chat","Message"],
 
   endpoints: () => ({})
 })
