@@ -14,7 +14,10 @@ export default function Header() {
   const {
     data: pendingData,
     isLoading: pendingLoading,
-  } = useGetPendingRequestQuery();
+  } = useGetPendingRequestQuery(undefined, {
+    pollingInterval: 10000,
+    skipPollingIfUnfocused: true,
+  });
 
   const {
     data: sentData,

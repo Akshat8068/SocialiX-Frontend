@@ -42,8 +42,11 @@ export default function FeedPost({ post }: FeedPostProps) {
         }
     }
     const { data: commentsData } = useGetPostCommentsQuery({
-        postId: post.id,
-    });
+        postId: post.id
+    }, {
+        pollingInterval: 5000,
+        skipPollingIfUnfocused: true,
+        });
 
     const comments = commentsData?.data ?? []
     const [content, setContent] = useState("");
@@ -66,6 +69,9 @@ export default function FeedPost({ post }: FeedPostProps) {
 
     const {data: likedUsersData,isLoading: likedUsersLoading,} = useGetLikedUsersQuery({
         postId: post.id,
+    }, {
+        pollingInterval: 10000,
+        skipPollingIfUnfocused: true,
     });
     const likedUsers =likedUsersData?.data.map((user) => ({
             id: user.id,

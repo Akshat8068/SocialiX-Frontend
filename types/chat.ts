@@ -39,8 +39,11 @@ export interface CreateConversationRequest {
   receiverId: number;
 }
 
+// New conversation: { conversationId: number }
+// Existing conversation: full ConversationResponse (participant with nested conversation)
 export interface CreateConversationResponse {
-  conversationId: number;
+  conversationId?: number;        // present when newly created (201)
+  conversation?: Conversation;    // present when already existed (200)
 }
 
 /* ---------------- Socket Emit Payloads ---------------- */
@@ -81,7 +84,7 @@ export interface MessageSeenEvent {
 export interface MessageDeletedEvent {
   messageId: number;
   deletedAt: string;
-   conversationId: number
+  conversationId: number
 }
 
 export interface UserOfflineEvent {
@@ -99,4 +102,4 @@ export interface UserTypingEvent {
   username: string;
   isTyping: boolean;
 }
-export interface MessageNotificationEvent extends SocketMessage {}
+export interface MessageNotificationEvent extends SocketMessage { }

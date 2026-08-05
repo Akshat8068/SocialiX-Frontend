@@ -1,5 +1,3 @@
-// app/messages/components/ChatWindow/ChatHeader.tsx
-
 "use client";
 
 import Image from "next/image";
@@ -8,14 +6,13 @@ import {
   Info,
   Phone,
   Video,
-  Users,
 } from "lucide-react";
-import { Conversation } from "../converstaionList/ConversationList";
 
-
+import { useAppSelector } from "@/store/hooks";
+import type { ConversationResponse } from "@/types/chat";
 
 interface ChatHeaderProps {
-  conversation: Conversation;
+  conversation: ConversationResponse;
   onBack?: () => void;
 }
 
@@ -23,6 +20,15 @@ const ChatHeader = ({
   conversation,
   onBack,
 }: ChatHeaderProps) => {
+  const currentUser = useAppSelector((state) => state.auth.user);
+
+  const otherUser = conversation.conversation.participants.find(
+    (participant) => participant.user.id !== currentUser?.id
+  )?.user;
+
+  const avatar = otherUser?.profilePicture;
+  const name = otherUser?.username ?? "Unknown User";
+
   return (
     <header className="flex h-16 items-center justify-between border-b border-outline-variant/30 bg-surface px-4 md:px-6">
       {/* Left */}
@@ -39,49 +45,29 @@ const ChatHeader = ({
 
         {/* Avatar */}
         <div className="relative shrink-0">
-          {conversation.avatar ? (
+          {avatar ? (
             <Image
-              src={conversation.avatar}
-              alt={conversation.name}
+              src={avatar}
+              alt={name}
               width={44}
               height={44}
               className="rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
-              {conversation.isGroup ? (
-                <Users size={20} />
-              ) : (
-                <span className="text-lg font-semibold">
-                  {conversation.name.charAt(0)}
-                </span>
-              )}
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary">
+              {name.toUpperCase()}
             </div>
-          )}
-
-          {!conversation.isGroup && (
-            <span
-              className={`absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-surface ${
-                conversation.isOnline
-                  ? "bg-green-500"
-                  : "bg-gray-400"
-              }`}
-            />
           )}
         </div>
 
-        {/* Name & Status */}
+        {/* Name */}
         <div className="min-w-0">
           <h2 className="truncate text-base font-semibold text-on-surface">
-            {conversation.name}
+            {name}
           </h2>
 
           <p className="truncate text-sm text-on-surface-variant">
-            {conversation.isGroup
-              ? "Group Chat"
-              : conversation.isOnline
-              ? "Active now"
-              : "Offline"}
+            Direct Message
           </p>
         </div>
       </div>

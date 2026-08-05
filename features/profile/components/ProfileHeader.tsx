@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { User } from "@/types/auth";
 import { useFollowUserMutation, useUnFollowUserMutation } from "@/features/follow/api/follow.api";
+import { useCreateConversationMutation } from "@/features/chat/api/chat.api";
+import { useRouter } from "next/navigation";
 interface ProfileHeaderProps {
     user: User;
     onFollowersClick: () => void;
@@ -20,8 +22,24 @@ interface ProfileHeaderProps {
 
 export default function ProfileHeader({ onFollowersClick, onFollowingClick, isFollowing, user, postCount, isOwnProfile, followerCount, followingCount }: ProfileHeaderProps) {
     const [followUser, { isLoading: isFollowLoading }] = useFollowUserMutation()
-
     const [unFollowUser, { isLoading: isUnfollowLoading }] = useUnFollowUserMutation()
+    const [createConversation, { isLoading: isMessageLoading }] = useCreateConversationMutation()
+    const router = useRouter()
+
+    const handleMessage = async () => {
+        if (!user?.id) return;
+        try {
+            const res = await createConversation({ receiverId: user.id }).unwrap();
+            // 201 → newly created: res.data.conversationId
+            // 200 → already existed: res.data.conversation.id
+            const conversationId = res.data.conversationId ?? res.data.conversation?.id;
+            if (!conversationId) return;
+            router.push(`/chat?conversationId=${conversationId}`);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleFollow = async () => {
         if (!user?.id) return;
 
@@ -153,8 +171,10 @@ export default function ProfileHeader({ onFollowersClick, onFollowingClick, isFo
                                 variant="outlined"
                                 size="lg"
                                 leftIcon={<MessageCirclePlus size={16} />}
+                                onClick={handleMessage}
+                                disabled={isMessageLoading}
                             >
-                                Share
+                                Message
                             </Button>
                         </>
                     )}
@@ -228,15 +248,16 @@ export default function ProfileHeader({ onFollowersClick, onFollowingClick, isFo
                             ) : (
                                 <>
 
-                                        <Button variant={isFollowing ? "outlined" : "primary"} size="lg"
-                                            onClick={handleFollow}
-                                            disabled={isFollowLoading || isUnfollowLoading}>
+                                    <Button variant={isFollowing ? "outlined" : "primary"} size="lg"
+                                        onClick={handleFollow}
+                                        disabled={isFollowLoading || isUnfollowLoading}>
                                         {isFollowing ? "Following" : "Follow"}
                                     </Button>
                                     <Button
                                         variant="outlined"
                                         size="lg"
-
+                                        onClick={handleMessage}
+                                        disabled={isMessageLoading}
                                     >
                                         <MessageCirclePlus size={16} />
                                     </Button>
