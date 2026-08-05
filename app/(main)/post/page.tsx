@@ -5,7 +5,7 @@ import FileUpload from "@/components/ui/FileUpload";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textArea";
 import { useCreatePostMutation } from "@/features/post/api/post.api";
-import { Hash, Send, Camera } from "lucide-react";
+import { Hash, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -71,35 +71,17 @@ export default function PostPage() {
         <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
 
           {/* ── Left: Media Upload ── */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-outline-variant bg-surface p-6 min-h-64">
-            {previewUrls.length === 0 ? (
-              <div className="flex flex-col items-center gap-3 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                  <Camera size={22}/>
-                </div>
-                <p className="text-sm font-medium text-on-surface">
-                  Upload your visuals
-                </p>
-                <p className="text-xs text-on-surface-variant">
-                  Drag and drop or tap to upload media
-                </p>
-              </div>
-            ) : null}
-
-            <div className={previewUrls.length > 0 ? "w-full" : "mt-4"}>
-              <FileUpload
-                value={files}
-                previewUrls={previewUrls}
-                onChange={setFiles}
-                multiple
-                maxFiles={2}
-                accept="image/*,video/*"
-              />
-            </div>
-          </div>
+          <FileUpload
+            value={files}
+            previewUrls={previewUrls}
+            onChange={setFiles}
+            multiple
+            maxFiles={2}
+            accept="image/*,video/*"
+          />
 
           {/* ── Right: Form Panel ── */}
-          <div className="rounded-2xl border border-outline-variant bg-surface p-5 flex flex-col gap-5">
+          <div className="rounded-2xl border border-outline-variant bg-surface p-5 flex flex-col gap-5 pb-10">
 
             {/* Caption */}
             <div>
@@ -123,10 +105,9 @@ export default function PostPage() {
                 <Hash size={16} />
                 Add Hashtags
               </span>
-              <span className="text-xs text-on-surface-variant">
-                0 / 3000
-              </span>
+              
             </button>
+            
 
             {/* Divider */}
             <div className="h-px bg-outline-variant/30" />

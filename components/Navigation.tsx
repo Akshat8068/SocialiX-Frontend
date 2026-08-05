@@ -13,6 +13,7 @@ import {
   Search,
   User,
   User2,
+  Send,
 } from "lucide-react";
 import clsx from "clsx";
 import { Button } from "./ui/button";
@@ -21,6 +22,7 @@ const sidebarItems = [
   { label: "Home", href: "/home", icon: Home },
   { label: "Users", href: "/user", icon: Compass },
   { label: "Profile", href: "/profile", icon: User },
+  { label: "Chat", href: "/chat", icon: Send }
 ];
 
 const bottomItems = [
@@ -75,7 +77,7 @@ export default function Navigation() {
         </div>
 
         <div className="px-4">
-          <Link href={"/post"}><Button rightIcon={<Plus size={20}/>}>Create Post</Button></Link>
+          <Link href={"/post"}><Button ><Plus size={20}/></Button></Link>
         </div>
 
         <div className="mt-6 flex items-center justify-center gap-3 border-t border-outline-variant p-4 lg:justify-start">

@@ -13,12 +13,14 @@ import type { ConversationResponse } from "@/types/chat";
 
 interface ChatHeaderProps {
   conversation: ConversationResponse;
+  isOnline: boolean;
   onBack?: () => void;
 }
 
 const ChatHeader = ({
   conversation,
   onBack,
+  isOnline,
 }: ChatHeaderProps) => {
   const currentUser = useAppSelector((state) => state.auth.user);
 
@@ -66,8 +68,8 @@ const ChatHeader = ({
             {name}
           </h2>
 
-          <p className="truncate text-sm text-on-surface-variant">
-            Direct Message
+          <p className="text-xs text-on-surface-variant">
+            {isOnline ? "Online" : "Offline"}
           </p>
         </div>
       </div>

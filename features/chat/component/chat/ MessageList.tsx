@@ -6,11 +6,10 @@ import { useEffect, useRef } from "react";
 
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
-import { ConversationListItem } from "../converstaionList/ConversationList";
-import { Message } from "@/types/chat";
+import { ConversationResponse, Message } from "@/types/chat";
 
 interface MessageListProps {
-  conversation: ConversationListItem;
+  conversation: ConversationResponse;
   messages: Message[];
   currentUserId: number;
   isTyping?: boolean;
@@ -32,7 +31,13 @@ const MessageList = ({
       behavior: "smooth",
     });
   }, [messages, isTyping]);
-
+  const otherParticipant = conversation.conversation.participants.find(
+    (participant) => participant.user.id !== currentUserId
+  )
+  
+  const conversationName =otherParticipant?.user.fullname ??
+  otherParticipant?.user.username ??
+  "User"
   return (
     <div className="custom-scrollbar flex-1 overflow-y-auto bg-surface-container-lowest px-4 py-6 md:px-6">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-4">
@@ -61,7 +66,7 @@ const MessageList = ({
         {/* Typing Indicator */}
         {isTyping && (
           <TypingIndicator
-            name={conversation.name}
+            name={conversationName}
           />
         )}
 
