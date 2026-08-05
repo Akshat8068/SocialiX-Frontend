@@ -48,7 +48,7 @@ const useChatSocket = ({
     }
 
     if (onTyping) {
-      socket.on("typing", onTyping);
+      socket.on("userTyping", onTyping);
     }
     if (onMessageDeleted) {
   socket.on("messageDeleted", onMessageDeleted);
@@ -74,10 +74,12 @@ const useChatSocket = ({
       if (onMessageSeen) {
         socket.off("messageSeen", onMessageSeen);
       }
-
+      if (onMessageDeleted) {
+        socket.off("messageDeleted", onMessageDeleted);
+      }
       socket.disconnect();
     };
-  }, [onNewMessage, onTyping, onMessageSeen]);
+  }, [onNewMessage, onTyping, onMessageSeen,onMessageDeleted]);
 
   const joinConversation = (payload: JoinConversationPayload) => {
     socket.emit("joinConversation", payload);

@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, KeyboardEvent } from "react";
+import { useState, useRef, KeyboardEvent } from "react";
 import {
   Image,
   Paperclip,

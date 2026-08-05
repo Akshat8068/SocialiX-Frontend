@@ -5,7 +5,10 @@ import ProfileFeedView from "@/features/profile/components/ProfileFeedView";
 
 
 export default function HomeFeed() {
-  const { data, isLoading, isError, error } = useGetHomeFeedQuery();
+  const { data, isLoading, isError, error } = useGetHomeFeedQuery(undefined, {
+    pollingInterval: 30000,
+    skipPollingIfUnfocused: true,
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
