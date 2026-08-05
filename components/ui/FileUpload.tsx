@@ -45,7 +45,10 @@ export default function FileUpload({
   };
 
   return (
-    <div className="space-y-4">
+    <div
+      className="flex flex-col items-center justify-center rounded-2xl border border-outline-variant bg-surface p-6 min-h-64 cursor-pointer"
+      onClick={() => inputRef.current?.click()}
+    >
       <input
         ref={inputRef}
         hidden
@@ -54,24 +57,38 @@ export default function FileUpload({
         multiple={multiple}
         disabled={disabled}
         onChange={handleSelect}
+        // stop click from bubbling back up to the outer div (would double-trigger)
+        onClick={(e) => e.stopPropagation()}
       />
 
-      <Button
-        type="button"
-        variant="outlined"
-        onClick={() => inputRef.current?.click()}
-      >
-        <Camera size={18} />
-        {multiple ? "Select Media" : "Select Image"}
-      </Button>
-
-      {previewUrls.length > 0 && (
+      {previewUrls.length === 0 ? (
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+            <Camera size={22} />
+          </div>
+          <p className="text-sm font-medium text-on-surface">
+            Upload your visuals
+          </p>
+          <p className="text-xs text-on-surface-variant">
+            Drag and drop or tap to upload media
+          </p>
+          <Button
+            type="button"
+            variant="outlined"
+            onClick={(e) => {
+              e.stopPropagation();
+              inputRef.current?.click();
+            }}
+          >
+            
+            {multiple ? "Select Media" : "Select Image"}
+          </Button>
+        </div>
+      ) : (
         <div
-          className={
-            multiple
-              ? "grid grid-cols-3 gap-3"
-              : "flex justify-center"
-          }
+          className={`w-full ${multiple ? "grid grid-cols-3 gap-3" : "flex justify-center"}`}
+          // prevent the preview area click from re-opening the picker
+          onClick={(e) => e.stopPropagation()}
         >
           {previewUrls.map((url, index) => (
             <div key={index} className="relative">
@@ -82,7 +99,6 @@ export default function FileUpload({
                 height={140}
                 className="h-32 w-32 rounded-lg object-cover"
               />
-
               <Button
                 type="button"
                 size="sm"

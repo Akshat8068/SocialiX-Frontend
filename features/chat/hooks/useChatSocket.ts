@@ -9,6 +9,8 @@ import type {
   MessageSeenEvent,
   SendMessagePayload,
   TypingPayload,
+  UserOfflineEvent,
+  UserOnlineEvent,
   UserTypingEvent,
 } from "@/types/chat";
 import { socket } from "../services/socket";
@@ -17,6 +19,8 @@ interface UseChatSocketProps {
   onNewMessage?: (message: MessageNotificationEvent) => void;
   onTyping?: (payload: UserTypingEvent) => void;
   onMessageSeen?: (payload: MessageSeenEvent) => void;
+  onUserOnline?: (payload: UserOnlineEvent) => void;
+  onUserOffline?: (payload: UserOfflineEvent) => void;
   onMessageDeleted?: (payload: MessageDeletedEvent) => void
 }
 
@@ -24,10 +28,11 @@ const useChatSocket = ({
   onNewMessage,
   onTyping,
   onMessageSeen,
-  onMessageDeleted
+  onMessageDeleted, onUserOnline,
+  onUserOffline
 }: UseChatSocketProps = {}) => {
   useEffect(() => {
-    socket.connect();
+
 
     // Connection Events
     socket.on("connect", () => {
@@ -39,7 +44,7 @@ const useChatSocket = ({
     });
 
     socket.on("connect_error", (err) => {
-      console.error("Socket Error:", err.message);
+      console.log("Socket Error:", err.message);
     });
 
     // Chat Events
@@ -48,14 +53,22 @@ const useChatSocket = ({
     }
 
     if (onTyping) {
+
       socket.on("userTyping", onTyping);
     }
     if (onMessageDeleted) {
-  socket.on("messageDeleted", onMessageDeleted);
-}
+      socket.on("messageDeleted", onMessageDeleted);
+    }
 
     if (onMessageSeen) {
       socket.on("messageSeen", onMessageSeen);
+    }
+    if (onUserOnline) {
+      socket.on("userOnline", onUserOnline);
+    }
+
+    if (onUserOffline) {
+      socket.on("userOffline", onUserOffline);
     }
 
     return () => {
@@ -68,18 +81,25 @@ const useChatSocket = ({
       }
 
       if (onTyping) {
-        socket.off("typing", onTyping);
+        console.log("Typing event")
+        socket.off("userTyping", onTyping);
+      }
+      if (onUserOnline) {
+        socket.off("userOnline", onUserOnline);
       }
 
+      if (onUserOffline) {
+        socket.off("userOffline", onUserOffline);
+      }
       if (onMessageSeen) {
         socket.off("messageSeen", onMessageSeen);
       }
       if (onMessageDeleted) {
         socket.off("messageDeleted", onMessageDeleted);
       }
-      socket.disconnect();
+
     };
-  }, [onNewMessage, onTyping, onMessageSeen,onMessageDeleted]);
+  }, [onNewMessage, onTyping, onMessageSeen,onUserOffline,onUserOnline, onMessageDeleted]);
 
   const joinConversation = (payload: JoinConversationPayload) => {
     socket.emit("joinConversation", payload);

@@ -46,32 +46,19 @@ const MessageBubble = ({
         handleClickOutside
       );
     };
-  }, []);
-
-  const getStatusIcon = () => {
-    if (message.seenAt) {
-      return (
-        <CheckCheck
-          size={14}
-          className="text-sky-400"
-        />
-      );
-    }
-
-    
-  };
+  }, [])
 
   return (
     <div
       className={`flex ${isOwnMessage
-          ? "justify-end"
-          : "justify-start"
+        ? "justify-end"
+        : "justify-start"
         }`}
     >
       <div
         className={`flex items-start gap-2 max-w-[85%] md:max-w-[70%] ${isOwnMessage
-            ? "flex-row-reverse"
-            : "flex-row"
+          ? "flex-row-reverse"
+          : "flex-row"
           }`}
       >
         {/* Menu (Only Own Messages) */}
@@ -109,14 +96,14 @@ const MessageBubble = ({
         {/* Bubble */}
         <div
           className={`flex flex-col gap-1 ${isOwnMessage
-              ? "items-end"
-              : "items-start"
+            ? "items-end"
+            : "items-start"
             }`}
         >
           <div
             className={`rounded-2xl px-4 py-3 shadow-sm ${isOwnMessage
-                ? "rounded-br-md bg-primary text-on-primary"
-                : "rounded-bl-md bg-surface-container text-on-surface"
+              ? "rounded-br-md bg-primary text-on-primary"
+              : "rounded-bl-md bg-surface-container text-on-surface"
               }`}
           >
             <p className="whitespace-pre-wrap text-sm leading-6 md:text-base">
@@ -126,14 +113,17 @@ const MessageBubble = ({
 
           <div
             className={`flex items-center gap-1 px-1 text-xs text-on-surface-variant ${isOwnMessage
-                ? "justify-end"
-                : "justify-start"
+              ? "justify-end"
+              : "justify-start"
               }`}
           >
-            <span>{message.createdAt}</span>
-
-            {isOwnMessage &&
-              getStatusIcon()}
+            
+            <span>
+              {new Date(message.createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
           </div>
         </div>
       </div>

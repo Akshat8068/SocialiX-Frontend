@@ -86,7 +86,9 @@ export interface MessageDeletedEvent {
   deletedAt: string;
   conversationId: number
 }
-
+export interface UserOnlineEvent {
+  userId: number;
+}
 export interface UserOfflineEvent {
   userId: number;
   lastSeen: string;

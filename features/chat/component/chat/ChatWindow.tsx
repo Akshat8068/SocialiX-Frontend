@@ -2,32 +2,33 @@
 
 "use client";
 
-import { Message, TypingPayload } from "@/types/chat";
+import { ConversationResponse, Message, TypingPayload } from "@/types/chat";
 
 import MessageList from "./ MessageList";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
-import { ConversationListItem } from "../converstaionList/ConversationList";
 
 
 interface ChatWindowProps {
-  conversation: ConversationListItem | null;
+  conversation: ConversationResponse | null;
   messages: Message[];
   currentUserId: number;
   isTyping?: boolean;
 
   typingStart: (payload: TypingPayload) => void;
   typingStop: (payload: TypingPayload) => void;
-onDeleteMessage: (messageId: number) => void;
+  onDeleteMessage: (messageId: number) => void;
   onBack?: () => void;
   onSendMessage: (message: string) => void;
   className?: string;
+  isOnline: boolean
 }
 
 const ChatWindow = ({
   conversation,
   messages,
   currentUserId,
+  isOnline,
   isTyping = false,
   typingStart,
   typingStop,
@@ -68,6 +69,7 @@ const ChatWindow = ({
       <ChatHeader
         conversation={conversation}
         onBack={onBack}
+        isOnline={isOnline}
       />
 
       <MessageList
@@ -79,10 +81,10 @@ const ChatWindow = ({
       />
 
       <MessageInput
-        conversationId={Number(conversation.id)}
-    onSend={onSendMessage}
-    typingStart={typingStart}
-    typingStop={typingStop}
+        conversationId={Number(conversation.conversation.id)}
+        onSend={onSendMessage}
+        typingStart={typingStart}
+        typingStop={typingStop}
       />
     </section>
   );

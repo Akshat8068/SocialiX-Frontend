@@ -19,15 +19,17 @@ export default function ChatPage() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user)
   const searchParams = useSearchParams();
-  const { data, isLoading, isError, } = useGetConversationsQuery();
+  const { data, isLoading, isError, } = useGetConversationsQuery(undefined,{pollingInterval:60000,skipPollingIfUnfocused: true});
   const [isTyping, setIsTyping] = useState(false)
+  const [onlineUsers, setOnlineUsers] = useState<Set<number>>(new Set())
   const {
     joinConversation,
     sendMessage,
     typingStart,
     typingStop,
     markSeen,
-    deleteForEveryone
+    deleteForEveryone,
+
   } = useChatSocket({
     onNewMessage: (message) => {
       dispatch(
@@ -35,14 +37,55 @@ export default function ChatPage() {
           "getConversationMessages",
           Number(message.conversationId),
           (draft) => {
+            if (!draft?.data) return
             draft.data.push(message);
+          }
+        )
+      )
+      dispatch(
+        chatApi.util.updateQueryData(
+          "getConversations",
+          undefined,
+          (draft) => {
+            if (!draft?.data) return;
+
+            const conversation = draft.data.find(
+              (c) => c.conversation.id === message.conversationId
+            );
+
+            if (!conversation) return;
+
+            conversation.conversation.lastMessage = message.content;
+            conversation.conversation.lastMessageAt = message.createdAt;
+
+            draft.data.sort(
+              (a, b) =>
+                new Date(b.conversation.lastMessageAt ?? 0).getTime() -
+                new Date(a.conversation.lastMessageAt ?? 0).getTime()
+            );
           }
         )
       );
     },
 
     onTyping: (payload) => {
+      console.log("Typing event", payload)
       setIsTyping(payload.isTyping);
+    },
+    onUserOnline: ({ userId }) => {
+      setOnlineUsers((prev) => {
+        const next = new Set(prev);
+        next.add(userId);
+        return next;
+      });
+    },
+
+    onUserOffline: ({ userId }) => {
+      setOnlineUsers((prev) => {
+        const next = new Set(prev);
+        next.delete(userId);
+        return next;
+      });
     },
     onMessageSeen: (payload) => {
       dispatch(
@@ -50,6 +93,7 @@ export default function ChatPage() {
           "getConversationMessages",
           Number(payload.conversationId),
           (draft) => {
+            if (!draft?.data) return
             const msg = draft.data.find(
               (m) => m.id === payload.messageId
             );
@@ -70,6 +114,7 @@ export default function ChatPage() {
           "getConversationMessages",
           Number(conversationId),
           (draft) => {
+            if (!draft?.data) return;
             draft.data = draft.data.filter(
               (m) => m.id !== messageId
             );
@@ -107,8 +152,8 @@ export default function ChatPage() {
     setSelectedConversation(conversation);
 
     joinConversation({
-      conversationId: Number(conversation.id),
-    })
+      conversationId: Number(conversation.conversation.id),
+    });
 
 
     if (window.innerWidth < 768) {
@@ -121,20 +166,48 @@ export default function ChatPage() {
   const handleBack = () => {
     setIsMobileChatOpen(false);
   }
-  const selectedCon = selectedConversation?.id ?? 0
-  const {
-    data: messagesResponse,
-    isLoading: messagesLoading,
-  } = useGetConversationMessagesQuery(
-    selectedCon,
-    {
-      skip: !selectedConversation,
-    }
-  );
+  const selectedCon = selectedConversation?.conversation.id ?? 0
+  const { data: messagesResponse,
+    isLoading: messagesLoading, } = useGetConversationMessagesQuery(
+      selectedCon,
+      {
+        skip: !selectedConversation,
+        pollingInterval:60000,
+        skipPollingIfUnfocused:true
+      }
+    )
 
 
   const currentUserId = user!.id
+  const messages = messagesResponse?.data ?? [];
+  const otherParticipant =
+    selectedConversation?.conversation.participants.find(
+      (p) => p.user.id !== currentUserId
+    );
 
+  const isOnline = onlineUsers.has(
+    otherParticipant?.user.id ?? 0
+  )
+  useEffect(() => {
+    if (!selectedConversation) return;
+
+    messages.forEach((message) => {
+      if (
+        message.sender.id !== currentUserId &&
+        !message.seenAt
+      ) {
+        markSeen({
+          conversationId: selectedConversation.conversation.id,
+          messageId: message.id,
+        });
+      }
+    });
+  }, [
+    messages,
+    selectedConversation,
+    currentUserId,
+    markSeen,
+  ]);
   const handleSendMessage = (text: string) => {
     if (!selectedConversation) return;
 
@@ -153,9 +226,9 @@ export default function ChatPage() {
 
   const handleDeleteMessage = (messageId: number) => {
     deleteForEveryone({
-      conversationId: Number(selectedConversation!.id),
+      conversationId: Number(selectedConversation!.conversation.id),
       messageId,
-    });
+    })
   }
   if (isLoading) {
     return (
@@ -172,7 +245,6 @@ export default function ChatPage() {
       </div>
     );
   }
-  const messages = messagesResponse?.data ?? []
   return (
     <main className="flex h-[calc(100vh-64px)] overflow-hidden bg-surface">
 
@@ -195,6 +267,7 @@ export default function ChatPage() {
       <ChatWindow
         conversation={selectedConversation}
         messages={messages}
+        isOnline={isOnline}
         onDeleteMessage={handleDeleteMessage}
         currentUserId={currentUserId}
         isTyping={isTyping}
