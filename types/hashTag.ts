@@ -23,6 +23,7 @@ export interface DeleteHashtagRequest {
 }
 
 export type HashtagResponse = ApiResponse<Hashtag>;
+export type GetAllHashtagsResponse = ApiResponse<Hashtag[]>;
 
 export interface DeleteHashtagResponse {
     success: boolean;

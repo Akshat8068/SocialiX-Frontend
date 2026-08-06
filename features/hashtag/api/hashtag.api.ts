@@ -1,34 +1,49 @@
 import baseApi from "@/store/api/baseApi";
-import { CreateHashtagRequest,  DeleteHashtagRequest, DeleteHashtagResponse, GetHashtagRequest, HashtagResponse } from "@/types/hashTag";
+import {
+    CreateHashtagRequest,
+    DeleteHashtagRequest,
+    DeleteHashtagResponse,
+    GetHashtagRequest,
+    GetAllHashtagsResponse,
+    HashtagResponse,
+} from "@/types/hashTag";
 
 export const hashtagApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        createHashtag: builder.mutation<HashtagResponse,CreateHashtagRequest>({
+        createHashtag: builder.mutation<HashtagResponse, CreateHashtagRequest>({
             query: (data) => ({
                 url: "/hashtag",
                 method: "POST",
-                body:data,
+                body: data,
             }),
-            invalidatesTags: ["Post","Hashtags"],
+            invalidatesTags: ["Post", "Hashtags"],
         }),
 
+        // Search / lookup a single hashtag by name
         getHashtag: builder.query<HashtagResponse, GetHashtagRequest>({
             query: ({ hashTag }) => ({
                 url: "/hashtag",
                 method: "GET",
-                body: {
-                    hashTag,
-                },
+                body: { hashTag },
             }),
-            providesTags: ["Post","Hashtags"],
+            providesTags: ["Post", "Hashtags"],
         }),
 
-        deleteHashtag: builder.mutation<DeleteHashtagResponse,DeleteHashtagRequest>({
+        // Fetch all public hashtags for the picker list
+        getAllHashtags: builder.query<GetAllHashtagsResponse, void>({
+            query: () => ({
+                url: "/hashtag/all",
+                method: "GET",
+            }),
+            providesTags: ["Hashtags"],
+        }),
+
+        deleteHashtag: builder.mutation<DeleteHashtagResponse, DeleteHashtagRequest>({
             query: ({ hashtagId }) => ({
                 url: `/hashtag/${hashtagId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["Post","Hashtags"],
+            invalidatesTags: ["Post", "Hashtags"],
         }),
     }),
 });
@@ -36,5 +51,6 @@ export const hashtagApi = baseApi.injectEndpoints({
 export const {
     useCreateHashtagMutation,
     useGetHashtagQuery,
+    useGetAllHashtagsQuery,
     useDeleteHashtagMutation,
 } = hashtagApi;

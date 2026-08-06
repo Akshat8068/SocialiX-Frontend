@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 interface AddHashtagFormProps {
     onAdd: (hashtag: string) => void;
+    isLoading?: boolean;
 }
 
 export default function AddHashtagForm({
     onAdd,
+    isLoading = false,
 }: AddHashtagFormProps) {
     const [hashtag, setHashtag] = useState("");
 
@@ -45,6 +47,7 @@ export default function AddHashtagForm({
                         placeholder="Enter hashtag..."
                         autoComplete="off"
                         spellCheck={false}
+                        disabled={isLoading}
                         className="
                             h-11
                             w-full
@@ -62,6 +65,9 @@ export default function AddHashtagForm({
                             focus:ring-4
                             focus:ring-orange-500/20
 
+                            disabled:cursor-not-allowed
+                            disabled:opacity-60
+
                             dark:border-zinc-700
                             dark:bg-zinc-900
                             dark:text-white
@@ -72,7 +78,7 @@ export default function AddHashtagForm({
 
                 <button
                     type="submit"
-                    disabled={!hashtag.trim()}
+                    disabled={!hashtag.trim() || isLoading}
                     className="
                         inline-flex
                         h-11
@@ -93,8 +99,12 @@ export default function AddHashtagForm({
                         disabled:opacity-50
                     "
                 >
-                    <Plus size={16} />
-                    Add
+                    {isLoading ? (
+                        <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                        <Plus size={16} />
+                    )}
+                    {isLoading ? "Adding..." : "Add"}
                 </button>
             </form>
         </div>

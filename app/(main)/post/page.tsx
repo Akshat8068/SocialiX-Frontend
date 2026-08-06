@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/ui/FileUpload";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textArea";
+import HashtagModel from "@/features/hashtag/component/HashtagModel";
 import { useCreatePostMutation } from "@/features/post/api/post.api";
-import { Hash, Send } from "lucide-react";
+import { Hash, Send, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,8 +19,8 @@ interface CreatePostForm {
 
 export default function PostPage() {
   const [files, setFiles] = useState<File[]>([]);
-  const [hideLikeCount, setHideLikeCount] = useState(false);
-  const [disableComments, setDisableComments] = useState(false);
+  const [hashtagModalOpen, setHashtagModalOpen] = useState(false);
+  const [selectedHashtags, setSelectedHashtags] = useState<string[]>([]);
 
   const [createPost, { isLoading }] = useCreatePostMutation();
   const router = useRouter();
@@ -38,6 +39,15 @@ export default function PostPage() {
     return files.map((file) => URL.createObjectURL(file));
   }, [files]);
 
+  // Called when user hits "Done" in the hashtag modal.
+  const handleHashtagDone = (hashtags: string[]) => {
+    setSelectedHashtags(hashtags);
+  };
+
+  const removeHashtag = (tag: string) => {
+    setSelectedHashtags((prev) => prev.filter((t) => t !== tag));
+  };
+
   const onSubmit = async (values: CreatePostForm) => {
     if (!files.length) {
       toast.error("Please select at least one media file.");
@@ -51,10 +61,14 @@ export default function PostPage() {
       files.forEach((file) => {
         formData.append("media", file);
       });
+      selectedHashtags.forEach((tag) => {
+        formData.append("hashtags[]", tag.replace(/^#/, ""));
+      });
 
       await createPost(formData).unwrap();
       reset();
       setFiles([]);
+      setSelectedHashtags([]);
       toast.success("Post created successfully.");
       router.push("/profile");
     } catch (error) {
@@ -96,22 +110,49 @@ export default function PostPage() {
               </div>
             </div>
 
-            {/* Add Hashtags — UI only */}
-            <button
-              type="button"
-              className="flex items-center justify-between rounded-lg border border-outline-variant/50 bg-surface px-4 py-3 text-sm text-on-surface hover:bg-surface-container transition-colors"
-            >
-              <span className="flex items-center gap-2 text-primary font-medium">
-                <Hash size={16} />
-                Add Hashtags
-              </span>
-              
-            </button>
-            
+            {/* Add Hashtags */}
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => setHashtagModalOpen(true)}
+                className="flex w-full items-center justify-between rounded-lg border border-outline-variant/50 bg-surface px-4 py-3 text-sm text-on-surface hover:bg-surface-container transition-colors"
+              >
+                <span className="flex items-center gap-2 text-primary font-medium">
+                  <Hash size={16} />
+                  {selectedHashtags.length > 0
+                    ? `${selectedHashtags.length} hashtag${selectedHashtags.length > 1 ? "s" : ""} selected`
+                    : "Add Hashtags"}
+                </span>
+                {selectedHashtags.length > 0 && (
+                  <span className="text-xs text-on-surface-variant">Edit</span>
+                )}
+              </button>
+
+              {/* Selected hashtag chips */}
+              {selectedHashtags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {selectedHashtags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => removeHashtag(tag)}
+                        className="ml-0.5 rounded-full p-0.5 hover:bg-primary/20 transition-colors"
+                        aria-label={`Remove ${tag}`}
+                      >
+                        <X size={10} />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Divider */}
             <div className="h-px bg-outline-variant/30" />
-
 
             {/* Audience / Visibility */}
             <div className="space-y-2">
@@ -138,7 +179,6 @@ export default function PostPage() {
             {/* Divider */}
             <div className="h-px bg-outline-variant/30" />
 
-
             {/* Submit */}
             <Button
               type="submit"
@@ -152,6 +192,14 @@ export default function PostPage() {
           </div>
         </div>
       </form>
+
+      {/* Hashtag modal — outside the grid so it overlays correctly */}
+      <HashtagModel
+        open={hashtagModalOpen}
+        onClose={() => setHashtagModalOpen(false)}
+        onDone={handleHashtagDone}
+        initialHashtags={selectedHashtags}
+      />
     </div>
   );
 }
