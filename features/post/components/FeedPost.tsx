@@ -25,6 +25,8 @@ interface FeedPostProps {
 }
 
 export default function FeedPost({ post }: FeedPostProps) {
+    console.log(post.user.id)
+    
     const [search, setSearch] = useState("")
     const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation()
     const [toggleLike] = useToggleLikeMutation()
@@ -85,13 +87,14 @@ export default function FeedPost({ post }: FeedPostProps) {
             isFollowing: user.isFollowing,
     })) ?? []
     return (
-        <article className="mb-8  overflow-hidden rounded-xl  bg-[#fff8f6] shadow-2xl ">
+        <article className="mb-8  overflow-hidden rounded-xl  bg-primary/8 shadow-2xl ">
             <PostHeader
                 fullname={post.user.fullname}
                 username={post.user.username}
                 profilePicture={post.user.profilePicture ?? undefined}
                 verified={post.user.isVerified}
                 createdAt={post.createdAt}
+                id={post.user.id}
                 onDelete={handleDelete}
             />
 

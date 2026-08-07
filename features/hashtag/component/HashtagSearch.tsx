@@ -61,7 +61,7 @@ export default function HashtagSearch({
                         dark:text-white
                         dark:placeholder:text-zinc-400
                         dark:focus:border-orange-500
-                        dark:focus:bg-zinc-900
+                        dark:focus:bg-on-background
                     "
                 />
 

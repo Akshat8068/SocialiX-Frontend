@@ -7,6 +7,7 @@ import {
     MoreHorizontal,
 } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 interface PostHeaderProps {
     fullname: string;
@@ -14,12 +15,13 @@ interface PostHeaderProps {
     profilePicture?: string;
     createdAt: string;
     verified?: boolean;
+    id:number;
     onEdit?: () => void;
     onDelete?: () => void;
 }
 
 export default function PostHeader({
-    fullname,
+    fullname,id,
     username,
     profilePicture,
     createdAt,
@@ -32,6 +34,7 @@ export default function PostHeader({
     return (
         <div className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
+                <Link href={`/user/${id}`}>
                 <Image
                     src={profilePicture || "/Hero.jpg"}
                     alt={fullname}
@@ -39,12 +42,14 @@ export default function PostHeader({
                     height={48}
                     className="h-12 w-12 rounded-full object-cover"
                 />
+                </Link>
 
                 <div>
                     <div className="flex items-center gap-1">
+                         <Link href={`/user/${id}`}>
                         <h3 className="text-base font-semibold">
                             {username}
-                        </h3>
+                        </h3></Link>
                     </div>
 
                     <p className="flex items-center gap-1 text-xs text-muted-foreground">

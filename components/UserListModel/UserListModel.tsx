@@ -110,36 +110,33 @@ export default function UserListModel({
             <div
                 role="dialog"
                 aria-modal="true"
-                className="
-        fixed
-        z-50
-        flex
-        flex-col
-        bg-white
-        dark:bg-zinc-900
-        shadow-2xl
+                className="fixed
+z-50
+flex
+flex-col
+bg-on-background
+shadow-2xl
+overflow-hidden
 
-        inset-x-0
-        bottom-0
-        max-h-[92vh]
-        rounded-t-4xl
+inset-x-0
+bottom-0
+max-h-[92vh]
+rounded-t-4xl
 
-        animate-in
-        slide-in-from-bottom
-        duration-300
+animate-in
+slide-in-from-bottom
+duration-300
 
-        md:left-1/2
-        md:top-1/2
-        md:bottom-auto
-        md:inset-x-auto
-        md:w-140
-        md:max-h-[80vh]
-        md:-translate-x-1/2
-        md:-translate-y-1/2
-        md:rounded-3xl
-        md:animate-in
-        md:zoom-in-95
-      "
+md:left-1/2
+md:top-1/2
+md:right-auto
+md:bottom-auto
+md:inset-x-auto
+md:w-[560px]
+md:max-h-[80vh]
+md:-translate-x-1/2
+md:-translate-y-1/2
+md:rounded-3xl"
             >
                 {/* Grabber */}
                 <div className="flex justify-center py-3 md:hidden">

@@ -30,8 +30,7 @@ export default function ProfileHeader({ onFollowersClick, onFollowingClick, isFo
         if (!user?.id) return;
         try {
             const res = await createConversation({ receiverId: user.id }).unwrap();
-            // 201 → newly created: res.data.conversationId
-            // 200 → already existed: res.data.conversation.id
+           
             const conversationId = res.data.conversationId ?? res.data.conversation?.id;
             if (!conversationId) return;
             router.push(`/chat?conversationId=${conversationId}`);
@@ -65,7 +64,7 @@ export default function ProfileHeader({ onFollowersClick, onFollowingClick, isFo
                         <div className="h-24 w-24 rounded-full bg-primary p-1">
                             <div className="h-full w-full overflow-hidden rounded-full border-4 border-surface">
                                 <Image
-                                    src={user?.profilePicture || "/hero.jpg"}
+                                    src={user?.profilePicture || "/Hero.jpg"}
                                     alt={user?.fullname || "USer"}
                                     width={96}
                                     height={96}
@@ -82,24 +81,25 @@ export default function ProfileHeader({ onFollowersClick, onFollowingClick, isFo
                     <div className="flex flex-1 justify-around">
 
                         <div className="text-center">
-                            <p className="text-lg font-bold">{postCount}</p>
-                            <p className="text-xs text-muted-foreground">Posts</p>
+                            <p className="text-center font-bold">{postCount}</p>
+                            <p className=" text-muted-foreground">Posts</p>
                         </div>
 
                         <button
                             onClick={onFollowersClick}
                             className="text-left"
                         >
-                            <span className="font-bold">{followerCount}</span>{" "}
-                            Followers
+                            <p className="font-bold text-center">{followerCount}</p>
+                            <p className="text-muted-foreground">Followers</p>
+                            
                         </button>
 
                         <button
                             onClick={onFollowingClick}
                             className="text-left"
-                        >
-                            <span className="font-bold">{followingCount}</span>{" "}
-                            Following
+                        ><p className="font-bold text-center">{followingCount}</p>
+                            <p className="text-muted-foreground">Following</p>
+                            
                         </button>
 
                     </div>

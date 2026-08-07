@@ -24,7 +24,7 @@ export default function StoryHighlights() {
                             <div className="overflow-hidden rounded-full border-2 border-surface">
 
                                 <Image
-                                    src={highlight.image}
+                                    src={highlight.image || "/Hero.jpg"}
                                     alt={highlight.title}
                                     width={72}
                                     height={72}
