@@ -19,10 +19,14 @@ interface CreatePostForm {
 
 export default function PostPage() {
   const [files, setFiles] = useState<File[]>([]);
-  const [hashtagModalOpen, setHashtagModalOpen] = useState(false);
-  const [selectedHashtags, setSelectedHashtags] = useState<string[]>([]);
+
+  const [isHashtagModalOpen, setIsHashtagModalOpen] = useState(false)
+
+  const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
 
   const [createPost, { isLoading }] = useCreatePostMutation();
+
+
   const router = useRouter();
 
   const { register, handleSubmit, reset, watch, setValue } =
@@ -60,11 +64,9 @@ export default function PostPage() {
       formData.append("visibility", values.visibility);
       files.forEach((file) => {
         formData.append("media", file);
-      });
-      selectedHashtags.forEach((tag) => {
-        formData.append("hashtags[]", tag.replace(/^#/, ""));
-      });
 
+      })
+      formData.append("hashtags", JSON.stringify(selectedHashtags))
       await createPost(formData).unwrap();
       reset();
       setFiles([]);
@@ -114,41 +116,37 @@ export default function PostPage() {
             <div className="space-y-2">
               <button
                 type="button"
-                onClick={() => setHashtagModalOpen(true)}
+
+                onClick={() => setIsHashtagModalOpen(true)}
                 className="flex w-full items-center justify-between rounded-lg border border-outline-variant/50 bg-surface px-4 py-3 text-sm text-on-surface hover:bg-surface-container transition-colors"
               >
                 <span className="flex items-center gap-2 text-primary font-medium">
                   <Hash size={16} />
-                  {selectedHashtags.length > 0
-                    ? `${selectedHashtags.length} hashtag${selectedHashtags.length > 1 ? "s" : ""} selected`
-                    : "Add Hashtags"}
+
+                  Add Hashtags
                 </span>
                 {selectedHashtags.length > 0 && (
-                  <span className="text-xs text-on-surface-variant">Edit</span>
+                  <span className="text-xs text-on-surface-variant">
+                    {selectedHashtags.length} selected
+                  </span>
                 )}
               </button>
-
-              {/* Selected hashtag chips */}
               {selectedHashtags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {selectedHashtags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+
+                      className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
                     >
-                      {tag}
-                      <button
-                        type="button"
-                        onClick={() => removeHashtag(tag)}
-                        className="ml-0.5 rounded-full p-0.5 hover:bg-primary/20 transition-colors"
-                        aria-label={`Remove ${tag}`}
-                      >
-                        <X size={10} />
-                      </button>
+                      #{tag}
                     </span>
                   ))}
                 </div>
               )}
+            </div>
+
+
             </div>
 
             {/* Divider */}
@@ -189,17 +187,21 @@ export default function PostPage() {
             >
               Share Post
             </Button>
-          </div>
         </div>
       </form>
 
-      {/* Hashtag modal — outside the grid so it overlays correctly */}
-      <HashtagModel
-        open={hashtagModalOpen}
-        onClose={() => setHashtagModalOpen(false)}
-        onDone={handleHashtagDone}
-        initialHashtags={selectedHashtags}
-      />
+
+      {/* Hashtag Modal */}
+      {isHashtagModalOpen && (
+        <HashtagModel
+          selected={selectedHashtags}
+          onDone={(hashtags) => {
+            setSelectedHashtags(hashtags);
+            setIsHashtagModalOpen(false);
+          }}
+          onClose={() => setIsHashtagModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

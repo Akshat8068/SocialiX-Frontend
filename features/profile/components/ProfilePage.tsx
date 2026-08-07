@@ -8,7 +8,11 @@ import { useAppSelector } from "@/store/hooks";
 import { User } from "@/types/auth";
 import { Post } from "@/types/post";
 import { useGetFollowersQuery, useGetFollowingQuery, useRemoveFollowerMutation, useUnFollowUserMutation } from "@/features/follow/api/follow.api";
-import UserListModel from "@/components/UserListModel/UserListModel";
+import dynamic from "next/dynamic";
+
+const UserListModel = dynamic(() => import("@/components/UserListModel/UserListModel"), {
+  loading: () => null,
+});
 
 interface ProfilePageProps {
     user?: User
@@ -25,7 +29,7 @@ export default function ProfilePage({ user, isLoading, isError,posts,isOwnProfil
     const openFollowers = () => {
         setModalType("followers");
         setOpenModal(true);
-    };
+    }
 
     const openFollowing = () => {
         setModalType("following");

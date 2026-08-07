@@ -18,7 +18,7 @@ export default function ProfileFeedView({
         );
     }
     return (
-        <div className="mx-auto mt-6 max-w-200 space-y-8">
+        <div className=" mt-6 mx-1 max-w-200 space-y-8">
             {posts.map((post) => (
                 <FeedPost
                     key={post.id}

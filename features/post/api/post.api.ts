@@ -3,7 +3,7 @@ import { CreatePostRequest, DeletePostResponse, GetUserPostRequest, GetUserPostR
 
 export const postApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        createPost: builder.mutation<PostResponse, CreatePostRequest>({
+        createPost: builder.mutation<PostResponse, FormData>({
             query: (formData) => {
                 return {
                     url: "/post",

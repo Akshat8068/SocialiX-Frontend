@@ -19,7 +19,7 @@ export default function HomeFeed() {
   }
 
   return (
-    <main className="min-h-screen lg:pl-64">
+    <main className="min-h-screen mx-4 md:ml-28 md:mr-12 ">
       <ProfileFeedView posts={data?.data ?? []} />
     </main>
   );

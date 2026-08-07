@@ -6,21 +6,27 @@ export interface PostMedia {
     id: number;
     url: string;
     publicId: string;
-    secureUrl:string
+    secureUrl: string
 }
-
+export interface PostHashtag {
+    is: number;
+    createdAt: string;
+    hashtag: Hashtag;
+}
 export interface Post {
     id: number;
     caption?: string | null;
     user: User;
     media: PostMedia[];
-    hashtag?:Hashtag;
+    hashtags: PostHashtag[]
     createdAt: string;
     isLiked: boolean;
     updatedAt: string;
     likeCount: number;
+
     commentCount: number
 }
+
 export interface HomeFeedResponse {
     success: boolean;
     message: string;
@@ -28,8 +34,8 @@ export interface HomeFeedResponse {
 }
 export interface CreatePostRequest {
     caption?: string;
-    hashtag?:Hashtag;
-    visibility?:boolean
+    hashtag?: Hashtag;
+    visibility?: boolean
     media: File[];
 }
 
@@ -37,8 +43,8 @@ export interface UpdatePostRequest {
     postId: number;
     caption?: string;
     media?: File[];
-    hashtag?:Hashtag;
-    formData:string
+    hashtag?: Hashtag;
+    formData: string
 }
 
 export interface PostRequest {

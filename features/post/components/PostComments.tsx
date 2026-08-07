@@ -20,7 +20,7 @@ export default function PostComments({
     onViewAll,
 }: PostCommentsProps) {
     return (
-        <div className="space-y-3 border-t px-4 pt-3">
+        <div className="space-y-3  px-4 pt-3">
             {comments.slice(0, 2).map((comment) => (
                 <div key={comment.id} className="flex gap-2 text-sm">
                     <span className="font-semibold">

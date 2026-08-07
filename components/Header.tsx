@@ -2,8 +2,13 @@
 import { useAcceptRequestMutation, useCancelRequestMutation, useGetPendingRequestQuery, useGetSentRequestQuery, useRejectRequestMutation } from "@/features/follow/api/follow.api";
 import { Search, Send, UserCheck, UserPlus } from "lucide-react";
 import { useState } from "react";
-import UserListModel, { FollowUser } from "./UserListModel/UserListModel";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import type { FollowUser } from "./UserListModel/UserListModel";
+
+const UserListModel = dynamic(() => import("./UserListModel/UserListModel"), {
+  loading: () => null,
+});
 
 
 

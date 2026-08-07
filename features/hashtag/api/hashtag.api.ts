@@ -1,12 +1,7 @@
 import baseApi from "@/store/api/baseApi";
-import {
-    CreateHashtagRequest,
-    DeleteHashtagRequest,
-    DeleteHashtagResponse,
-    GetHashtagRequest,
-    GetAllHashtagsResponse,
-    HashtagResponse,
-} from "@/types/hashTag";
+
+import { CreateHashtagRequest, DeleteHashtagRequest, DeleteHashtagResponse, GetHashtagRequest, HashtagResponse, HashtagsListResponse } from "@/types/hashTag";
+
 
 export const hashtagApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -21,18 +16,21 @@ export const hashtagApi = baseApi.injectEndpoints({
 
         // Search / lookup a single hashtag by name
         getHashtag: builder.query<HashtagResponse, GetHashtagRequest>({
-            query: ({ hashTag }) => ({
-                url: "/hashtag",
+            query: ({ name}) => ({
+                url: "/hashtag/name",
                 method: "GET",
-                body: { hashTag },
+
+                body: {
+                    name,
+                },
             }),
             providesTags: ["Post", "Hashtags"],
         }),
 
-        // Fetch all public hashtags for the picker list
-        getAllHashtags: builder.query<GetAllHashtagsResponse, void>({
+
+        getAllHashtags: builder.query<HashtagsListResponse, void>({
             query: () => ({
-                url: "/hashtag/all",
+                url: "/hashtag",
                 method: "GET",
             }),
             providesTags: ["Hashtags"],
