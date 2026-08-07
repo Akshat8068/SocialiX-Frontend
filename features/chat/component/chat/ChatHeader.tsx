@@ -10,6 +10,7 @@ import {
 
 import { useAppSelector } from "@/store/hooks";
 import type { ConversationResponse } from "@/types/chat";
+import Link from "next/link";
 
 interface ChatHeaderProps {
   conversation: ConversationResponse;
@@ -48,13 +49,15 @@ const ChatHeader = ({
         {/* Avatar */}
         <div className="relative shrink-0">
           {avatar ? (
+            <Link href={`/user/${otherUser.id}`} >
             <Image
-              src={avatar}
+              src={avatar || "/Hero.jpg"}
               alt={name}
               width={44}
               height={44}
               className="rounded-full object-cover"
             />
+            </Link>
           ) : (
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary">
               {name.toUpperCase()}
@@ -64,9 +67,11 @@ const ChatHeader = ({
 
         {/* Name */}
         <div className="min-w-0">
+          <Link href={`/user/${otherUser?.id}`} >
           <h2 className="truncate text-base font-semibold text-on-surface">
             {name}
           </h2>
+          </Link>
 
           <p className="text-xs text-on-surface-variant">
             {isOnline ? "Online" : "Offline"}

@@ -14,7 +14,7 @@ export default function UserModelHeader({
     onClose,
 }: FollowModalHeaderProps) {
     return (
-        <div className="sticky top-0 z-10 bg-white dark:bg-zinc-900">
+        <div className="sticky top-0 z-10 bg-on-background">
             {/* Header */}
             <div className="flex items-center justify-between px-5 pb-4 md:pt-5">
                 <div className="flex items-center gap-2 min-w-0">
@@ -22,7 +22,7 @@ export default function UserModelHeader({
                         {title}
                     </h2>
 
-                    <span className="inline-flex items-center rounded-full bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                    <span className="inline-flex items-center rounded-full bg-zinc-100  px-2.5 py-1  font-medium text-black">
                         {count}
                     </span>
                 </div>
@@ -46,7 +46,7 @@ export default function UserModelHeader({
             </div>
 
             {/* Divider */}
-            <div className="h-px bg-zinc-200 dark:bg-zinc-800" />
+            <div className="h-px bg-on-background" />
         </div>
     );
 }

@@ -43,7 +43,7 @@ isOwnProfile,
     if (!users.length) {
         return (
             <div className="flex h-72 flex-col items-center justify-center px-6 text-center">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-on-background">
                     <svg
                         className="h-8 w-8 text-zinc-500"
                         fill="none"
@@ -94,15 +94,15 @@ isOwnProfile,
 function SkeletonCard() {
     return (
         <div className="flex animate-pulse items-center gap-3 py-3">
-            <div className="h-12 w-12 rounded-full bg-zinc-200 dark:bg-zinc-800" />
+            <div className="h-12 w-12 rounded-full bg-on-background" />
 
             <div className="flex-1 space-y-2">
-                <div className="h-4 w-32 rounded bg-zinc-200 dark:bg-zinc-800" />
+                <div className="h-4 w-32 rounded bg-on-background" />
 
-                <div className="h-3 w-20 rounded bg-zinc-200 dark:bg-zinc-800" />
+                <div className="h-3 w-20 rounded bg-on-background" />
             </div>
 
-            <div className="h-10 w-24 rounded-xl bg-zinc-200 dark:bg-zinc-800" />
+            <div className="h-10 w-24 rounded-xl bg-on-background" />
         </div>
     );
 }

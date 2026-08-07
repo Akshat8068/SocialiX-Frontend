@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { BadgeCheckIcon } from "lucide-react";
-import {  FollowUser, UserListType } from "./UserListModel";
+import { FollowUser, UserListType } from "./UserListModel";
 import UserRequestActions from "./UserRequestActions";
 import UserActions from "./UserActions";
+import Link from "next/link";
 
 interface FollowUserCardProps {
     type: UserListType;
@@ -12,7 +13,7 @@ interface FollowUserCardProps {
     isOwnProfile: boolean
     onFollow?: (id: number) => void;
     onUnfollow?: (id: number) => void;
-onRemoveFollower?: (id: number) => void
+    onRemoveFollower?: (id: number) => void
     onAccept?: (id: number) => void;
     onReject?: (id: number) => void;
 
@@ -39,27 +40,30 @@ export default function UserCard({
         px-5
         py-3
         transition-colors
-        hover:bg-zinc-50
-        dark:hover:bg-zinc-800/40
+        hover:bg-bg-on-background/50
+        dark:hover:bg-on-background
       "
         >
             {/* Avatar */}
-            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-                <Image
-                    src={user.profilePicture || "/images/default-avatar.png"}
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-zinc-200 dark:bg-on-background">
+                <Link href={`/user/${user.id}`}><Image
+                    src={user.profilePicture || "/Hero.jpg"}
                     alt={user.fullName}
                     fill
                     sizes="48px"
                     className="object-cover"
-                />
+                /></Link>
             </div>
 
             {/* User Info */}
             <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1">
-                    <p className="truncate text-sm font-semibold text-zinc-900 dark:text-white">
-                        {user.fullName}
-                    </p>
+                    <Link href={`/user/${user.id}`}>
+
+                        <p className="truncate text-sm font-semibold text-zinc-900 dark:text-white">
+                            {user.fullName}
+                        </p>
+                    </Link>
 
                     {user.isVerified && (
                         <BadgeCheckIcon className="h-4 w-4 shrink-0 text-sky-500" />
@@ -88,12 +92,12 @@ export default function UserCard({
                 ) : (
                     <UserActions
                         user={user}
-                         type={type}
+                        type={type}
                         onFollow={onFollow}
                         onUnfollow={onUnfollow}
                         onMessage={onMessage}
-                            onRemoveFollower={onRemoveFollower}
-                            isOwnProfile={isOwnProfile}
+                        onRemoveFollower={onRemoveFollower}
+                        isOwnProfile={isOwnProfile}
                     />
                 )}
             </div>

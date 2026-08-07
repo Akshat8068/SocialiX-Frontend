@@ -48,7 +48,7 @@ const ConversationItem = ({
       <div className="relative shrink-0">
         {avatar ? (
           <Image
-            src={avatar}
+            src={avatar || "/Hero.jpg"}
             alt={name}
             width={52}
             height={52}

@@ -53,7 +53,7 @@ export default function UserRequestActions({
           disabled:opacity-50
 
           dark:border-zinc-700
-          dark:bg-zinc-900
+          dark:bg-on-background
           dark:text-zinc-300
           dark:hover:border-red-500
           dark:hover:bg-red-500/10

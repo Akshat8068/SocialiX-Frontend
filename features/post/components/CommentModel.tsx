@@ -104,7 +104,7 @@ export default function CommentModel({
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center ">
             <div className="max-h-[80vh] w-125 overflow-y-auto rounded-lg bg-white p-5">
                 <div className="mb-5 flex items-center justify-between">
                     <h2 className="text-lg font-semibold">

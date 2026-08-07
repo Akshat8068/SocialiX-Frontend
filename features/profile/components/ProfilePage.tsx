@@ -83,7 +83,7 @@ export default function ProfilePage({ user, isLoading, isError,posts,isOwnProfil
     }
     return (
         <>
-            <div className=" w-full md:text-xl md:tracking-[0.5px] lg:text-3xl px-2 md:pl-22 lg:pl-68 pt-2">
+            <div className=" w-full md:text-xl md:tracking-[0.5px] lg:text-3xl px-2 md:mx-10 lg:mx-0 py-5">
                 <ProfileHeader
                     user={user}
                     postCount={postCount}

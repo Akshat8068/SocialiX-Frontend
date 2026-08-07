@@ -33,7 +33,7 @@ export default function HashtagModel({ selected, onDone, onClose }: HashtagModal
             {/* Overlay */}
             <div
 
-                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+                className="fixed inset-0 z-40  backdrop-blur-sm"
             />
 
 
@@ -45,7 +45,7 @@ export default function HashtagModel({ selected, onDone, onClose }: HashtagModal
       flex
       flex-col
       bg-white
-      dark:bg-zinc-900
+      dark:bg-on-background
       shadow-2xl
 
       inset-x-0

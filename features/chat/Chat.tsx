@@ -20,6 +20,7 @@ export default function ChatPage() {
   const user = useAppSelector((state) => state.auth.user)
   const searchParams = useSearchParams();
   const { data, isLoading, isError, } = useGetConversationsQuery(undefined,{pollingInterval:60000,skipPollingIfUnfocused: true});
+  console.log(data)
   const [isTyping, setIsTyping] = useState(false)
   const [onlineUsers, setOnlineUsers] = useState<Set<number>>(new Set())
   const {

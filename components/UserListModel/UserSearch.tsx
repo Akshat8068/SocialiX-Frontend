@@ -35,7 +35,7 @@ export default function UserSearch({
           rounded-xl
           border
           border-transparent
-          bg-zinc-100
+         
           pl-11
           pr-10
           text-sm
@@ -49,11 +49,11 @@ export default function UserSearch({
           focus:ring-4
           focus:ring-orange-400/20
 
-          dark:bg-zinc-800
+         bg-on-background
           dark:text-white
           dark:placeholder:text-zinc-400
           dark:focus:border-orange-500
-          dark:focus:bg-zinc-900
+          dark:focus:bg-on-background
         "
             />
 

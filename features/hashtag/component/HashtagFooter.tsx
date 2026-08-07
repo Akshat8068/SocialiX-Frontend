@@ -18,7 +18,7 @@ export default function HashtagFooter({
     loading = false,
 }: HashtagFooterProps) {
     return (
-        <div className="border-t border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="border-t border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-on-background">
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
                 {/* Cancel */}
                 <button
