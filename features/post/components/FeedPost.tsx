@@ -7,7 +7,11 @@ import PostCaption from "./PostCaption";
 import PostComments from "./PostComments";
 import AddComment from "./AddComment";
 import { useState } from "react";
-import UserListModel from "@/components/UserListModel/UserListModel";
+import dynamic from "next/dynamic";
+
+const UserListModel = dynamic(() => import("@/components/UserListModel/UserListModel"), {
+  loading: () => null,
+})
 import { Post } from "@/types/post";
 import { useDeletePostMutation } from "../api/post.api";
 import { toast } from "react-toastify";
@@ -32,7 +36,7 @@ export default function FeedPost({ post }: FeedPostProps) {
         } catch {
             toast.error("Something went wrong");
         }
-    };
+    }
     const handleDelete = async () => {
         try {
             await deletePost({ postId: post.id }).unwrap();
@@ -49,7 +53,6 @@ export default function FeedPost({ post }: FeedPostProps) {
         });
 
     const comments = commentsData?.data ?? []
-    const [content, setContent] = useState("");
     const [showAllComments, setShowAllComments] = useState(false);
     const [createComment] = useCreateCommentMutation()
 
@@ -82,7 +85,7 @@ export default function FeedPost({ post }: FeedPostProps) {
             isFollowing: user.isFollowing,
     })) ?? []
     return (
-        <article className="mb-8 overflow-hidden rounded-xl border bg-card shadow-sm">
+        <article className="mb-8  overflow-hidden rounded-xl  bg-[#fff8f6] shadow-2xl ">
             <PostHeader
                 fullname={post.user.fullname}
                 username={post.user.username}
@@ -111,6 +114,7 @@ export default function FeedPost({ post }: FeedPostProps) {
             <PostCaption
                 username={post.user.username}
                 caption={post.caption ?? ""}
+                hashtags={post.hashtags ?? []}
             />
 
             <PostComments

@@ -290,6 +290,7 @@ export default function ProfileHeader({ onFollowersClick, onFollowingClick, isFo
                             <span className="font-bold">{followingCount}</span>{" "}
                             Following
                         </button>
+                        
 
                     </div>
 

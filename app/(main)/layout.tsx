@@ -11,20 +11,24 @@ export default function MainLayout({
     children: React.ReactNode;
 }) {
     useEffect(() => {
-    socket.connect();
+        socket.connect();
 
-    return () => {
-      socket.disconnect();
-    };
-  }, [])
+        return () => {
+            socket.disconnect();
+        };
+    }, [])
     return (
         <AuthProvider>
             <ProtectedRoute>
                 <Navigation />
-                <Header />
-                {children}
+                {/* Offset content area to the right of the sidebar on md+ */}
+                <div className="flex min-h-screen flex-col md:pl-20 lg:pl-64">
+                    <Header />
+                    <main className="flex-1">
+                        {children}
+                    </main>
+                </div>
             </ProtectedRoute>
-
         </AuthProvider>
     );
 }

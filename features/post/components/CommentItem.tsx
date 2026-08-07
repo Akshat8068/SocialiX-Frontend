@@ -63,7 +63,7 @@ export default function CommentItem({
                             onChange={(e) =>
                                 setEditedContent(e.target.value)
                             }
-                            className="mt-1 w-full rounded border px-2 py-1"
+                            className="mt-1 w-full rounded  px-2 py-1"
                         />
                     ) : (
                         <p>{comment.content}</p>
@@ -83,7 +83,7 @@ export default function CommentItem({
                                 onChange={(e) =>
                                     setReplyContent(e.target.value)
                                 }
-                                className="flex-1 rounded border px-2 py-1"
+                                className="flex-1 rounded px-2 py-1"
                                 placeholder="Write a reply..."
                             />
 

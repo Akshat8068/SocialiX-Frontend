@@ -12,7 +12,7 @@ export default function PostMedia({
     alt = "Post",
 }: PostMediaProps) {
     return (
-        <div className="relative aspect-square w-full overflow-hidden bg-muted">
+        <div className="relative mx-1 aspect-square w-full overflow-hidden bg-muted">
             <Image
                 src={image || "/Hero.jpg"}
                 alt={alt}

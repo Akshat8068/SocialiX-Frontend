@@ -1,26 +1,48 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
 
-interface AddHashtagFormProps {
-    onAdd: (hashtag: string) => void;
-}
+import { Hash, Plus } from "lucide-react";
+import { toast } from "react-toastify";
 
-export default function AddHashtagForm({
-    onAdd,
-}: AddHashtagFormProps) {
-    const [hashtag, setHashtag] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+import { useCreateHashtagMutation } from "../api/hashtag.api"
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/button"
+
+export default function AddHashtagForm() {
+    const [name, setName] = useState("");
+
+    const [createHashtag, { isLoading }] =
+        useCreateHashtagMutation();
+
+    const handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ) => {
         e.preventDefault();
 
-        const value = hashtag.trim().replace(/^#/, "");
+        const hashtag = name
+            .trim()
+            .replace(/^#/, "");
 
-        if (!value) return;
+        if (!hashtag) {
+            toast.error("Please enter a hashtag.");
+            return;
+        }
 
-        onAdd(`#${value}`);
-        setHashtag("");
+        try {
+            const response = await createHashtag({
+                name: hashtag,
+            }).unwrap();
+
+            toast.success(response.message);
+
+            setName("");
+        } catch (error: any) {
+            toast.error(
+                error?.data?.message ?? "Failed to create hashtag."
+            );
+        }
     };
 
     return (
@@ -33,69 +55,23 @@ export default function AddHashtagForm({
                 onSubmit={handleSubmit}
                 className="flex items-center gap-3"
             >
-                <div className="relative flex-1">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-semibold text-zinc-500 dark:text-zinc-400">
-                        #
-                    </span>
+                <Input
+                    icon={Hash}
+                    placeholder="Enter hashtag..."
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    autoComplete="off"
+                    spellCheck={false}
+                />
 
-                    <input
-                        type="text"
-                        value={hashtag}
-                        onChange={(e) => setHashtag(e.target.value)}
-                        placeholder="Enter hashtag..."
-                        autoComplete="off"
-                        spellCheck={false}
-                        className="
-                            h-11
-                            w-full
-                            rounded-xl
-                            border
-                            border-zinc-300
-                            bg-white
-                            pl-8
-                            pr-4
-                            text-sm
-                            outline-none
-                            transition-all
 
-                            focus:border-orange-500
-                            focus:ring-4
-                            focus:ring-orange-500/20
-
-                            dark:border-zinc-700
-                            dark:bg-zinc-900
-                            dark:text-white
-                            dark:placeholder:text-zinc-500
-                        "
-                    />
-                </div>
-
-                <button
+                <Button
                     type="submit"
-                    disabled={!hashtag.trim()}
-                    className="
-                        inline-flex
-                        h-11
-                        items-center
-                        gap-2
-                        rounded-xl
-                        bg-orange-500
-                        px-5
-                        text-sm
-                        font-semibold
-                        text-white
-                        transition-all
-
-                        hover:bg-orange-600
-                        active:scale-95
-
-                        disabled:cursor-not-allowed
-                        disabled:opacity-50
-                    "
+                    isLoading={isLoading}
+                    leftIcon={<Plus size={18} />}
                 >
-                    <Plus size={16} />
                     Add
-                </button>
+                </Button>
             </form>
         </div>
     );

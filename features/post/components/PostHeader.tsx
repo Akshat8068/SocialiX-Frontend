@@ -12,7 +12,6 @@ interface PostHeaderProps {
     fullname: string;
     username: string;
     profilePicture?: string;
-    location?: string;
     createdAt: string;
     verified?: boolean;
     onEdit?: () => void;
@@ -23,7 +22,6 @@ export default function PostHeader({
     fullname,
     username,
     profilePicture,
-    location,
     createdAt,
     verified = false,
     onEdit,
@@ -50,8 +48,11 @@ export default function PostHeader({
                     </div>
 
                     <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                       
-                        <span>{createdAt}</span>
+
+                        <span>{new Date(createdAt).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "short",
+                        })}</span>
                     </p>
                 </div>
             </div>

@@ -103,7 +103,7 @@ export default function UserListModel({
             {/* Overlay */}
             <div
                 onClick={onClose}
-                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+                className="fixed inset-0 z-40  backdrop-blur-sm animate-in fade-in duration-200"
             />
 
             {/* Modal */}

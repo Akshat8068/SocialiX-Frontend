@@ -4,147 +4,83 @@ import { useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 
 import UserModelHeader from "../../../components/UserListModel/UserModelHeader";
-import UserSearch from "../../../components/UserListModel/UserSearch"
+import UserSearch from "../../../components/UserListModel/UserSearch";
 import HashtagFooter from "./HashtagFooter";
 import AddHashtagForm from "./AddHashtagForm";
 import TrendingHashtags from "./TrendingHashtags";
+import { useCreateHashtagMutation, useGetAllHashtagsQuery } from "../api/hashtag.api";
+import { toast } from "react-toastify";
 
-interface HashtagModelProps {
-    open: boolean;
-    onClose: () => void;
+interface HashtagModalProps {
+    selected: string[];
     onDone: (hashtags: string[]) => void;
-    trendingHashtags?: string[];
-    initialHashtags?: string[];
+    onClose: () => void;
 }
 
-export default function HashtagModel({
-    open,
-    onClose,
-    onDone,
-    trendingHashtags = [],
-    initialHashtags = [],
-}: HashtagModelProps) {
-    const [search, setSearch] = useState("");
-    const [selectedHashtags, setSelectedHashtags] =useState<string[]>(initialHashtags);
-
-    useEffect(() => {
-        setSelectedHashtags(initialHashtags);
-    }, [initialHashtags]);
-
-    useEffect(() => {
-        if (!open) return;
-
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") {
-                onClose();
-            }
-        };
-
-        document.body.style.overflow = "hidden";
-        window.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            document.body.style.overflow = "";
-            window.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [open, onClose]);
-
-    const filteredTrending = useMemo(() => {
-        if (!search.trim()) return trendingHashtags;
-
-        return trendingHashtags.filter((tag) =>
-            tag.toLowerCase().includes(search.toLowerCase())
-        );
-    }, [search, trendingHashtags]);
-
+export default function HashtagModel({ selected, onDone, onClose }: HashtagModalProps) {
+    const [search, setSearch] = useState("")
+    const [selectedTags, setSelectedTags] = useState(selected)
     const toggleHashtag = (tag: string) => {
-        setSelectedHashtags((prev) =>
+        setSelectedTags((prev) =>
             prev.includes(tag)
-                ? prev.filter((item) => item !== tag)
+                ? prev.filter((t) => t !== tag)
                 : [...prev, tag]
-        );
-    };
-
-    const addCustomHashtag = (tag: string) => {
-        const formatted = tag.startsWith("#") ? tag : `#${tag}`;
-
-        setSelectedHashtags((prev) => {
-            if (prev.includes(formatted)) return prev;
-            return [...prev, formatted];
-        });
-    };
-
-    const handleDone = () => {
-        onDone(selectedHashtags);
-        onClose();
-    };
-
-    if (!open) return null;
+        )
+    }
 
     return (
-        <div className="fixed inset-0 z-50">
-            {/* Backdrop */}
+        <>
+            {/* Overlay */}
             <div
-                onClick={onClose}
-                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+
+                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
             />
 
-            {/* Mobile Bottom Sheet / Desktop Dialog */}
+
+            {/* Modal */}
             <div
                 className="
-                    absolute bottom-0 left-0 right-0
-                    flex max-h-[90vh] flex-col
-                    rounded-t-3xl
-                    bg-white
-                    shadow-2xl
-                    dark:bg-zinc-900
+      fixed
+      z-50
+      flex
+      flex-col
+      bg-white
+      dark:bg-zinc-900
+      shadow-2xl
 
-                    md:left-1/2
-                    md:top-1/2
-                    md:bottom-auto
-                    md:right-auto
-                    md:w-full
-                    md:max-w-xl
-                    md:-translate-x-1/2
-                    md:-translate-y-1/2
-                    md:rounded-3xl
-                "
+      inset-x-0
+      bottom-0
+      max-h-[92vh]
+      rounded-t-4xl
+
+      md:left-1/2
+      md:top-1/2
+      md:bottom-auto
+      md:inset-x-auto
+      md:w-150
+      md:max-h-[80vh]
+      md:-translate-x-1/2
+      md:-translate-y-1/2
+      md:rounded-3xl
+    "
             >
-                {/* Grabber (Mobile Only) */}
-                <div className="flex justify-center pt-3 md:hidden">
-                    <div className="h-1.5 w-12 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+                {/* Grabber */}
+                <div className="flex justify-center py-3 md:hidden">
+                    <div className="h-1.5 w-14 rounded-full bg-zinc-300" />
                 </div>
 
-                {/* Desktop Close */}
+                {/* Close button */}
                 <button
-                    onClick={onClose}
-                    className="
-                        absolute
-                        right-5
-                        top-5
-                        hidden
-                        h-10
-                        w-10
-                        items-center
-                        justify-center
-                        rounded-full
-                        transition
-                        hover:bg-zinc-100
-                        dark:hover:bg-zinc-800
-                        md:flex
-                    "
+
+                    className="absolute right-4 top-4 hidden md:flex h-9 w-9 items-center justify-center rounded-full hover:bg-zinc-100"
                 >
-                    <X size={20} />
+                    <X size={18} />
                 </button>
 
-                {/* Header */}
-                <UserModelHeader
-                    title="Add Hashtags"
-                    onClose={onClose}
-                />
+                <UserModelHeader title="Add Hashtags"
+                    onClose={onClose} />
 
-                {/* Body */}
-                <div className="flex-1 space-y-6 overflow-y-auto px-5 py-5">
+                <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
                     <UserSearch
                         value={search}
                         onChange={setSearch}
@@ -152,22 +88,17 @@ export default function HashtagModel({
                     />
 
                     <TrendingHashtags
-                        hashtags={filteredTrending}
-                        selected={selectedHashtags}
+                        selected={selectedTags}
                         onToggle={toggleHashtag}
                     />
 
-                    <AddHashtagForm
-                        onAdd={addCustomHashtag}
-                    />
+                    <AddHashtagForm/>
                 </div>
 
-                {/* Footer */}
-                <HashtagFooter
-                    onCancel={onClose}
-                    onDone={handleDone}
-                />
+                <HashtagFooter onDone={() => onDone(selectedTags)}
+                    onCancel={onClose} />
             </div>
-        </div>
+
+        </>
     );
 }
