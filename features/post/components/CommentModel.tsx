@@ -11,6 +11,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import CommentItem from "./CommentItem";
 import { Comment } from "@/types/likeandComment";
+import EmptyState from "@/components/common/EmptyState";
 
 interface CommentModelProps {
     comments: Comment[];
@@ -117,7 +118,7 @@ export default function CommentModel({
                 </div>
 
                 {comments.length === 0 ? (
-                    <p>No comments yet.</p>
+                    <EmptyState variant="comments" />
                 ) : (
                     comments.map((comment) => (
                         <CommentItem

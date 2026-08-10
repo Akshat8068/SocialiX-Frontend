@@ -1,12 +1,13 @@
+"use client";
 // app/messages/components/ChatWindow/ChatWindow.tsx
 
-"use client";
 
 import { ConversationResponse, Message, TypingPayload } from "@/types/chat";
 
 import MessageList from "./ MessageList";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
+import EmptyState from "@/components/common/EmptyState";
 
 
 interface ChatWindowProps {
@@ -42,15 +43,7 @@ const ChatWindow = ({
       <section
         className={`flex-1 items-center justify-center bg-surface-container-lowest hidden md:flex ${className}`}
       >
-        <div className="text-center">
-          <h2 className="text-xl font-semibold text-on-surface">
-            Select a conversation
-          </h2>
-
-          <p className="mt-2 text-sm text-on-surface-variant">
-            Choose a chat from the sidebar to start messaging.
-          </p>
-        </div>
+        <EmptyState variant="chat" />
       </section>
     );
   }
