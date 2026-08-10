@@ -1,15 +1,23 @@
 import { User } from "./auth";
 import { Post } from "./post";
 
-
 export interface Saved {
     id: number;
     user: User;
     post: Post;
     createdAt: string;
 }
+export interface SavePostRequest {
+    postId: number;
+}
 
-export interface PostRequest {
+export interface SavePostResponse {
+    success: boolean;
+    message: string;
+    data: Saved;
+}
+
+export interface GetSingleSavedRequest {
     postId: number;
 }
 

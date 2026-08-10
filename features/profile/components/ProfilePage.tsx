@@ -72,14 +72,14 @@ export default function ProfilePage({ user, isLoading, isError,posts,isOwnProfil
             isFollowing: false,
         })) ?? [];
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div className="text-center min-h-screen flex font-semibold justify-center items-center">Socialix...</div>;
     }
 
     if (isError) {
         return <div>Something went wrong.</div>;
     }
     if (!user) {
-        return <div>Loading...</div>;
+        return <div className="text-center min-h-screen flex  font-semibold justify-center items-center">Socialix...</div>;
     }
     return (
         <>

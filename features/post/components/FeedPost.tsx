@@ -10,7 +10,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 
 const UserListModel = dynamic(() => import("@/components/UserListModel/UserListModel"), {
-  loading: () => null,
+    loading: () => null,
 })
 import { Post } from "@/types/post";
 import { useDeletePostMutation } from "../api/post.api";
@@ -19,14 +19,14 @@ import { useGetLikedUsersQuery, useToggleLikeMutation } from "@/features/likeAnd
 import { useCreateCommentMutation, useGetPostCommentsQuery } from "@/features/likeAndComment/api/comment.api";
 
 import CommentModel from "./CommentModel";
+import { useAppSelector } from "@/store/hooks";
 
 interface FeedPostProps {
-   post:Post
+    post: Post
 }
 
 export default function FeedPost({ post }: FeedPostProps) {
-    console.log(post.user.id)
-    
+
     const [search, setSearch] = useState("")
     const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation()
     const [toggleLike] = useToggleLikeMutation()
@@ -52,7 +52,7 @@ export default function FeedPost({ post }: FeedPostProps) {
     }, {
         pollingInterval: 5000,
         skipPollingIfUnfocused: true,
-        });
+    });
 
     const comments = commentsData?.data ?? []
     const [showAllComments, setShowAllComments] = useState(false);
@@ -70,27 +70,32 @@ export default function FeedPost({ post }: FeedPostProps) {
             toast.error("Failed to add comment");
         }
     };
-    const [openLikes, setOpenLikes] = useState(false);
+    const [openLikes, setOpenLikes] = useState(false)
 
-    const {data: likedUsersData,isLoading: likedUsersLoading,} = useGetLikedUsersQuery({
+    const { data: likedUsersData, isLoading: likedUsersLoading, } = useGetLikedUsersQuery({
         postId: post.id,
     }, {
         pollingInterval: 10000,
         skipPollingIfUnfocused: true,
-    });
-    const likedUsers =likedUsersData?.data.map((user) => ({
-            id: user.id,
-            fullName: user.fullname,
-            username: user.username,
-            profilePicture: user.profilePicture,
-            isVerified: user.isVerified,
-            isFollowing: user.isFollowing,
+    })
+    const likedUsers = likedUsersData?.data.map(({ user }) => ({
+        id: user.id,
+        fullName: user.fullname,
+        username: user.username,
+        profilePicture: user.profilePicture,
+        isVerified: user.isVerified,
+        isFollowing: user.isFollowing,
     })) ?? []
+    console.log(likedUsersData)
+    console.log(likedUsers)
+    const currentUser = useAppSelector((state) => state.auth.user)
+    const isOwnPost = currentUser?.id === post.user.id
     return (
         <article className="mb-8  overflow-hidden rounded-xl  bg-primary/8 shadow-2xl ">
             <PostHeader
                 fullname={post.user.fullname}
                 username={post.user.username}
+                isOwnPost={isOwnPost}
                 profilePicture={post.user.profilePicture ?? undefined}
                 verified={post.user.isVerified}
                 createdAt={post.createdAt}

@@ -22,7 +22,7 @@ export default function ProtectedRoute({
     }, [authChecked, isAuthenticated, router]);
 
     if (!authChecked) {
-        return <div>Loading...</div>
+        return <div className="text-center min-h-screen flex font-semibold justify-center items-center">Socialix...</div>
     }
 
     return <>{children}</>
