@@ -2,20 +2,17 @@
 
 import FeedPost from "@/features/post/components/FeedPost";
 import { Post } from "@/types/post";
+import EmptyState from "@/components/common/EmptyState";
 
 interface ProfileFeedViewProps {
-  posts: Post[]
+    posts: Post[]
 }
 
 export default function ProfileFeedView({
-  posts,
+    posts,
 }: ProfileFeedViewProps) {
-     if (posts.length === 0) {
-        return (
-            <div className="py-20 text-center">
-                <h1 className="text-xl font-semibold">No Posts</h1>
-            </div>
-        );
+    if (posts.length === 0) {
+        return <EmptyState variant="posts" className="py-20" />;
     }
     return (
         <div className=" mt-6 mx-1 max-w-200 space-y-8">

@@ -8,13 +8,14 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { Post } from "@/types/post";
+import EmptyState from "@/components/common/EmptyState";
 
 const tabs = [
     {
         id: "posts",
         icon: Grid3X3,
     },
-    
+
     {
         id: "tagged",
         icon: UserSquare2,
@@ -23,16 +24,16 @@ const tabs = [
 
 interface ProfileTabsProps {
     onPostClick: () => void;
-    isOwnProfile:boolean
-    posts:Post[]
+    isOwnProfile: boolean
+    posts: Post[]
 }
 
 export default function ProfileTabs({
-    onPostClick,isOwnProfile,posts
+    onPostClick, isOwnProfile, posts
 }: ProfileTabsProps) {
     const [activeTab, setActiveTab] = useState("posts");
-    if(posts.length==0){
-        return <h1 className="text-center">No POst</h1>
+    if (posts.length === 0) {
+        return <EmptyState variant="posts" className="py-20" />;
     }
     return (
         <section className="mt-8">
@@ -76,13 +77,13 @@ export default function ProfileTabs({
                     >
                         <Image
                             src={post.media[0]?.secureUrl || "/Hero.jpg"}
-                            alt={post.caption||"Post"}
+                            alt={post.caption || "Post"}
                             fill
                             className="object-cover transition duration-500 group-hover:scale-110"
                         />
 
                     </div>
-                ))} 
+                ))}
 
             </div>
 

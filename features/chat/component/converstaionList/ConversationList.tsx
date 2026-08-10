@@ -4,6 +4,7 @@ import { SquarePen } from "lucide-react";
 import ConversationFilters, { ConversationFilter } from "./ConversationFilters";
 import ConversationItem from "./ConversationItem";
 import { ConversationResponse } from "@/types/chat";
+import EmptyState from "@/components/common/EmptyState";
 
 
 
@@ -12,8 +13,8 @@ interface ConversationListProps {
     className?: string
     filter: ConversationFilter;
     onFilterChange: (filter: ConversationFilter) => void
-  selectedConversation: ConversationResponse | null;
-  onSelectConversation: (conversation: ConversationResponse) => void;
+    selectedConversation: ConversationResponse | null;
+    onSelectConversation: (conversation: ConversationResponse) => void;
 }
 const ConversationList = ({
     conversations,
@@ -61,9 +62,7 @@ const ConversationList = ({
             {/* Conversation List */}
             <div className="custom-scrollbar flex-1 overflow-y-auto">
                 {conversations.length === 0 ? (
-                    <div className="flex h-full items-center justify-center px-4 text-center text-sm text-on-surface-variant">
-                        No conversations found.
-                    </div>
+                    <EmptyState variant="conversations" className="h-full" />
                 ) : (
                     conversations.map((conversation) => (
                         <ConversationItem
