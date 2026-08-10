@@ -15,7 +15,7 @@ export type UserListType =
     | "requests" | "likes";
 
 export interface FollowUser {
-    id: number; // user id
+    id: number; 
 
     requestId?: number;
 
@@ -50,14 +50,14 @@ interface FollowListModalProps {
     onRemoveFollower?: (id: number) => void
     onAccept?: (id: number) => void;
     onReject?: (id: number) => void;
-    isOwnProfile: boolean;
+    isOwnProfile?: boolean;
     onMessage?: (id: number) => void;
 }
 
 export default function UserListModel({
     open,
     onClose,
-    isOwnProfile,
+    isOwnProfile=false,
     title,
     count,
     users,

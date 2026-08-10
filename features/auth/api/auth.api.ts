@@ -33,6 +33,13 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
+    logout: builder.mutation<ApiResponse<null>, void>({
+      query: () => ({
+       url: "/auth/logout",
+        method: "POST"
+      }), 
+      invalidatesTags: ["Auth"]
+    }),
     emailVerify: builder.mutation<VerifyEmailResponse, VerifyEmailRequest>({
       query: (data) => ({
         url: "/auth/emailVerify",
@@ -74,6 +81,7 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useEmailVerifyMutation,
+  useLogoutMutation,
   useForgetEmailMutation,
   useResetPasswordMutation,
   useGetMeQuery

@@ -27,10 +27,11 @@ export const resetPasswordSchema = z.object({
 })
 export const ProfileUpdateSchema = z.object({
     bio: z.string().max(150, "Bio have onlu 150 words").optional(),
-    website: z.preprocess(
-        (value) => value === "" ? undefined : value,
-        z.url().optional()
-    ),
+   website: z
+        .string()
+        .url("Please enter a valid URL")
+        .or(z.literal(""))
+        .optional(),
     accountType: z.enum(["PUBLIC", "PRIVATE"]).optional(),
 })
 

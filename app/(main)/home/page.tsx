@@ -5,13 +5,14 @@ import ProfileFeedView from "@/features/profile/components/ProfileFeedView";
 
 
 export default function HomeFeed() {
-  const { data, isLoading, isError, error } = useGetHomeFeedQuery(undefined, {
-    pollingInterval: 30000,
-    skipPollingIfUnfocused: true,
-  });
+  // const { data, isLoading, isError, error } = useGetHomeFeedQuery(undefined, {
+  //   pollingInterval: 30000,
+  //   skipPollingIfUnfocused: true,
+  // })
+  const { data, isLoading, isError, error } = useGetHomeFeedQuery()
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="text-center flex font-semibold justify-center min-h-screen items-center">Socialix</div>;
   }
 
   if (isError) {

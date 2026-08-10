@@ -3,6 +3,7 @@ import {
   FetchArgs,
   FetchBaseQueryError,
   fetchBaseQuery,
+  retry,
 } from "@reduxjs/toolkit/query";
 import { logout } from "../slices/authSlice";
 
@@ -45,4 +46,6 @@ const baseQueryWithReauth: BaseQueryFn<
   return result;
 }
 
-export default baseQueryWithReauth;
+export const baseQueryWithRetry = retry(baseQueryWithReauth, {
+  maxRetries: 3,
+})

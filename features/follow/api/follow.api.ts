@@ -1,5 +1,6 @@
 import baseApi from "@/store/api/baseApi";
-import { AcceptRequestResponse,  CancelRequestResponse, FollowActionRequest,  FollowersResponse,  FollowingResponse,  FollowRequest,  FollowResponse, FriendsResponse, MutualFollowersResponse, PendingRequestsResponse, RejectRequestResponse, RemoveFollowerResponse, SentRequestsResponse, UnfollowResponse } from "../types";
+import { AcceptRequestResponse, CancelRequestResponse, FollowActionRequest, FollowersResponse, FollowingResponse, FollowRequest, FollowResponse, FriendsResponse, MutualFollowersResponse, PendingRequestsResponse, RejectRequestResponse, RemoveFollowerResponse, SentRequestsResponse, UnfollowResponse } from "../types";
+import { profileApi } from "@/features/profile/api/profile.api";
 
 export const followApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -8,18 +9,65 @@ export const followApi = baseApi.injectEndpoints({
                 url: `/follow/${userId}`,
                 method: "POST",
             }),
+
+            async onQueryStarted(
+                { userId },
+                { dispatch, queryFulfilled }
+            ) {
+                const patchResult = dispatch(
+                    profileApi.util.updateQueryData(
+                        "getUserProfile",
+                        userId,
+                        (draft) => {
+                            if (draft.data) {
+                                draft.data.isFollowing = true;
+                            }
+                        }
+                    )
+                );
+
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
+
             invalidatesTags: ["Follow", "Profile"],
         }),
-
         unFollowUser: builder.mutation<UnfollowResponse, FollowRequest>({
             query: ({ userId }) => ({
                 url: `/follow/${userId}`,
                 method: "DELETE",
             }),
+
+            async onQueryStarted(
+                { userId },
+                { dispatch, queryFulfilled }
+            ) {
+                const patchResult = dispatch(
+                    profileApi.util.updateQueryData(
+                        "getUserProfile",
+                        userId,
+                        (draft) => {
+                            if (draft.data) {
+                                draft.data.isFollowing = false;
+                            }
+                        }
+                    )
+                );
+
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
+
             invalidatesTags: ["Follow", "Profile"],
         }),
 
-        acceptRequest: builder.mutation<AcceptRequestResponse,FollowActionRequest>({
+        acceptRequest: builder.mutation<AcceptRequestResponse, FollowActionRequest>({
             query: ({ id }) => ({
                 url: `/follow/request/${id}/accept`,
                 method: "PUT",
@@ -27,7 +75,7 @@ export const followApi = baseApi.injectEndpoints({
             invalidatesTags: ["Follow"],
         }),
 
-        rejectRequest: builder.mutation<RejectRequestResponse,FollowActionRequest>({
+        rejectRequest: builder.mutation<RejectRequestResponse, FollowActionRequest>({
             query: ({ id }) => ({
                 url: `/follow/request/${id}/reject`,
                 method: "PUT",
@@ -35,7 +83,7 @@ export const followApi = baseApi.injectEndpoints({
             invalidatesTags: ["Follow"],
         }),
 
-        cancelRequest: builder.mutation<CancelRequestResponse,FollowActionRequest>({
+        cancelRequest: builder.mutation<CancelRequestResponse, FollowActionRequest>({
             query: ({ id }) => ({
                 url: `/follow/request/${id}/cancel`,
                 method: "DELETE",
@@ -43,7 +91,7 @@ export const followApi = baseApi.injectEndpoints({
             invalidatesTags: ["Follow"],
         }),
 
-        removeFollower: builder.mutation<RemoveFollowerResponse,FollowRequest>({
+        removeFollower: builder.mutation<RemoveFollowerResponse, FollowRequest>({
             query: ({ userId }) => ({
                 url: `/follow/remove-follower/${userId}`,
                 method: "DELETE",
@@ -51,35 +99,35 @@ export const followApi = baseApi.injectEndpoints({
             invalidatesTags: ["Follow", "Profile"],
         }),
 
-        getFollowers: builder.query<FollowersResponse,FollowRequest>({
+        getFollowers: builder.query<FollowersResponse, FollowRequest>({
             query: ({ userId }) => ({
                 url: `/follow/follower/${userId}`,
             }),
             providesTags: ["Follow"],
         }),
 
-        getFollowing: builder.query<FollowingResponse,FollowRequest>({
+        getFollowing: builder.query<FollowingResponse, FollowRequest>({
             query: ({ userId }) => ({
                 url: `/follow/following/${userId}`,
             }),
             providesTags: ["Follow"],
         }),
 
-        getPendingRequest: builder.query<PendingRequestsResponse,void>({
+        getPendingRequest: builder.query<PendingRequestsResponse, void>({
             query: () => ({
                 url: "/follow/requests",
             }),
             providesTags: ["Follow"],
         }),
 
-        getSentRequest: builder.query<SentRequestsResponse,void>({
+        getSentRequest: builder.query<SentRequestsResponse, void>({
             query: () => ({
                 url: "/follow/sent-requests",
             }),
             providesTags: ["Follow"],
         }),
 
-        mutualFollow: builder.query<MutualFollowersResponse,FollowRequest>({
+        mutualFollow: builder.query<MutualFollowersResponse, FollowRequest>({
             query: ({ userId }) => ({
                 url: `/follow/mutual/${userId}`,
             }),

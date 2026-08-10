@@ -1,10 +1,10 @@
 
 import { createApi } from "@reduxjs/toolkit/query/react";
-import baseQueryWithReauth from "./fetchBaseQuery";
+import { baseQueryWithRetry } from "./fetchBaseQuery";
 
  const baseApi = createApi({
   reducerPath: "api",
-  baseQuery:baseQueryWithReauth,
+  baseQuery:baseQueryWithRetry,
 
    tagTypes: ["Auth", "Profile", "Follow", "Post", "Hashtags", "Like",
      "Comment","Saved","Chat","Message"],

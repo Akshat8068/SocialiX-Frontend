@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 
 interface CreatePostForm {
   caption: string;
-  visibility: "PUBLIC" | "FOLLOWERS" | "FRIENDS";
+  visibility: "PUBLIC" | "FOLLOWERS" 
 }
 
 export default function PostPage() {
@@ -116,13 +116,11 @@ export default function PostPage() {
             <div className="space-y-2">
               <button
                 type="button"
-
                 onClick={() => setIsHashtagModalOpen(true)}
                 className="flex w-full items-center justify-between rounded-lg border border-outline-variant/50 bg-surface px-4 py-3 text-sm text-on-surface hover:bg-surface-container transition-colors"
               >
                 <span className="flex items-center gap-2 text-primary font-medium">
                   <Hash size={16} />
-
                   Add Hashtags
                 </span>
                 {selectedHashtags.length > 0 && (
@@ -136,7 +134,6 @@ export default function PostPage() {
                   {selectedHashtags.map((tag) => (
                     <span
                       key={tag}
-
                       className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
                     >
                       #{tag}
@@ -144,9 +141,6 @@ export default function PostPage() {
                   ))}
                 </div>
               )}
-            </div>
-
-
             </div>
 
             {/* Divider */}
@@ -161,7 +155,7 @@ export default function PostPage() {
                 options={[
                   { label: "Everyone", value: "PUBLIC" },
                   { label: "Followers", value: "FOLLOWERS" },
-                  { label: "Friends", value: "FRIENDS" },
+                 
                 ]}
                 defaultValue="PUBLIC"
                 {...register("visibility")}
@@ -187,6 +181,9 @@ export default function PostPage() {
             >
               Share Post
             </Button>
+
+          </div>
+
         </div>
       </form>
 

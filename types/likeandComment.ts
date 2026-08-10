@@ -9,11 +9,15 @@ export interface ToggleLikeResponse {
     liked: boolean;
     message: string;
 }
+export interface LikedUser {
+    id: number;
+    user: User;
+}
 
 export interface GetLikedUsersResponse {
     success: boolean;
     message: string;
-    data: User[];
+    data: LikedUser[];
 }
 
 export interface Comment {

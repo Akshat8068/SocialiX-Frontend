@@ -1,10 +1,15 @@
 "use client";
 import { useAcceptRequestMutation, useCancelRequestMutation, useGetPendingRequestQuery, useGetSentRequestQuery, useRejectRequestMutation } from "@/features/follow/api/follow.api";
-import { Search, Send, UserCheck, UserPlus } from "lucide-react";
+import { LogOut, LogOutIcon, Power, Search, Send, UserCheck, UserPlus } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import type { FollowUser } from "./UserListModel/UserListModel";
+import { useLogoutMutation } from "@/features/auth/api/auth.api";
+import { useAppDispatch } from "@/store/hooks";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { logout } from "@/store/slices/authSlice";
 
 const UserListModel = dynamic(() => import("./UserListModel/UserListModel"), {
   loading: () => null,
@@ -14,8 +19,22 @@ const UserListModel = dynamic(() => import("./UserListModel/UserListModel"), {
 
 export default function Header() {
   const [modal, setModal] = useState<"pending" | "sent" | null>(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("")
+  const dispatch = useAppDispatch()
+ const router = useRouter()
+  const [logoutUser, { isLoading: isLoggingOut }] = useLogoutMutation()
+  const handleLogout = async () => {
+    try {
+      await logoutUser().unwrap();
 
+      dispatch(logout())
+      toast.success("Logout successfull")
+      router.replace("/login")
+
+    } catch (error) {
+      console.error("Logout failed:")
+    }
+  }
   const {
     data: pendingData,
     isLoading: pendingLoading,
@@ -109,13 +128,23 @@ export default function Header() {
             </button>
           </Link>
 
+          <button
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="rounded-full p-2 transition hover:bg-surface-container-low"
+          >
+            <Power className="text-red-600" size={22} />
+
+          </button>
+
+
         </div>
       </header>
 
       <header className="sticky top-0 z-40 hidden h-16 items-center justify-end border-b border-outline-variant bg-surface/80 px-6 backdrop-blur-xl md:flex">
 
 
-        
+
 
         <div className="flex items-center gap-5">
 
@@ -131,6 +160,14 @@ export default function Header() {
             className="rounded-full p-2 transition hover:bg-surface-container-low"
           >
             <UserCheck size={22} />
+          </button>
+
+          <button
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="rounded-full p-2 transition hover:bg-surface-container-low"
+          >
+            <Power className="text-red-600" size={22} />
           </button>
 
 
