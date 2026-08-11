@@ -9,9 +9,11 @@ import { User } from "@/types/auth";
 import { Post } from "@/types/post";
 import { useGetFollowersQuery, useGetFollowingQuery, useRemoveFollowerMutation, useUnFollowUserMutation } from "@/features/follow/api/follow.api";
 import dynamic from "next/dynamic";
+import { useGetAllSavedQuery } from "@/features/post/api/saved.api";
+import { ArrowBigLeft, MoveLeft } from "lucide-react";
 
 const UserListModel = dynamic(() => import("@/components/UserListModel/UserListModel"), {
-  loading: () => null,
+    loading: () => null,
 });
 
 interface ProfilePageProps {
@@ -22,8 +24,9 @@ interface ProfilePageProps {
     posts?: Post[]
     isFollowing?: boolean;
 }
-export default function ProfilePage({ user, isLoading, isError,posts,isOwnProfile, isFollowing }: ProfilePageProps) {
+export default function ProfilePage({ user, isLoading, isError, posts, isOwnProfile, isFollowing }: ProfilePageProps) {
     const [showFeed, setShowFeed] = useState(false)
+    const [selectedPosts, setSelectedPosts] = useState<Post[] | null>(null)
     const [openModal, setOpenModal] = useState(false);
     const [modalType, setModalType] = useState<"followers" | "following">("followers")
     const openFollowers = () => {
@@ -51,7 +54,8 @@ export default function ProfilePage({ user, isLoading, isError,posts,isOwnProfil
             skip: !userId,
         }
     )
-    const userPosts = posts ?? user?.post ?? [];
+    const userPosts = posts ?? user?.post ?? []
+
     const postCount = userPosts.length;
     const followerUsers =
         followersData?.data.map((item) => ({
@@ -70,7 +74,13 @@ export default function ProfilePage({ user, isLoading, isError,posts,isOwnProfil
             profilePicture: item.following.profilePicture,
             isVerified: item.following.isVerified,
             isFollowing: false,
-        })) ?? [];
+        })) ?? []
+    const { data: savedData, isLoading: savedLoading } = useGetAllSavedQuery(undefined, {
+        skip: !isOwnProfile,
+    })
+    const savedPosts =
+        savedData?.data.map((saved) => saved.post) ?? []
+
     if (isLoading) {
         return <div className="text-center min-h-screen flex font-semibold justify-center items-center">Socialix...</div>;
     }
@@ -94,11 +104,27 @@ export default function ProfilePage({ user, isLoading, isError,posts,isOwnProfil
                     onFollowersClick={openFollowers}
                     onFollowingClick={openFollowing}
                 />
-                {showFeed ? (
-                    <ProfileFeedView posts={userPosts} />
+                {selectedPosts ? (
+                    <>
+                        <button
+                            onClick={() => setSelectedPosts(null)}
+                            className="mb-4 px-4 py-2"
+                        >
+                            <MoveLeft size={22}/>
+                        </button>
+                        
+
+
+                        <ProfileFeedView posts={selectedPosts} />
+                    </>
                 ) : (
-                    <ProfileTabs posts={userPosts} isOwnProfile={isOwnProfile} onPostClick={() => setShowFeed(true)} />
+                    <ProfileTabs
+                     posts={userPosts}
+                    savedPosts={savedPosts} 
+                    isOwnProfile={isOwnProfile} 
+                    onPostClick={(posts) => setSelectedPosts(posts)} />
                 )}
+               
             </div>
             <UserListModel
                 open={openModal}

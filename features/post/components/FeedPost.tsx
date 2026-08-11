@@ -20,6 +20,7 @@ import { useCreateCommentMutation, useGetPostCommentsQuery } from "@/features/li
 
 import CommentModel from "./CommentModel";
 import { useAppSelector } from "@/store/hooks";
+import { useGetSingleSavedQuery, useSavePostMutation } from "../api/saved.api";
 
 interface FeedPostProps {
     post: Post
@@ -86,10 +87,23 @@ export default function FeedPost({ post }: FeedPostProps) {
         isVerified: user.isVerified,
         isFollowing: user.isFollowing,
     })) ?? []
-    console.log(likedUsersData)
-    console.log(likedUsers)
     const currentUser = useAppSelector((state) => state.auth.user)
     const isOwnPost = currentUser?.id === post.user.id
+    const { data: savedData, } = useGetSingleSavedQuery({
+        postId: post.id,
+    })
+    const [savePost] = useSavePostMutation()
+    const handleSave = async () => {
+        try {
+            const res = await savePost({
+                postId: post.id,
+            }).unwrap();
+
+            toast.success(res.message);
+        } catch {
+            toast.error("Failed to save post");
+        }
+    };
     return (
         <article className="mb-8  overflow-hidden rounded-xl  bg-primary/8 shadow-2xl ">
             <PostHeader
@@ -113,9 +127,10 @@ export default function FeedPost({ post }: FeedPostProps) {
                 isLiked={post.isLiked}
                 comments={post.commentCount}
                 shares={0}
-                isSaved={false}
+                isSaved={!!savedData?.data}
                 onLikesClick={() => setOpenLikes(true)}
                 onLike={handleLike}
+                onSave={handleSave}
             />
 
 
