@@ -18,8 +18,9 @@ export default function PostCaption({
 }: PostCaptionProps) {
     
     const hashtagText = hashtags
-        .map((item) => `#${item.hashtag.name}`)
-        .join(" ")
+    .filter((item) => item?.hashtag?.name)
+    .map((item) => `#${item.hashtag.name}`)
+    .join(" ");
     const text = [caption, hashtagText]
         .filter(Boolean)
         .join(" ")

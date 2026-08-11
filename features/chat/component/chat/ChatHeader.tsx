@@ -29,7 +29,7 @@ const ChatHeader = ({
     (participant) => participant.user.id !== currentUser?.id
   )?.user;
 
-  const avatar = otherUser?.profilePicture;
+  const avatar = otherUser?.profilePicture || "/Hero.jpg";
   const name = otherUser?.username ?? "Unknown User";
 
   return (
@@ -49,7 +49,7 @@ const ChatHeader = ({
         {/* Avatar */}
         <div className="relative shrink-0">
           {avatar ? (
-            <Link href={`/user/${otherUser.id}`} >
+            <Link href={`/user/${otherUser?.id}`} >
             <Image
               src={avatar || "/Hero.jpg"}
               alt={name}

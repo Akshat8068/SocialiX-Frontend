@@ -14,7 +14,8 @@ interface PostActionsProps {
     isLiked?: boolean;
     isSaved?: boolean;
     onLike?: () => void;
-    onLikesClick?: () => void
+    onLikesClick?: () => void;
+    onSave?: () => void;
 }
 
 export default function PostActions({
@@ -24,7 +25,7 @@ export default function PostActions({
     shares,
     onLikesClick,
     isLiked = false,
-    isSaved = false,
+    isSaved = false,onSave
 }: PostActionsProps) {
     return (
         <div className="flex items-center justify-between px-4 py-3">
@@ -73,7 +74,7 @@ export default function PostActions({
 
             <button className="transition-transform active:scale-95">
                 <Bookmark
-                    size={22}
+                    size={22}  onClick={onSave}
                     className={
                         isSaved
                             ? "fill-primary text-primary"

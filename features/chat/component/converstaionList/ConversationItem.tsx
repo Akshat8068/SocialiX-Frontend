@@ -21,7 +21,7 @@ const ConversationItem = ({
     (participant) => participant.user.id !== currentUser?.id
   )?.user;
 
-  const avatar = otherUser?.profilePicture;
+  const avatar = otherUser?.profilePicture || "/Hero.jpg";
   const name = otherUser?.username ?? "Unknown User";
 
   return (
