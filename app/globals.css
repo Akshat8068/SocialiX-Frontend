@@ -1,64 +1,51 @@
 @import "tailwindcss";
 
 @theme {
-  --color-surface: #fff8f6;
-  --color-surface-dim: #f4d3cb;
-  --color-surface-bright: #fff8f6;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #fff1ed;
-  --color-surface-container: #ffe9e4;
-  --color-surface-container-high: #ffe2db;
-  --color-surface-container-highest: #fddbd3;
-  --color-on-surface: #291712;
-  --color-on-surface-variant: #5d4038;
-  --color-inverse-surface: #402c26;
-  --color-inverse-on-surface: #ffede8;
+  --color-surface: var(--theme-surface);
+  --color-surface-dim: var(--theme-surface-dim);
 
-  --color-outline: #926f66;
-  --color-outline-variant: #e7bdb2;
+  --color-surface-container-lowest:
+    var(--theme-surface-container-lowest);
 
-  --color-surface-tint: #b12d00;
-  --color-primary: #FF4500;
-  --color-primary-hover:#e63e00;
-  --color-brown: #ad2c00;
-  --color-on-primary: #ffffff;
-  --color-primary-container: #d83900;
-  --color-on-primary-container: #fffbff;
-  --color-inverse-primary: #ffb5a0;
+  --color-surface-container-low:
+    var(--theme-surface-container-low);
 
+  --color-surface-container:
+    var(--theme-surface-container);
 
-  --color-secondary: #0051d5;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #316bf3;
-  --color-on-secondary-container: #fefcff;
+  --color-surface-container-high:
+    var(--theme-surface-container-high);
 
-  --color-tertiary: #005daa;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #0075d5;
-  --color-on-tertiary-container: #fefcff;
+  --color-surface-container-highest:
+    var(--theme-surface-container-highest);
 
-  --color-error: #ba1a1a;
-  --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
+  --color-on-surface: var(--theme-on-surface);
+  --color-on-surface-variant:
+    var(--theme-on-surface-variant);
 
-  --color-primary-fixed: #ffdbd1;
-  --color-primary-fixed-dim: #ffb5a0;
-  --color-on-primary-fixed: #3b0900;
-  --color-on-primary-fixed-variant: #872000;
-  --color-secondary-fixed: #dbe1ff;
-  --color-secondary-fixed-dim: #b4c5ff;
-  --color-on-secondary-fixed: #00174b;
-  --color-on-secondary-fixed-variant: #003ea8;
-  --color-tertiary-fixed: #d4e3ff;
-  --color-tertiary-fixed-dim: #a5c8ff;
-  --color-on-tertiary-fixed: #001c3a;
-  --color-on-tertiary-fixed-variant: #004785;
+  --color-primary: var(--theme-primary);
+  --color-primary-hover: var(--theme-primary-hover);
+  --color-on-primary: var(--theme-on-primary);
 
-  --color-background: #fff8f6;
-  --color-on-background: #291712;
-  --color-surface-variant: #fddbd3;
+  --color-secondary: var(--theme-secondary);
+  --color-on-secondary: var(--theme-on-secondary);
 
+  --color-outline: var(--theme-outline);
+  --color-background: var(--theme-background);
+  --color-on-background: var(--theme-on-background);
+
+  --color-input: var(--theme-input);
+  --color-input-focus: var(--theme-input-focus);
+
+  --color-hover: var(--theme-hover);
+
+  --color-badge: var(--theme-badge);
+  --color-on-badge: var(--theme-on-badge);
+  --color-overlay: var(--theme-overlay);
+  --color-hover: var(--theme-hover);
+  --color-outline-variant: var(--theme-outline-variant);
+
+  --color-switch-thumb: var(--theme-switch-thumb);
   --radius: 0.25rem;
   --radius-lg: 0.5rem;
   --radius-xl: 16px;
@@ -79,9 +66,154 @@
   --font-sans: "Inter", sans-serif;
 }
 
+:root,
+[data-theme="orange"] {
+  --theme-surface: #fff8f6;
+
+  --theme-surface-dim: #f4d3cb;
+
+  --theme-surface-container-lowest: #ffffff;
+
+  --theme-surface-container-low: #fff1ed;
+
+  --theme-surface-container: #ffe9e4;
+
+  --theme-surface-container-high: #ffe2db;
+
+  --theme-surface-container-highest: #fddbd3;
+
+  --theme-on-surface: #291712;
+
+  --theme-on-surface-variant: #5d4038;
+
+  --theme-primary: #ff4500;
+
+  --theme-primary-hover: #e63e00;
+
+  --theme-on-primary: #ffffff;
+
+  --theme-secondary: #0051d5;
+
+  --theme-on-secondary: #ffffff;
+
+  --theme-outline: #926f66;
+
+  --theme-background: #fff8f6;
+  --theme-on-background: #291712;
+
+  --theme-input: #ffffff;
+  --theme-input-focus: #ffffff;
+
+  --theme-hover: #ffe2db;
+
+  --theme-badge: #ffe2db;
+  --theme-on-badge: #291712;
+  --theme-overlay: rgb(0 0 0 / 0.4);
+  --theme-hover: #ffe2db;
+  --theme-outline-variant: #e7bdb2;
+  --theme-switch-thumb: #ffffff;
+}
+
+[data-theme="light"] {
+  --theme-surface: #ffffff;
+
+  --theme-surface-dim: #f5f5f5;
+
+  --theme-surface-container-lowest: #ffffff;
+
+  --theme-surface-container-low: #fafafa;
+
+  --theme-surface-container: #f5f5f5;
+
+  --theme-surface-container-high: #eeeeee;
+
+  --theme-surface-container-highest: #e5e5e5;
+
+  --theme-on-surface: #181818;
+
+  --theme-on-surface-variant: #666666;
+
+  --theme-primary: #000000;
+
+  --theme-primary-hover: #333333;
+
+  --theme-on-primary: #ffffff;
+
+  --theme-secondary: #444444;
+
+  --theme-on-secondary: #ffffff;
+
+  --theme-outline: #d1d1d1;
+
+  --theme-background: #ffffff;
+  --theme-on-background: #181818;
+
+  --theme-input: #f5f5f5;
+  --theme-input-focus: #ffffff;
+
+  --theme-hover: #eeeeee;
+
+  --theme-badge: #eeeeee;
+  --theme-on-badge: #181818;
+
+  --theme-overlay: rgb(0 0 0 / 0.35);
+  --theme-hover: #eeeeee;
+  --theme-outline-variant: #d1d1d1;
+  --theme-switch-thumb: #ffffff;
+}
+
+[data-theme="dark"] {
+  --theme-surface: #121212;
+
+  --theme-surface-dim: #181818;
+
+  --theme-surface-container-lowest: #0d0d0d;
+
+  --theme-surface-container-low: #161616;
+
+  --theme-surface-container: #1e1e1e;
+
+  --theme-surface-container-high: #292929;
+
+  --theme-surface-container-highest: #333333;
+
+  --theme-on-surface: #f5f5f5;
+
+  --theme-on-surface-variant: #b3b3b3;
+
+  --theme-primary: #ff4500;
+
+  --theme-primary-hover: #ff6a33;
+
+  --theme-on-primary: #ffffff;
+
+  --theme-secondary: #4d8dff;
+
+  --theme-on-secondary: #ffffff;
+
+  --theme-outline: #444444;
+
+  --theme-background: #121212;
+  --theme-on-background: #f5f5f5;
+
+  --theme-input: #1e1e1e;
+  --theme-input-focus: #292929;
+
+  --theme-hover: #292929;
+
+  --theme-badge: #333333;
+  --theme-on-badge: #f5f5f5;
+
+  --theme-overlay: rgb(0 0 0 / 0.6);
+  --theme-hover: #292929;
+
+  --theme-outline-variant: #333333;
+  --theme-switch-thumb: #f5f5f5;
+}
 
 body {
-  background-color: #fff8f6;
+  background-color: var(--theme-background);
+  color: var(--theme-on-surface);
   overflow-x: hidden;
   background-size: cover;
   background-position: center;

@@ -83,12 +83,12 @@ function SkeletonCard() {
             <div className="h-12 w-12 rounded-full bg-on-background" />
 
             <div className="flex-1 space-y-2">
-                <div className="h-4 w-32 rounded bg-on-background" />
+                <div className="h-4 w-32 rounded bg-on-surface" />
 
-                <div className="h-3 w-20 rounded bg-on-background" />
+                <div className="h-3 w-20 rounded bg-on-surface" />
             </div>
 
-            <div className="h-10 w-24 rounded-xl bg-on-background" />
+            <div className="h-10 w-24 rounded-xl bg-on-syrafce" />
         </div>
     );
 }

@@ -1,27 +1,48 @@
 "use client";
 import { useAcceptRequestMutation, useCancelRequestMutation, useGetPendingRequestQuery, useGetSentRequestQuery, useRejectRequestMutation } from "@/features/follow/api/follow.api";
-import { LogOut, LogOutIcon, Power, Search, Send, UserCheck, UserPlus } from "lucide-react";
+import { LogOut, LogOutIcon, Power, Search, Send, SunMoon, UserCheck, UserPlus } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import type { FollowUser } from "./UserListModel/UserListModel";
 import { useLogoutMutation } from "@/features/auth/api/auth.api";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { logout } from "@/store/slices/authSlice";
+import { logout } from "@/store/slices/auth.slice";
+import { setTheme, Theme } from "@/store/slices/theme.slice";
+import { Select } from "./ui/select";
 
 const UserListModel = dynamic(() => import("./UserListModel/UserListModel"), {
   loading: () => null,
 });
 
 
-
+const themes: Theme[] = ["orange", "light", "dark"]
+const themeOptions = [
+  {
+    label: "Premium",
+    value: "orange",
+  },
+  {
+    label: "Light",
+    value: "light",
+  },
+  {
+    label: "Dark",
+    value: "dark",
+  },
+]
 export default function Header() {
   const [modal, setModal] = useState<"pending" | "sent" | null>(null);
   const [search, setSearch] = useState("")
+  const [themeOpen, setThemeOpen] = useState(false);
   const dispatch = useAppDispatch()
- const router = useRouter()
+  const currentTheme = useAppSelector((state) => state.theme.theme)
+  const handleThemeChange = (theme: Theme) => {
+    dispatch(setTheme(theme))
+  }
+  const router = useRouter()
   const [logoutUser, { isLoading: isLoggingOut }] = useLogoutMutation()
   const handleLogout = async () => {
     try {
@@ -127,7 +148,17 @@ export default function Header() {
               <Send size={22} />
             </button>
           </Link>
-
+          <div className="w-32">
+            <Select
+              icon={SunMoon}
+              options={themeOptions}
+              value={currentTheme}
+              className="h-10"
+              onChange={(e) =>
+                handleThemeChange(e.target.value as Theme)
+              }
+            />
+          </div>
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
@@ -161,7 +192,17 @@ export default function Header() {
           >
             <UserCheck size={22} />
           </button>
-
+          <div className="w-36">
+            <Select
+              icon={SunMoon}
+              options={themeOptions}
+              value={currentTheme}
+              onChange={(e) =>
+                handleThemeChange(e.target.value as Theme)
+              }
+              className="h-10"
+            />
+          </div>
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}

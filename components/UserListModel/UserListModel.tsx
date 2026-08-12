@@ -15,7 +15,7 @@ export type UserListType =
     | "requests" | "likes";
 
 export interface FollowUser {
-    id: number; 
+    id: number;
 
     requestId?: number;
 
@@ -57,7 +57,7 @@ interface FollowListModalProps {
 export default function UserListModel({
     open,
     onClose,
-    isOwnProfile=false,
+    isOwnProfile = false,
     title,
     count,
     users,
@@ -103,63 +103,30 @@ export default function UserListModel({
             {/* Overlay */}
             <div
                 onClick={onClose}
-                className="fixed inset-0 z-40  backdrop-blur-sm animate-in fade-in duration-200"
+                className="fixed inset-0 bg-overlay z-40  backdrop-blur-sm animate-in fade-in duration-200"
             />
 
             {/* Modal */}
             <div
                 role="dialog"
                 aria-modal="true"
-                className="fixed
-z-50
-flex
-flex-col
-bg-on-background
-shadow-2xl
-overflow-hidden
-
-inset-x-0
-bottom-0
-max-h-[92vh]
-rounded-t-4xl
-
-animate-in
-slide-in-from-bottom
-duration-300
-
-md:left-1/2
-md:top-1/2
-md:right-auto
-md:bottom-auto
-md:inset-x-auto
-md:w-[560px]
-md:max-h-[80vh]
-md:-translate-x-1/2
-md:-translate-y-1/2
-md:rounded-3xl"
-            >
+                className="fixed z-50 flex flex-col bg-surface-container text-on-surface shadow-2xl overflow-hidden
+                    inset-x-0 bottom-0 max-h-[92vh] rounded-t-4xl animate-in slide-in-from-bottom duration-300
+                    md:left-1/2 md:top-1/2 md:right-auto md:bottom-auto md:inset-x-auto
+                    md:w-[560px] md:max-h-[80vh]
+                    md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-3xl
+                    animate-in
+                    slide-in-from-bottom">
                 {/* Grabber */}
                 <div className="flex justify-center py-3 md:hidden">
-                    <div className="h-1.5 w-14 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+                    <div className="h-1.5 w-14 rounded-full bg-outline" />
                 </div>
 
                 {/* Close Button Desktop */}
                 <button
                     onClick={onClose}
-                    className="
-            absolute
-            right-4
-            top-4
-            hidden
-            h-9
-            w-9
-            items-center
-            justify-center
-            rounded-full
-            hover:bg-zinc-100
-            dark:hover:bg-zinc-800
-            md:flex
-          "
+                    className="active:scale-95 transition absolute right-4
+                        top-4 hidden h-9 w-9 items-center justify-center rounded-full hover:bg-hover md:flex "
                 >
                     <X size={18} />
                 </button>

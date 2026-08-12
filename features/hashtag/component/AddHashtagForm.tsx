@@ -47,7 +47,7 @@ export default function AddHashtagForm() {
 
     return (
         <div className="space-y-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
                 Create Custom
             </h3>
 

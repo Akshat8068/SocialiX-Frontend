@@ -33,7 +33,7 @@ export default function HashtagModel({ selected, onDone, onClose }: HashtagModal
             {/* Overlay */}
             <div
 
-                className="fixed inset-0 z-40  backdrop-blur-sm"
+                className="fixed inset-0 z-40  bg-overlay backdrop-blur-sm"
             />
 
 
@@ -44,8 +44,8 @@ export default function HashtagModel({ selected, onDone, onClose }: HashtagModal
       z-50
       flex
       flex-col
-      bg-white
-      dark:bg-on-background
+      bg-surface-container
+text-on-surface
       shadow-2xl
 
       inset-x-0
@@ -66,13 +66,13 @@ export default function HashtagModel({ selected, onDone, onClose }: HashtagModal
             >
                 {/* Grabber */}
                 <div className="flex justify-center py-3 md:hidden">
-                    <div className="h-1.5 w-14 rounded-full bg-zinc-300" />
+                    <div className="h-1.5 w-14 rounded-full bg-outline" />
                 </div>
 
                 {/* Close button */}
-                <button
-
-                    className="absolute right-4 top-4 hidden md:flex h-9 w-9 items-center justify-center rounded-full hover:bg-zinc-100"
+                <button type="button"
+                    onClick={onClose}
+                    className="absolute right-4 top-4 hidden md:flex h-9 w-9 items-center justify-center rounded-full hover:bg-hover text-on-surface"
                 >
                     <X size={18} />
                 </button>
@@ -92,7 +92,7 @@ export default function HashtagModel({ selected, onDone, onClose }: HashtagModal
                         onToggle={toggleHashtag}
                     />
 
-                    <AddHashtagForm/>
+                    <AddHashtagForm />
                 </div>
 
                 <HashtagFooter onDone={() => onDone(selectedTags)}
