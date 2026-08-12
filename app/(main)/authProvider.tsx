@@ -2,7 +2,7 @@
 
 import { useGetMeQuery } from "@/features/auth/api/auth.api";
 import { useAppDispatch } from "@/store/hooks";
-import { loginSuccess, logout, setAuthChecked } from "@/store/slices/authSlice";
+import { loginSuccess, logout, setAuthChecked } from "@/store/slices/auth.slice";
 import { useEffect } from "react";
 
 

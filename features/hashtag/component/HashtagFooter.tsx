@@ -18,7 +18,7 @@ export default function HashtagFooter({
     loading = false,
 }: HashtagFooterProps) {
     return (
-        <div className="border-t border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-on-background">
+        <div className="border-t border-outline/30 bg-surface-container p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
                 {/* Cancel */}
                 <button
@@ -28,19 +28,14 @@ export default function HashtagFooter({
                         h-11
                         rounded-xl
                         border
-                        border-zinc-300
                         px-6
                         text-sm
                         font-medium
-                        text-zinc-700
                         transition-all
-
-                        hover:bg-zinc-100
-                        active:scale-95
-
-                        dark:border-zinc-700
-                        dark:text-zinc-300
-                        dark:hover:bg-zinc-800
+                        active:scale-95 border-outline
+                        bg-surface-container-low
+                        text-on-surface
+                        hover:bg-hover
                     "
                 >
                     {cancelLabel}
@@ -54,16 +49,14 @@ export default function HashtagFooter({
                     className="
                         h-11
                         rounded-xl
-                        bg-orange-500
                         px-6
                         text-sm
                         font-semibold
-                        text-white
                         transition-all
-
-                        hover:bg-orange-600
+                        bg-primary
+                        text-on-primary
+                        hover:bg-primary-hover
                         active:scale-95
-
                         disabled:cursor-not-allowed
                         disabled:opacity-50
                     "

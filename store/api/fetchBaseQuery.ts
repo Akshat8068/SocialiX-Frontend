@@ -5,7 +5,7 @@ import {
   fetchBaseQuery,
   retry,
 } from "@reduxjs/toolkit/query";
-import { logout } from "../slices/authSlice";
+import { logout } from "../slices/auth.slice";
 
 
 const baseQuery = fetchBaseQuery({

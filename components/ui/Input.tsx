@@ -24,11 +24,11 @@ const Input = React.forwardRef<HTMLInputElement, Inputprops>(({  error, id, icon
                         type={type}
                         id={id}
                         className={cn(
-                            "w-full rounded-lg border bg-white/50 py-3 pr-4 outline-none transition-all",
+                            "w-full rounded-lg border bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant py-3 pr-4 outline-none transition-all",
                             Icon ? "pl-12" : "pl-4",
                             error
                                 ? "border-red-500 focus:ring-red-500/20"
-                                : "border-outline-variant/50 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                                : "border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20",
                             className
                         )}
                         ref={ref}

@@ -19,7 +19,7 @@ export default function TrendingHashtags({ selected, onToggle }: TrendingHashtag
 
     return (
         <div className="space-y-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
                 All Hashtags
             </h3>
 

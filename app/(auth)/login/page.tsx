@@ -5,7 +5,7 @@ import { useLoginMutation } from "@/features/auth/api/auth.api";
 import AuthHeader from "@/features/auth/components/AuthHeader";
 import { LoginFormData, loginSchema } from "@/features/auth/validation";
 import { useAppDispatch } from "@/store/hooks";
-import { loginSuccess, setAuthenticated, setUser } from "@/store/slices/authSlice";
+import { loginSuccess, setAuthenticated, setUser } from "@/store/slices/auth.slice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "lucide-react";
 import Link from "next/link";
