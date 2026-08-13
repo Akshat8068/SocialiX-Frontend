@@ -30,7 +30,9 @@ export interface Conversation {
 
 export interface ConversationResponse {
   id: number;
+  joinedAt: string;
   conversation: Conversation;
+unreadCount: number;
 }
 
 
@@ -64,7 +66,6 @@ export interface TypingPayload {
 
 export interface MarkSeenPayload {
   conversationId: number;
-  messageId: number;
 }
 
 export interface DeleteForEveryonePayload {
@@ -72,13 +73,11 @@ export interface DeleteForEveryonePayload {
   messageId: number;
 }
 
-/* ---------------- Socket Receive Events ---------------- */
+/* Socket Receive Events  */
 
-
-export interface MessageSeenEvent {
+export interface ConversationSeenEvent {
   conversationId: number;
-  messageId: number;
-  seenAt: string
+  seenAt: string;
 }
 
 export interface MessageDeletedEvent {
