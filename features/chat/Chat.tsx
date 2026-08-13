@@ -18,8 +18,9 @@ import { ConversationResponse } from "@/types/chat";
 export default function ChatPage() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user)
+  const currentUserId = user!.id
   const searchParams = useSearchParams();
-  const { data, isLoading, isError, } = useGetConversationsQuery(undefined,{pollingInterval:60000,skipPollingIfUnfocused: true});
+  const { data, isLoading, isError, } = useGetConversationsQuery(undefined, { pollingInterval: 60000, skipPollingIfUnfocused: true });
 
   const [isTyping, setIsTyping] = useState(false)
   const [onlineUsers, setOnlineUsers] = useState<Set<number>>(new Set())
@@ -33,16 +34,48 @@ export default function ChatPage() {
 
   } = useChatSocket({
     onNewMessage: (message) => {
+      const conversationId = Number(message.conversationId);
+
+      const isCurrentConversation =
+        selectedConversation?.conversation.id === conversationId;
+
+      const isReceivedMessage =
+        message.sender.id !== currentUserId;
+
+      console.log("NEW MESSAGE:", {
+        conversationId,
+        senderId: message.sender.id,
+        currentUserId,
+        selectedConversationId:
+          selectedConversation?.conversation.id,
+        isCurrentConversation,
+        isReceivedMessage,
+      });
+
+      // --------------------------------
+      // 1. Update messages cache
+      // --------------------------------
       dispatch(
         chatApi.util.updateQueryData(
           "getConversationMessages",
-          Number(message.conversationId),
+          conversationId,
           (draft) => {
-            if (!draft?.data) return
-            draft.data.push(message);
+            if (!draft?.data) return;
+
+            const alreadyExists = draft.data.some(
+              (msg) => msg.id === message.id
+            );
+
+            if (!alreadyExists) {
+              draft.data.push(message);
+            }
           }
         )
-      )
+      );
+
+      // --------------------------------
+      // 2. Update conversations cache
+      // --------------------------------
       dispatch(
         chatApi.util.updateQueryData(
           "getConversations",
@@ -51,18 +84,66 @@ export default function ChatPage() {
             if (!draft?.data) return;
 
             const conversation = draft.data.find(
-              (c) => c.conversation.id === message.conversationId
+              (c) =>
+                Number(c.conversation.id) === conversationId
             );
 
-            if (!conversation) return;
+            if (!conversation) {
+              console.log(
+                "Conversation not found:",
+                conversationId
+              );
+              return;
+            }
 
-            conversation.conversation.lastMessage = message.content;
-            conversation.conversation.lastMessageAt = message.createdAt;
+            // Always update last message
+            conversation.conversation.lastMessage =
+              message.content;
 
+            conversation.conversation.lastMessageAt =
+              message.createdAt;
+
+            // --------------------------------
+            // IMPORTANT
+            // --------------------------------
+            // Only increase unread count when:
+            //
+            // 1. Message is from another user
+            // 2. Conversation is NOT currently open
+            //
+            if (
+              isReceivedMessage &&
+              !isCurrentConversation
+            ) {
+              conversation.unreadCount =
+                (conversation.unreadCount ?? 0) + 1;
+            }
+
+            // If conversation is currently open,
+            // keep unread count at 0.
+            if (
+              isReceivedMessage &&
+              isCurrentConversation
+            ) {
+              conversation.unreadCount = 0;
+            }
+
+            console.log(
+              "UPDATED CONVERSATION:",
+              conversation.conversation.id,
+              "unread:",
+              conversation.unreadCount
+            );
+
+            // Move latest conversation to top
             draft.data.sort(
               (a, b) =>
-                new Date(b.conversation.lastMessageAt ?? 0).getTime() -
-                new Date(a.conversation.lastMessageAt ?? 0).getTime()
+                new Date(
+                  b.conversation.lastMessageAt ?? 0
+                ).getTime() -
+                new Date(
+                  a.conversation.lastMessageAt ?? 0
+                ).getTime()
             );
           }
         )
@@ -88,20 +169,22 @@ export default function ChatPage() {
         return next;
       });
     },
-    onMessageSeen: (payload) => {
+    onConversationSeen: (payload) => {
       dispatch(
         chatApi.util.updateQueryData(
           "getConversationMessages",
           Number(payload.conversationId),
           (draft) => {
-            if (!draft?.data) return
-            const msg = draft.data.find(
-              (m) => m.id === payload.messageId
-            );
+            if (!draft?.data) return;
 
-            if (msg) {
-              msg.seenAt = payload.seenAt;
-            }
+            draft.data.forEach((message) => {
+              if (
+                message.sender.id === currentUserId &&
+                !message.seenAt
+              ) {
+                message.seenAt = payload.seenAt;
+              }
+            });
           }
         )
       );
@@ -173,13 +256,13 @@ export default function ChatPage() {
       selectedCon,
       {
         skip: !selectedConversation,
-        pollingInterval:60000,
-        skipPollingIfUnfocused:true
+        pollingInterval: 60000,
+        skipPollingIfUnfocused: true
       }
     )
 
 
-  const currentUserId = user!.id
+
   const messages = messagesResponse?.data ?? [];
   const otherParticipant =
     selectedConversation?.conversation.participants.find(
@@ -191,17 +274,16 @@ export default function ChatPage() {
   )
   useEffect(() => {
     if (!selectedConversation) return;
-
-    messages.forEach((message) => {
-      if (
+    const hasUnreadMessages = messages.some(
+      (message) =>
         message.sender.id !== currentUserId &&
         !message.seenAt
-      ) {
-        markSeen({
-          conversationId: selectedConversation.conversation.id,
-          messageId: message.id,
-        });
-      }
+    );
+
+    if (!hasUnreadMessages) return;
+    markSeen({
+      conversationId:
+        selectedConversation.conversation.id,
     });
   }, [
     messages,

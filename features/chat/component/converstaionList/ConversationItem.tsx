@@ -62,6 +62,7 @@ const ConversationItem = ({
       </div>
 
       {/* Content */}
+      {/* Content */}
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex items-center justify-between">
           <h3
@@ -83,9 +84,25 @@ const ConversationItem = ({
           </span>
         </div>
 
-        <p className="truncate text-sm text-on-surface-variant">
-          {conversation.conversation.lastMessage || "Start a conversation"}
-        </p>
+        <div className="flex items-center gap-2">
+          <p
+            className={`min-w-0 flex-1 truncate text-sm ${conversation.unreadCount > 0
+                ? "font-semibold text-on-surface"
+                : "text-on-surface-variant"
+              }`}
+          >
+            {conversation.conversation.lastMessage ||
+              "Start a conversation"}
+          </p>
+
+          {conversation.unreadCount > 0 && (
+            <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-on-primary">
+              {conversation.unreadCount > 99
+                ? "99+"
+                : conversation.unreadCount}
+            </span>
+          )}
+        </div>
       </div>
     </button>
   );
