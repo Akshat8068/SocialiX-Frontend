@@ -7,7 +7,7 @@ import { baseQueryWithRetry } from "./fetchBaseQuery";
   baseQuery:baseQueryWithRetry,
 
    tagTypes: ["Auth", "Profile", "Follow", "Post", "Hashtags", "Like",
-     "Comment","Saved","Chat","Message"],
+     "Comment","Saved","Chat","Message","Notification"],
 
   endpoints: () => ({})
 })
