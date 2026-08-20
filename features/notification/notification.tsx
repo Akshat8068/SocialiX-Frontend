@@ -32,7 +32,7 @@ export default function NotificationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: "var(--theme-background)" }}>
       <NotificationHeader />
 
       <main className="mx-auto min-h-screen w-full max-w-4xl pt-16">

@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   Home,
   Compass,
-  Clapperboard,
-  MessageCircle,
+  
   Bell,
   BarChart3,
   Plus,
@@ -22,14 +21,17 @@ const sidebarItems = [
   { label: "Home", href: "/home", icon: Home },
   { label: "Users", href: "/user", icon: Compass },
   { label: "Profile", href: "/profile", icon: User },
-  { label: "Chat", href: "/chat", icon: Send }
+  { label: "Chat", href: "/chat", icon: Send },
+  { label: "Notificaion", href: "/notification", icon: Bell }
 ];
 
 const bottomItems = [
   { label: "Home", href: "/home", icon: Home },
   { label: "Users", href: "/user", icon: User2 },
+  { label: "Notificaion", href: "/notification", icon:Bell },
   { label: "Post", href: "/post", icon: Plus },
   { label: "Profile", href: "/profile", icon: User },
+  
 ];
 
 export default function Navigation() {
