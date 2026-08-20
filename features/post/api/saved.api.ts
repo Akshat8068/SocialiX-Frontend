@@ -13,7 +13,34 @@ export const savedApi = baseApi.injectEndpoints({
                 url: `/saved/${postId}`,
                 method: "POST",
             }),
-            invalidatesTags: ["Post","Saved"],
+
+            async onQueryStarted({ postId }, { dispatch, queryFulfilled }) {
+                // Optimistically toggle getSingleSaved for this post
+                const singlePatch = dispatch(
+                    savedApi.util.updateQueryData(
+                        "getSingleSaved",
+                        { postId },
+                        (draft) => {
+                            // If currently saved, unsave (set data to null); if not saved, mark as saved
+                            // We can't construct a full Saved object here, so we toggle based on presence
+                            if (draft.data) {
+                                draft.data = null;
+                            } else {
+                                // Minimal placeholder — real data comes after invalidation refetch
+                                draft.data = { id: -1 } as any;
+                            }
+                        }
+                    )
+                );
+
+                try {
+                    await queryFulfilled;
+                } catch {
+                    singlePatch.undo();
+                }
+            },
+
+            invalidatesTags: ["Post", "Saved"],
         }),
 
         getSingleSaved: builder.query<GetSingleSavedResponse,GetSingleSavedRequest>({

@@ -29,14 +29,23 @@ interface FeedPostProps {
 export default function FeedPost({ post }: FeedPostProps) {
 
     const [search, setSearch] = useState("")
+    const [isLiked, setIsLiked] = useState(post.isLiked)
+    const [likeCount, setLikeCount] = useState(post.likeCount)
     const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation()
     const [toggleLike] = useToggleLikeMutation()
     const handleLike = async () => {
+        // Optimistic local update
+        const wasLiked = isLiked
+        setIsLiked(!wasLiked)
+        setLikeCount((c) => c + (!wasLiked ? 1 : -1))
+
         try {
             const res = await toggleLike({ postId: post.id }).unwrap();
-
             toast.success(res.message);
         } catch {
+            // Revert on failure
+            setIsLiked(wasLiked)
+            setLikeCount((c) => c + (wasLiked ? 1 : -1))
             toast.error("Something went wrong");
         }
     }
@@ -123,14 +132,15 @@ export default function FeedPost({ post }: FeedPostProps) {
             />
 
             <PostActions
-                likes={post.likeCount}
-                isLiked={post.isLiked}
+                likes={likeCount}
+                isLiked={isLiked}
                 comments={post.commentCount}
                 shares={0}
                 isSaved={!!savedData?.data}
                 onLikesClick={() => setOpenLikes(true)}
                 onLike={handleLike}
                 onSave={handleSave}
+                onCommentsClick={() => setShowAllComments(true)}
             />
 
 
@@ -168,6 +178,8 @@ export default function FeedPost({ post }: FeedPostProps) {
                 <CommentModel
                     comments={comments}
                     onClose={() => setShowAllComments(false)}
+                    profilePicture={currentUser?.profilePicture ?? "/Hero.jpg"}
+                    onAddComment={handleComment}
                 />
             )}
         </article>

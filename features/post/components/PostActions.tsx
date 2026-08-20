@@ -16,6 +16,7 @@ interface PostActionsProps {
     onLike?: () => void;
     onLikesClick?: () => void;
     onSave?: () => void;
+    onCommentsClick?: () => void;
 }
 
 export default function PostActions({
@@ -25,7 +26,7 @@ export default function PostActions({
     shares,
     onLikesClick,
     isLiked = false,
-    isSaved = false,onSave
+    isSaved = false, onSave, onCommentsClick
 }: PostActionsProps) {
     return (
         <div className="flex items-center justify-between px-4 py-3">
@@ -55,7 +56,10 @@ export default function PostActions({
                     </button>
                 </div>
 
-                <button className="flex items-center gap-2 rounded-full p-1 text-on-surface-variant transition active:scale-95 hover:bg-surface-container-high hover:text-primary">
+                <button
+                    type="button"
+                    onClick={onCommentsClick}
+                    className="flex items-center gap-2 rounded-full p-1 text-on-surface-variant transition active:scale-95 hover:bg-surface-container-high hover:text-primary">
                     <MessageCircle
                         size={22}
                     />
@@ -73,7 +77,7 @@ export default function PostActions({
 
             <button className="rounded-full p-1 transition active:scale-95 hover:bg-surface-container-high">
                 <Bookmark
-                    size={22}  onClick={onSave}
+                    size={22} onClick={onSave}
                     className={
                         isSaved
                             ? "fill-primary text-primary"

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { FormBuilder, FormFieldConfig } from "@/components/common/FormBuilder";
 
 interface AddCommentProps {
     profilePicture: string;
@@ -23,14 +22,6 @@ export default function AddComment({
         },
     });
 
-    const fields: FormFieldConfig[] = [
-        {
-            id: "content",
-            type: "text",
-            placeholder: "Add a comment...",
-        },
-    ];
-
     const handleSubmit = (values: CommentForm) => {
         if (!values.content.trim()) return;
 
@@ -39,7 +30,7 @@ export default function AddComment({
     };
 
     return (
-        <div className="flex items-center gap-3  px-4 py-3">
+        <div className="flex items-center gap-3 px-4 py-3">
             <Image
                 src={profilePicture || "/Hero.jpg"}
                 alt="Profile"
@@ -48,17 +39,29 @@ export default function AddComment({
                 className="rounded-full object-cover"
             />
 
-            <div className="flex-1">
-                <FormBuilder
-                    form={form}
-                    fields={fields}
-                    onSubmit={handleSubmit}
-                    submitButton={{
-                        children: "Post",
-                        className: "mt-2",
+            <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="flex flex-1 items-center gap-2"
+            >
+                <input
+                    {...form.register("content")}
+                    type="text"
+                    placeholder="Add a comment..."
+                    className="flex-1 rounded-full px-4 py-2 text-sm outline-none transition-colors"
+                    style={{
+                        border: "1px solid var(--theme-outline)",
+                        backgroundColor: "var(--theme-input)",
+                        color: "var(--theme-on-surface)",
                     }}
                 />
-            </div>
+                <button
+                    type="submit"
+                    className="text-sm font-semibold hover:opacity-80 transition-opacity"
+                    style={{ color: "var(--theme-primary)" }}
+                >
+                    Post
+                </button>
+            </form>
         </div>
     );
 }

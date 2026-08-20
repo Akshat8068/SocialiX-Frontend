@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
     Bell,
     CheckCircle2,
@@ -9,12 +10,7 @@ import {
     UserPlus,
     UserRoundCheck,
 } from "lucide-react";
-
-import type {
-    Notification,
-    NotificationType,
-} from "@/types/notification";
-import Link from "next/link";
+import type { Notification } from "@/types/notification";
 
 interface NotificationItemProps {
     notification: Notification;
@@ -26,187 +22,194 @@ export default function NotificationItem({
     onRead,
 }: NotificationItemProps) {
     const { sender, type, message, createdAt, isRead } = notification;
+    const senderName = sender?.username;
+    const senderId = sender?.id;
 
-    const senderName = sender?.username
-
-    const getNotificationContent = () => {
+    const getNotificationText = () => {
         switch (type) {
-            case "FOLLOW":
-                return "started following you.";
-
-            case "FOLLOW_REQUEST":
-                return "requested to follow you.";
-
-            case "FOLLOW_ACCEPTED":
-                return "accepted your follow request.";
-
-            case "LIKE":
-                return "liked your post.";
-
-            case "COMMENT":
-                return "commented on your post.";
-
-            case "MESSAGE":
-                return "sent you a message.";
-
-            default:
-                return "sent you a notification.";
+            case "FOLLOW":          return "started following you.";
+            case "FOLLOW_REQUEST":  return "requested to follow you.";
+            case "FOLLOW_ACCEPTED": return "accepted your follow request.";
+            case "LIKE":            return "liked your post.";
+            case "COMMENT":         return "commented on your post.";
+            case "MESSAGE":         return "sent you a message.";
+            default:                return "sent you a notification.";
         }
-    }
+    };
 
     const getNotificationIcon = () => {
         switch (type) {
             case "FOLLOW":
-                return <UserPlus className="h-3.5 w-3.5" />;
-
-            case "FOLLOW_REQUEST":
-                return <UserRoundCheck className="h-3.5 w-3.5" />;
-
-            case "FOLLOW_ACCEPTED":
-                return <CheckCircle2 className="h-3.5 w-3.5" />;
-
-            case "LIKE":
-                return <Heart className="h-3.5 w-3.5 fill-current" />;
-
-            case "COMMENT":
-                return <MessageCircle className="h-3.5 w-3.5" />;
-
-            case "MESSAGE":
-                return <Bell className="h-3.5 w-3.5" />;
-
-            default:
-                return <Bell className="h-3.5 w-3.5" />;
+            case "FOLLOW_REQUEST":  return <UserPlus className="h-3.5 w-3.5" />;
+            case "FOLLOW_ACCEPTED": return <UserRoundCheck className="h-3.5 w-3.5" />;
+            case "LIKE":            return <Heart className="h-3.5 w-3.5 fill-current" />;
+            case "COMMENT":         return <MessageCircle className="h-3.5 w-3.5" />;
+            default:                return <Bell className="h-3.5 w-3.5" />;
         }
     };
 
-    const getIconBackground = () => {
+    const getIconBg = () => {
         switch (type) {
-            case "LIKE":
-                return "bg-red-500 text-white";
-
-            case "COMMENT":
-                return "bg-blue-500 text-white";
-
+            case "LIKE":            return "bg-red-500 text-white";
+            case "COMMENT":         return "bg-blue-500 text-white";
             case "FOLLOW":
-            case "FOLLOW_REQUEST":
-                return "bg-green-500 text-white";
-
-            case "FOLLOW_ACCEPTED":
-                return "bg-purple-500 text-white";
-
-            case "MESSAGE":
-                return "bg-primary text-primary-foreground";
-
-            default:
-                return "bg-muted text-muted-foreground";
+            case "FOLLOW_REQUEST":  return "bg-green-500 text-white";
+            case "FOLLOW_ACCEPTED": return "bg-purple-500 text-white";
+            default:                return "text-white" /* fallback to primary below */;
         }
     };
 
     const formatTime = (date: string) => {
-        const notificationDate = new Date(date);
-        const now = new Date();
-
-        const difference =
-            now.getTime() - notificationDate.getTime();
-
-        const minutes = Math.floor(difference / 60000);
-
-        if (minutes < 1) return "now";
-        if (minutes < 60) return `${minutes}m`;
-
-        const hours = Math.floor(minutes / 60);
-
-        if (hours < 24) return `${hours}h`;
-
-        const days = Math.floor(hours / 24);
-
-        if (days < 7) return `${days}d`;
-
-        return notificationDate.toLocaleDateString();
+        const diff = Date.now() - new Date(date).getTime();
+        const mins = Math.floor(diff / 60000);
+        if (mins < 1)  return "now";
+        if (mins < 60) return `${mins}m`;
+        const hrs = Math.floor(mins / 60);
+        if (hrs < 24)  return `${hrs}h`;
+        const days = Math.floor(hrs / 24);
+        if (days < 7)  return `${days}d`;
+        return new Date(date).toLocaleDateString();
     };
 
     const handleClick = () => {
-        if (!isRead && onRead) {
-            onRead(notification.id);
-        }
+        if (!isRead && onRead) onRead(notification.id);
     };
 
     return (
         <div
             onClick={handleClick}
-            className={`relative flex cursor-pointer gap-3 border-b px-4 py-4 transition hover:bg-muted/50 md:px-6 lg:px-8 ${!isRead ? "bg-muted/20" : ""
-                }`}
+            className="relative flex cursor-pointer gap-3 px-4 py-4 transition"
+            style={{
+                borderBottom: "1px solid var(--theme-outline-variant)",
+                backgroundColor: !isRead
+                    ? "var(--theme-surface-container-low)"
+                    : "transparent",
+            }}
+            onMouseEnter={(e) =>
+                (e.currentTarget.style.backgroundColor = "var(--theme-hover)")
+            }
+            onMouseLeave={(e) =>
+                (e.currentTarget.style.backgroundColor = !isRead
+                    ? "var(--theme-surface-container-low)"
+                    : "transparent")
+            }
         >
+            {/* Unread dot */}
             {!isRead && (
-                <div className="absolute left-2 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-primary md:left-3" />
+                <div
+                    className="absolute left-2 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full"
+                    style={{ backgroundColor: "var(--theme-primary)" }}
+                />
             )}
 
-            <Link href={`/user/${sender?.id}`}>
-            <div
-                className={`relative shrink-0 ${!isRead ? "ml-2 md:ml-1" : ""
-                    }`}
+            {/* Avatar with type badge */}
+            <Link
+                href={senderId ? `/user/${senderId}` : "#"}
+                onClick={(e) => e.stopPropagation()}
+                className={`relative shrink-0 ${!isRead ? "ml-2" : ""}`}
             >
-                <div className="relative h-12 w-12 overflow-hidden rounded-full bg-muted">
-
+                <div className="relative h-12 w-12 overflow-hidden rounded-full"
+                    style={{ backgroundColor: "var(--theme-surface-container)" }}>
                     <Image
                         src={sender?.profilePicture || "/Hero.jpg"}
-                        alt={senderName || "Profile picture"}
+                        alt={senderName || "User"}
                         fill
                         className="object-cover"
                     />
-
                 </div>
 
+                {/* Type icon badge */}
                 <div
-                    className={`absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full ${getIconBackground()}`}
+                    className={`absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full ${getIconBg()}`}
+                    style={
+                        type === "MESSAGE"
+                            ? { backgroundColor: "var(--theme-primary)" }
+                            : undefined
+                    }
                 >
                     {getNotificationIcon()}
                 </div>
-            </div>
             </Link>
 
+            {/* Content */}
             <div className="min-w-0 flex-1">
-                <p className="text-sm leading-5 text-foreground md:text-[15px]">
-                    <span className="font-bold">{senderName}</span>{" "}
-                    {getNotificationContent()}
+                <p
+                    className="text-sm leading-5 md:text-[15px]"
+                    style={{ color: "var(--theme-on-surface)" }}
+                >
+                    {/* Clickable username */}
+                    {senderName && senderId ? (
+                        <Link
+                            href={`/user/${senderId}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="font-bold hover:underline"
+                            style={{ color: "var(--theme-on-surface)" }}
+                        >
+                            {senderName}
+                        </Link>
+                    ) : (
+                        <span className="font-bold">{senderName}</span>
+                    )}{" "}
+                    {getNotificationText()}
                 </p>
 
-                <p className="mt-1 text-xs text-muted-foreground">
+                {/* Timestamp */}
+                <p
+                    className="mt-0.5 text-xs"
+                    style={{ color: "var(--theme-on-surface-variant)" }}
+                >
                     {formatTime(createdAt)}
                 </p>
 
-                {message &&
-                    (type === "COMMENT" || type === "MESSAGE") && (
-                        <div
-                            className={`mt-2 text-sm ${type === "COMMENT"
-                                    ? " pl-3 italic text-muted-foreground"
-                                    : "rounded-lg bg-muted px-3 py-2 text-muted-foreground"
-                                }`}
-                        >
-                            {message}
-                        </div>
-                    )}
+                {/* Comment / message preview */}
+                {message && (type === "COMMENT" || type === "MESSAGE") && (
+                    <p
+                        className={`mt-1.5 text-sm ${
+                            type === "COMMENT"
+                                ? "pl-3 italic"
+                                : "rounded-lg px-3 py-2"
+                        }`}
+                        style={{
+                            color: "var(--theme-on-surface-variant)",
+                            ...(type === "MESSAGE" && {
+                                backgroundColor: "var(--theme-surface-container)",
+                            }),
+                            ...(type === "COMMENT" && {
+                                borderLeft: "2px solid var(--theme-outline-variant)",
+                            }),
+                        }}
+                    >
+                        {message}
+                    </p>
+                )}
 
+                {/* Follow request actions */}
                 {type === "FOLLOW_REQUEST" && (
                     <div className="mt-3 flex gap-2">
                         <button
-                            onClick={(event) => {
-                                event.stopPropagation();
-
-                                // Follow request accept logic here
+                            onClick={(e) => e.stopPropagation()}
+                            className="rounded-full px-4 py-1.5 text-sm font-medium transition hover:opacity-90"
+                            style={{
+                                backgroundColor: "var(--theme-primary)",
+                                color: "var(--theme-on-primary)",
                             }}
-                            className="rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
                         >
                             Confirm
                         </button>
-
                         <button
-                            onClick={(event) => {
-                                event.stopPropagation();
-
-                                // Follow request reject logic here
+                            onClick={(e) => e.stopPropagation()}
+                            className="rounded-full px-4 py-1.5 text-sm font-medium transition"
+                            style={{
+                                border: "1px solid var(--theme-outline)",
+                                color: "var(--theme-on-surface)",
                             }}
-                            className="rounded-full px-4 py-1.5 text-sm font-medium transition hover:bg-muted"
+                            onMouseEnter={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                    "var(--theme-hover)")
+                            }
+                            onMouseLeave={(e) =>
+                                (e.currentTarget.style.backgroundColor = "transparent")
+                            }
                         >
                             Delete
                         </button>
